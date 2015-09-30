@@ -11,7 +11,8 @@ class ServerCommunication():
         
     def testServer(self):   
         string = input("TEST TEST TEST, BONJOUR ANTOINE!!!!")
-        self.server.loginValidation(string)
+        reponse = self.server.loginValidation(string)
+        print ( reponse )
         
     def runSQLQuery(self,SQLquery):
         self.server.runQuery(SQLquery)
