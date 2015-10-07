@@ -50,3 +50,14 @@ class FrameLogin(Frame):
     def resetEntries(self):
         self.entryName.delete(0, END)
         self.entryPass.delete(0, END)
+
+class FrameAcceuil(Frame):
+    def __init__(self, view, parent, **args):
+        Frame.__init__(self, parent, **args)
+        self.grid_propagate(False)
+        self.parent = parent
+        self.view = view
+        self.titleFrame = "Acceuil"
+        
+        BACKGROUND_COLOR = "gray20"
+        self.config(bg=BACKGROUND_COLOR)
