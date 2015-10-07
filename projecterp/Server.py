@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
+import DbManager
 import Pyro4
 import socket
 
 class Server(object):
     def __init__(self):
-        pass
+        self.dbManager=DbManager.DbManager("data1.db")
     
-    def loginValidation(self, user):
-        print("bien recu! "+user)
-        message = "Bonjour "+user+"!"
-        return message
+    def loginValidation(self, user,mdp):
+        if self.dbManager.login(user,mdp):
+            return True
+        else:
+            return False
+        
  
     def writeIP(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
