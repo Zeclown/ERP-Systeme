@@ -11,7 +11,15 @@ class DbManager():
         self.createDB()
     def query(self,query):
         self.cursorDB.execute(query)
-        self.cursor.commit()
+        self.cursorDB.commit()
+        return self.cursorDB.fetchall()
+    def login(self,name,pswd):
+        self.cursorDB.execute('SELECT id From Sys_Usagers Where nom=? AND mdp=?', (name,pswd))
+        if self.cursorDB.fetchone():
+            return True
+        else:
+            return False
+        
     def createDB(self):
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_GroupesUtilisateurs
              (id integer primary key, nom text NOT NULL, droits text NOT NULL)''')
@@ -34,4 +42,4 @@ class DbManager():
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
              (id integer primary key, tableChoisie text NOT NULL,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
 if __name__ == "__main__":
-    db=DbManager("")        
+    db=DbManager("data1.db")        
