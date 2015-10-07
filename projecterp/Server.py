@@ -3,6 +3,7 @@ import DbManager
 import Pyro4
 import socket
 
+
 class Server(object):
     def __init__(self):
         self.dbManager=DbManager.DbManager("data1.db")
@@ -32,6 +33,11 @@ class Server(object):
         
         if(f.readline() != self.monip):
             self.writeIP()
+
+            
+    def executeSql(self, query):
+        self.dbManager.query(query)
+            
 
 serverPyro = Server()   #objet du serveur
 
