@@ -18,4 +18,8 @@ class ServerCommunication():
         self.server.runQuery(SQLquery)
         
     def logIn(self,user,password):
-        self.server.tryLogIn(user,password)
+        if user.strip() or password.strip() == "":
+            return False
+        else:
+            return self.server.loginValidation(user,password)
+            

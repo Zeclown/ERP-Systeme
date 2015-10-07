@@ -8,6 +8,7 @@ class View():
         self.parent = parent
         self.currentFrame = None
         self.frameLogin = FrameLogin(self, self.root, width=400, height=150)
+        self.frameAcceuil = FrameAcceuil(self, self.root, width=600, height=400)
         self.frameSwapper(self.frameLogin)
 
     def frameSwapper(self, frame):
@@ -41,33 +42,11 @@ class FrameLogin(Frame):
         self.labelPass = Label(self, text="Password : ", bg=BACKGROUND_COLOR, fg="white", width=25, anchor=E)
         self.labelPass.grid(row=2, column=0, sticky=E)
         self.entryPass = Entry(self, show="*")
-<<<<<<< HEAD:projecterp/View.py
-        self.entryPass.pack(side=LEFT)
-        
-        self.ButtonLogin = Button(self, text="Login", command=self.parent.userLogin())
-        self.ButtonLogin.pack(side=BOTTOM)
-        
-    def buttonLogin(self):
-        self.view.parent.userLogin(self.entryName.get(), self.entryPass.get())
-=======
         self.entryPass.grid(row=2, column=1, sticky=E)
 
-        self.ButtonLogin = Button(self, text="Login", width=10, command=self.buttonLogin)
+        self.ButtonLogin = Button(self, text="Login", width=10, command=self.view.parent.userLogin)
         self.ButtonLogin.grid(row=3, column=1, sticky=E)
-
-
-
-    def buttonLogin(self):
-        self.view.parent.userLogin(self.entryName.get(), self.entryPass.get())
-
-class Controller():
-    def __init__(self):
-        self.view = View(self)
-
-    def userLogin(self, user, password):
-        print(user, password)
-
-
-c = Controller()
-c.view.root.mainloop()
->>>>>>> 0f6531b3e48f04258f99debfe0410a66feaa5e8f:projecterp/View.py
+    
+    def resetEntries(self):
+        self.entryName.delete(0, END)
+        self.entryPass.delete(0, END)

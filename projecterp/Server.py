@@ -13,7 +13,6 @@ class Server(object):
         else:
             return False
         
- 
     def writeIP(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("gmail.com",80))
