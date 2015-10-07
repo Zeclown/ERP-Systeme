@@ -9,16 +9,15 @@ class ServerCommunication():
     def connectToServer(self):
         self.server = Pyro4.Proxy(self.serverAdress)
         
-    def testServer(self):   
-        string = input("TEST TEST TEST, BONJOUR ANTOINE!!!!")
-        reponse = self.server.loginValidation(string)
-        print ( reponse )
-        
     def runSQLQuery(self,SQLquery):
         self.server.runQuery(SQLquery)
         
     def logIn(self,user,password):
-        if user.strip() == "" or password.strip() == "":
+        if user.strip()== "" or password.strip() == "":
             return False
         else:
-            return self.server.loginValidation(user,password)
+            
+            message= self.server.loginValidation(user,password)
+            print(message)
+            return message
+            
