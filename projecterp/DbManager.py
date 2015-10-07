@@ -41,6 +41,7 @@ class DbManager():
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
-             (id integer primary key, tableChoisie text NOT NULL,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
+             (id integer primary key, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
+        
 if __name__ == "__main__":
     db=DbManager("data1.db")        
