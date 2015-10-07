@@ -19,7 +19,3 @@ class ServerCommunication():
         
     def logIn(self,user,password):
         self.server.tryLogIn(user,password)
-        
-s = ServerCommunication()
-s.connectToServer()
-s.testServer()

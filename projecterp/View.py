@@ -40,19 +40,8 @@ class FrameLogin(Frame):
         self.entryPass = Entry(self, show="*")
         self.entryPass.pack(side=LEFT)
         
-        self.ButtonLogin = Button(self, text="Login", command=self.buttonLogin)
+        self.ButtonLogin = Button(self, text="Login", command=self.parent.userLogin())
         self.ButtonLogin.pack(side=BOTTOM)
         
     def buttonLogin(self):
         self.view.parent.userLogin(self.entryName.get(), self.entryPass.get())
-    
-class Controller():
-    def __init__(self):
-        self.view = View(self)
-    
-    def userLogin(self, user, password):
-        print(user, password)    
-        
-
-c = Controller()
-c.view.root.mainloop()

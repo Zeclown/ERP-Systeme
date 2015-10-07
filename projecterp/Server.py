@@ -29,7 +29,7 @@ class Server(object):
         self.monip=s.getsockname()[0]
         
         if(f.readline() != self.monip):
-            writeIP()
+            self.writeIP()
 
 serverPyro = Server()   #objet du serveur
 

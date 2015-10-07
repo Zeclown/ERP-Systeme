@@ -9,25 +9,6 @@ class DbManager():
         self.db=sqlite3.connect(dbPath)
         self.cursorDB = self.db.cursor()
         self.createDB()
-    def getTable(self,name): #retourne la table en uilisant son nom
-        self.cursorDB.execute('select * From' + name)
-        names = list(map(lambda x: x[0], cursor.description))
-        rows=self.cursorDB.fetchall()
-        dictionnary={}
-        for i in range(len(names)):
-            for j in rows:
-                dictionnary[names[i]]=j[i]
-        return dictionnary
-        
-    def getRows(self,tableName,conditions): #retourne une ou plusieur rang� d�pendant d'une liste de condition (WHERE) 
-        self.cursorDB.execute('select * From ' + name + " WHERE " + conditions)
-        names = list(map(lambda x: x[0], cursor.description))
-        rows=self.cursorDB.fetchall()
-        dictionnary={}
-        for i in range(len(names)):
-            for j in rows:
-                dictionnary[names[i]]=j[i]
-        return dictionnary
     def query(self,query):
         self.cursorDB.execute(query)
         self.cursor.commit()
