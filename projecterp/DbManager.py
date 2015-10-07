@@ -15,6 +15,7 @@ class DbManager():
         return self.cursorDB.fetchall()
     def login(self,name,pswd):
         self.cursorDB.execute('SELECT id From Sys_Usagers Where nom=? AND mdp=?', (name,pswd))
+        
         if self.cursorDB.fetchone():
             return True
         else:

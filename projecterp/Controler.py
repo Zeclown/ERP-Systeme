@@ -9,7 +9,7 @@ class Controler():
         self.view.root.mainloop()
         
     def userLogin(self): 
-        if self.serverCommunication.logIn(self.view.entryName.get(), self.view.entryPass.get()) :
+        if self.serverCommunication.logIn(self.view.frameLogin.entryName.get(), self.view.frameLogin.entryPass.get()) :
             self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
         else:
             print( "FALSE LOG IN") #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
