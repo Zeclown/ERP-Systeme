@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import Pyro4
 import socket
+import DbManager
 
 class Server(object):
     def __init__(self):
-        pass
+        self.dbManager = DbManager.DbManager()
+        
     
     def loginValidation(self, user):
         print("bien recu! "+user)
@@ -30,6 +32,11 @@ class Server(object):
         
         if(f.readline() != self.monip):
             writeIP()
+            
+    def executeSql(self, query):
+        self.dbManager.query(query)
+            
+    
 
 serverPyro = Server()   #objet du serveur
 
