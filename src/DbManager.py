@@ -37,7 +37,7 @@ class DbManager():
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Crons
-             (id integer primary key, nom text NOT NULL,fnct_id integer, nbTemps integer, frequence integer ,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
+             (id integer primary key, nom text NOT NULL,fnct_id integer, nbTemps integer, frequence integer ,actif INTEGER,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
