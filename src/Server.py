@@ -2,14 +2,16 @@
 import DbManager
 import Pyro4
 import socket
+import shutil
+from threading import Timer
 
 
 class Server(object):
     def __init__(self):
         self.dbManager=DbManager.DbManager("data1.db")
     
-    def loginValidation(self, user,mdp):
-        if self.dbManager.login(user,mdp):
+    def loginValidation(self, user, mdp):
+        if self.dbManager.login(user, mdp):
             return True
         else:
             return False
@@ -37,6 +39,26 @@ class Server(object):
             
     def executeSql(self, query):
         self.dbManager.query(query)
+        
+#     def executeCronJobs(self):
+#         existingCronJobsInDB = []
+#         activeCronJobs = []
+#         
+#         for i in existingCronJobs:
+#             newCronJob = CronJob("placeholder")
+#             activeCronJobs.append(newCronJob)
+# 
+#         for i in activeCronJobs:
+#             t = Timer(5.0, hello)
+            
+
+    
+    def backupDatabase(self):
+        shutil.copyfile("data1.db","database_Backup.db")
+        
+class CronJob():
+    def __init__(self,nom):
+        self.nom = nom
             
 
 serverPyro = Server()   #objet du serveur
@@ -46,6 +68,8 @@ uri = daemon.register(serverPyro,"foo")
 
 serverPyro.writeIP()
 serverPyro.correctIP()
+
+serverPyro.backupDatabase()
 
 print("ready")
 daemon.requestLoop()
