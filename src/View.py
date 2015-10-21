@@ -27,13 +27,13 @@ class FrameLogin(Frame):
         self.titleFrame = "Login"
         #self.parent.wm_overrideredirect(True)
 
-        BACKGROUND_COLOR = "gray20"
+        BACKGROUND_COLOR = "#bdc3c7"
         self.config(bg=BACKGROUND_COLOR)
 
         self.label = Label(self, bg=BACKGROUND_COLOR)
         self.label.grid(row=0, column=0, sticky=W)
 
-        self.labelName = Label(self, text="User : ", bg=BACKGROUND_COLOR, fg="white", width=25, anchor=E)
+        self.labelName = Label(self, text="Username : ", bg=BACKGROUND_COLOR, fg="white", width=25, anchor=E)
         self.labelName.grid(row=1, column=0, sticky=E)
         self.entryName = Entry(self)
         self.entryName.focus_set()
@@ -46,6 +46,9 @@ class FrameLogin(Frame):
 
         self.ButtonLogin = Button(self, text="Login", width=10, command=self.view.parent.userLogin)
         self.ButtonLogin.grid(row=3, column=1, sticky=E)
+        
+        self.labelWrongPassword = Label(self, text="Le nom d'usager et ou le mot de passe sont invalides")
+        self.labelWrongPassword = None
     
     def resetEntries(self):
         self.entryName.delete(0, END)

@@ -14,14 +14,16 @@ class Controler():
         
         booltest=self.serverCommunication.logIn(test1,test2 )
         
-        
-        
         if booltest :
-             self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
+            self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
         else:
             print( "FALSE LOG IN") #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
             self.view.frameLogin.resetEntries()
 
-            
+    
+    def getFormsNameList(self):
+        sqlQuery = "SELECT names FROM formulaire"
+        self.serverCommunication.runSQLQuery(sqlQuery)
+               
 if __name__ == '__main__':
     c = Controler()
