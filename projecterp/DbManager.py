@@ -6,7 +6,7 @@ import sqlite3
 
 class DbManager():
     def __init__(self,dbPath):
-        self.db=sqlite3.connect(dbPath)
+        self.db=sqlite3.connect(dbPath,check_same_thread=False)
         self.cursorDB = self.db.cursor()
         self.createDB()
     def query(self,query):

@@ -16,7 +16,6 @@ class ServerCommunication():
         if user.strip()== "" or password.strip() == "":
             return False
         else:
-            
             message= self.server.loginValidation(user,password)
             print(message)
             return message
