@@ -27,7 +27,7 @@ class Server(object):
         f.close()
         
     def correctIP(self):
-        f = open("ip address.txt", "r")
+        f = open("ip_address.txt", "r")
         
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("gmail.com",80))
