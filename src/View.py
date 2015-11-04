@@ -62,7 +62,8 @@ class FrameUsersList(GFrame):
         self.frameCreation.labelPassword=Label(self.frameCreation,text="Password : ")
         self.frameCreation.nameVariable=StringVar()
         self.frameCreation.nameVariable.trace("w", lambda name, index, mode,sv=self.frameCreation.nameVariable: self.verifyUserName(sv))
-        self.frameCreation.entryName=Label(self.frameCreation,)
+        self.frameCreation.entryName=Label(self.frameCreation,textvariable=self.frameCreation.nameVariable)
+        self.frameCreation.entryPassword=Entry(self.frameCreation)
     def verifyUserName(self):
         pass
     def newUser(self):
