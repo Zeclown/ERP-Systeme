@@ -12,10 +12,9 @@ class View():
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         self.frameCreateUser = FrameCreateUser(self, self.root, "Cree un usager", width=400, height=300)
-        self.frameSwapper(self.frameCreateUser)
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
-        self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
+        self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaires", width=900, height=500)
         self.frameSwapper(self.frameFormulaire)
         #self.frameSwapper(self.frameUsersList)
         
@@ -31,7 +30,7 @@ class View():
         frame.pack(fill=BOTH, expand=True)
         self.currentFrame = frame
         self.root.title(frame.titleFrame)
-        self.currentFrame.updateFrame()
+        #self.currentFrame.updateFrame()
 
 class Styles(Style):
     def __init__(self):
@@ -179,15 +178,34 @@ class FrameAcceuil(GFrame):
         GFrame.addMenuBar(self, 1)  
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
-        GFrame.__init__(self, parentController, parentWindow, title, **args)      
-        self.labelTitle = Label(self, text = "Formulaires")
-        self.formsListBox = Listbox(self)
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+        
+        self.labelTitle = Label(self, text = "Formulaires", font=("Cooper Black", 20))
+        self.formsListBox = Listbox(self, bd = 12, width = 40, bg = "#2ecc71", font=("Arial Black", 14))
+        self.formsListBox.bind('<<ListboxSelect>>', self.selectForm)
+        
+        self.labelTitleInfo = Label(self, text = "Information", font=("Cooper Black", 20))
+        
         print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
             
-        self.labelTitle.pack()
-        self.formsListBox.pack()
+        self.labelTitle.grid(row = 0, column = 0)
+        self.formsListBox.grid(row = 1, column = 0)
+        self.labelTitleInfo.grid(row = 0, column = 1)
+    
+    def selectForm(self,evt):
+        try:
+            listBox = evt.widget
+            index = int(listBox.curselection()[0])
+            value = listBox.get(index)
+            print(value)
+            return value
+        except Exception: 
+            pass
+            
+           
+        
    
 
 

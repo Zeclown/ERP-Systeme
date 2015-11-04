@@ -110,6 +110,7 @@ class Server(object):
     
         
     
+
         
 class CronJob():
     def __init__(self, parent, id, nom, fnctid, nbTemps, frequence, activeCron):
@@ -139,6 +140,7 @@ class CronJob():
 serverPyro = Server()   #objet du serveur
 
 daemon = Pyro4.Daemon(host="10.57.47.23",port=43225)      #ce qui écoute les remote calls sur le serveur
+
 
 uri = daemon.register(serverPyro,"foo")
 
