@@ -24,7 +24,7 @@ class Controler():
 
     
     def getFormsNameList(self):
-        sqlQuery = "SELECT names FROM formulaire"
+        sqlQuery = "SELECT nom FROM Sys_Formulaires"
         self.model.formsList = self.serverCommunication.runSQLQuery(sqlQuery)
         return self.model.formsList
                
