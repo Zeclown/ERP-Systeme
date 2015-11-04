@@ -34,10 +34,8 @@ class DbManager():
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumList
              (id integer, nom text NOT NULL,FOREIGN KEY(id) REFERENCES Sys_EnumType(id))''')
-        self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
-             (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Crons
-             (id integer primary key, nom text NOT NULL,fnct_id integer, nbTemps integer, frequence integer ,actif INTEGER,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
+             (id integer primary key, nom text NOT NULL,fnct_id integer, nbTemps text, frequence integer ,actif INTEGER,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
