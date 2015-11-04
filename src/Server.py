@@ -38,7 +38,7 @@ class Server(object):
 
             
     def executeSql(self, query):
-        self.dbManager.query(query)
+        return self.dbManager.query(query)
         
 #     def executeCronJobs(self):
 #         existingCronJobsInDB = []
@@ -63,8 +63,14 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
+<<<<<<< HEAD
 #daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
 daemon = Pyro4.Daemon(host="127.0.0.1",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
+=======
+
+daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui écoute les remote calls sur le serveur
+
+>>>>>>> 510c5fd9adceea27a5e7df51724f3f5108c19010
 uri = daemon.register(serverPyro,"foo")
 
 serverPyro.writeIP()
@@ -74,4 +80,3 @@ serverPyro.backupDatabase()
 
 print("ready")
 daemon.requestLoop()
-        

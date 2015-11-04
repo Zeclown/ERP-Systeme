@@ -2,8 +2,8 @@ import Pyro4
 
 class ServerCommunication():
     def __init__(self):
-        #self.serverAdress = "PYRO:foo@10.57.47.25:43225"
-        self.serverAdress = "PYRO:foo@127.0.0.1:43225"
+        self.serverAdress = "PYRO:foo@10.57.47.25:43225"
+        #self.serverAdress = "PYRO:foo@127.0.0.1:43225"
         self.status = None
         self.server = None
         
@@ -11,7 +11,7 @@ class ServerCommunication():
         self.server = Pyro4.Proxy(self.serverAdress)
         
     def runSQLQuery(self,SQLquery):
-        self.server.runQuery(SQLquery)
+        return self.server.executeSql(SQLquery)
         
     def logIn(self,user,password):
         if user.strip()== "" or password.strip() == "":
