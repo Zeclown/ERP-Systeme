@@ -203,8 +203,8 @@ class FrameFormulaire(GFrame):
             return value
         except Exception: 
             pass
-            
-           
+
+
         
    
 

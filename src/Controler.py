@@ -20,6 +20,7 @@ class Controler():
             self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
         else:
             print( "FALSE LOG IN" ) #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
+            self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
             self.view.frameLogin.resetEntries()
 
     
