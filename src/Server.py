@@ -66,7 +66,7 @@ class Server(object):
                 frequence = cronJobResult[i][4]
                 activeCron = cronJobResult[i][5]
                 
-                newCronJob = CronJob(nom, fnctid, nbTemps, frequence, activeCron)
+                newCronJob = CronJob(self, nom, fnctid, nbTemps, frequence, activeCron)
                 self.activeCronJobs.append(newCronJob)
         
     def executeCronJobs(self):
@@ -112,7 +112,8 @@ class Server(object):
     
         
 class CronJob():
-    def __init__(self, id, nom, fnctid, nbTemps, frequence, activeCron):
+    def __init__(self, parent, id, nom, fnctid, nbTemps, frequence, activeCron):
+        self.parent = parent
         self.id = id
         self.nom = nom
         self.functionId = fnctid
@@ -124,12 +125,12 @@ class CronJob():
         tempsAExecuter = self.frequence*nbTemps
         self.t = Timer( tempsAExecuter ,timerExecution)
         self.t.start()
-        if(functionId == 1):
-            backupDatabase()
-        elif(functionId == 2):
-            sendEmail()
-        elif(functionId == 3):
-            writeLog()
+        if(self.functionId == 1):
+            self.parent.backupDatabase()
+        elif(self.functionId == 2):
+            self.parent.sendEmail()
+        elif(self.functionId == 3):
+            self.parent.writeLog()
             
     def cancelTimer(self):
         self.t.cancel()
