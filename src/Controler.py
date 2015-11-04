@@ -1,10 +1,12 @@
 from ServerCommunication import *
 from View import *
+from Model import *
 
 class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication()
         self.serverCommunication.connectToServer()
+        self.model = Model()
         self.view = View(self)
         self.view.root.mainloop()
         
@@ -23,7 +25,8 @@ class Controler():
     
     def getFormsNameList(self):
         sqlQuery = "SELECT names FROM formulaire"
-        self.serverCommunication.runSQLQuery(sqlQuery)
+        self.model.formsList = self.serverCommunication.runSQLQuery(sqlQuery)
+        return self.model.formsList
                
 if __name__ == '__main__':
     c = Controler()

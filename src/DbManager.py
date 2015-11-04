@@ -14,9 +14,9 @@ class DbManager():
         self.cursorDB.commit()
         return self.cursorDB.fetchall()
     def login(self,name,pswd):
-        self.cursorDB.execute('SELECT id From Sys_Usagers Where nom=? AND mdp=?', (name,pswd))
+        self.cursorDB.execute('SELECT id From Sys_Usagers Where nom=? AND mdp=?', (name,pswd))        
         
-        if self.cursorDB.fetchone():
+        if self.cursorDB.fetchone()!=None:
             return True
         else:
             return False
@@ -27,9 +27,9 @@ class DbManager():
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Usagers
              (id integer primary key, nom text NOT NULL, mdp text NOT NULL, groupUtilisateur integer  ,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Formulaires
-             ( id integer primary key,nom text NOT NULL, date_creation Date NOT NULL, derni�re_modif Date NOT NULL  , acces_utilisation integer UNIQUE ,acces_modification integer UNIQUE  )''')
+             ( id integer primary key,nom text NOT NULL, date_creation Date NOT NULL, derniere_modif Date NOT NULL  , acces_utilisation integer UNIQUE ,acces_modification integer UNIQUE  )''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Specificite
-             (id integer, nomChamp text NOT NULL, type text NOT NULL,FOREIGN KEY(id) REFERENCES Sys_Formulaires(id))''')
+             (id integer, nomChamp text NOT NULL, type text NOT NULL,nomTable text,colonne text,action text,FOREIGN KEY(id) REFERENCES Sys_Formulaires(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumType
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumList
@@ -37,7 +37,7 @@ class DbManager():
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Crons
-             (id integer primary key, nom text NOT NULL,fnct_id integer, nbTemps integer, frequence integer ,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
+             (id integer primary key, nom text NOT NULL,fnct_id integer, nbTemps integer, frequence integer ,actif INTEGER,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
              (id integer primary key, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
