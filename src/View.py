@@ -109,11 +109,10 @@ class FrameFormulaire(GFrame):
         self.labelTitle = Label(self, text = "Formulaires")
         self.formsListBox = Listbox(self)
         
-        for i in self.parentController.getFormsNameList():
+        for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
             
         self.labelTitle.pack()
         self.formsListBox.pack()
-            
-        
+   
 
