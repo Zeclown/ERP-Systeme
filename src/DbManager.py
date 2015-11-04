@@ -27,7 +27,7 @@ class DbManager():
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Usagers
              (id integer primary key, nom text NOT NULL, mdp text NOT NULL, groupUtilisateur integer  ,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Formulaires
-             ( id integer primary key,nom text NOT NULL, date_creation Date NOT NULL, derniere_modif Date NOT NULL  , acces_utilisation integer UNIQUE ,acces_modification integer UNIQUE  )''')
+             ( id integer primary key,nom text NOT NULL, date_creation Date NOT NULL, derniere_modif Date NOT NULL  , acces_utilisation integer  ,acces_modification integer   )''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Specificite
              (id integer, nomChamp text NOT NULL, type text NOT NULL,nomTable text,colonne text,action text,FOREIGN KEY(id) REFERENCES Sys_Formulaires(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumType
