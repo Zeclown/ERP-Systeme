@@ -12,7 +12,7 @@ class View():
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         self.frameUsers=FrameUsers(self, self.root, "Usagers", width=900, height=500)
-        self.frameFormulaire=FrameUsers(self, self.root, "Formulaire", width=900, height=500)
+        self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
         
     def show(self):
@@ -76,7 +76,7 @@ class FrameAcceuil(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         
-class FrameFormulaiure(GFrame):
+class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         
