@@ -80,7 +80,13 @@ class FrameFormulaiure(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         
+        self.labelTitle = Label(self, text = "Formulaires")
         self.formsListBox = Listbox(self)
         
         for i in self.parentController.getFormsNameList():
             self.formsListBox.insert(END,i)
+            
+        self.labelTitle.pack()
+        self.formsListBox.pack()
+            
+        
