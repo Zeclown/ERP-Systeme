@@ -11,7 +11,7 @@ class DbManager():
         self.createDB()
     def query(self,query):
         self.cursorDB.execute(query)
-        self.cursorDB.commit()
+        self.db.commit()
         return self.cursorDB.fetchall()
     def login(self,name,pswd):
         self.cursorDB.execute('SELECT id From Sys_Usagers Where nom=? AND mdp=?', (name,pswd))        
