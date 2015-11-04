@@ -47,7 +47,6 @@ class Server(object):
 
             
     def executeSql(self, query):
-<<<<<<< HEAD
         queryResult = self.dbManager.query(query)
         return queryResult
     
@@ -87,20 +86,6 @@ class Server(object):
         aFileName = "database_Backup_"+ str(self.databaseVersion) +".db"
         if( os.path.isfile(aFileName) ):
             shutil.move( aFileName, "Archives/"+aFileName)
-=======
-        return self.dbManager.query(query)
-        
-#     def executeCronJobs(self):
-#         existingCronJobsInDB = []
-#         activeCronJobs = []
-#         
-#         for i in existingCronJobs:
-#             newCronJob = CronJob("placeholder")
-#             activeCronJobs.append(newCronJob)
-# 
-#         for i in activeCronJobs:
-#             t = Timer(5.0, hello)
->>>>>>> 1d45f5533f24e72fcc7a271aa8fc4aa7f36e545a
             
         self.databaseVersion = int(self.databaseVersion)
         self.databaseVersion += 1
@@ -152,18 +137,8 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
-<<<<<<< HEAD
 daemon = Pyro4.Daemon(host="10.57.47.23",port=43225)      #ce qui écoute les remote calls sur le serveur
-=======
-<<<<<<< HEAD
-#daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
-daemon = Pyro4.Daemon(host="127.0.0.1",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
-=======
 
-daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui écoute les remote calls sur le serveur
-
->>>>>>> 510c5fd9adceea27a5e7df51724f3f5108c19010
->>>>>>> 1d45f5533f24e72fcc7a271aa8fc4aa7f36e545a
 uri = daemon.register(serverPyro,"foo")
 
 #serverPyro.writeIP()                #IP SHIT, NEEDS FIXING
