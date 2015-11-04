@@ -27,7 +27,7 @@ class Server(object):
         f.close()
         
     def correctIP(self):
-        f = open("ip_address.txt", "r")
+        f = open("ip address.txt", "r")
         
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("gmail.com",80))
@@ -63,7 +63,8 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
-daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui écoute les remote calls sur le serveur
+#daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host="127.0.0.1",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
 uri = daemon.register(serverPyro,"foo")
 
 serverPyro.writeIP()
