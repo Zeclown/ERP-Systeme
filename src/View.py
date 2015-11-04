@@ -13,7 +13,7 @@ class View():
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        self.frameSwapper(self.frameLogin)
+        self.frameSwapper(self.frameFormulaire)
         #self.frameSwapper(self.frameUsersList)
         
     def show(self):
@@ -109,7 +109,7 @@ class FrameFormulaire(GFrame):
         
         self.labelTitle = Label(self, text = "Formulaires")
         self.formsListBox = Listbox(self)
-        
+        print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
             

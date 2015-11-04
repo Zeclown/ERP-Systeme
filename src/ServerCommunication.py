@@ -10,7 +10,7 @@ class ServerCommunication():
         self.server = Pyro4.Proxy(self.serverAdress)
         
     def runSQLQuery(self,SQLquery):
-        self.server.runQuery(SQLquery)
+        return self.server.executeSql(SQLquery)
         
     def logIn(self,user,password):
         if user.strip()== "" or password.strip() == "":

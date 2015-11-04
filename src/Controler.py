@@ -14,9 +14,9 @@ class Controler():
         username = self.view.frameLogin.entryName.get()
         password = self.view.frameLogin.entryPass.get()
         
-        booltest=self.serverCommunication.logIn(username,password )
+        testLogIn = self.serverCommunication.logIn(username,password )
         
-        if booltest :
+        if testLogIn :
             self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
         else:
             print( "FALSE LOG IN" ) #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
@@ -24,7 +24,7 @@ class Controler():
 
     
     def getFormsNameList(self):
-        sqlQuery = "SELECT names FROM formulaire"
+        sqlQuery = "SELECT nom FROM Sys_Formulaires"
         self.model.formsList = self.serverCommunication.runSQLQuery(sqlQuery)
         return self.model.formsList
                
