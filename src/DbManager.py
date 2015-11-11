@@ -8,7 +8,7 @@ class DbManager():
     def __init__(self,dbPath):
         self.db=sqlite3.connect(dbPath,check_same_thread=False)
         self.cursorDB = self.db.cursor()
-        self.createDB()
+        #self.createDB()
     def query(self,query):
         self.cursorDB.execute(query)
         self.db.commit()
