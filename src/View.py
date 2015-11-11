@@ -17,18 +17,13 @@ class View():
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
 
-        
     def show(self):
         self.root.mainloop()
+
     def styleCreation(self):
         self.style=Style()
-<<<<<<< HEAD
         #self.style.configure("TButton", background="black",foreground="white")
 
-        
-=======
->>>>>>> 1dfe00b95e9bb655a7ce5e9341131a3e55402497
-        
     def frameSwapper(self, frame):
         if self.currentFrame:
             self.currentFrame.pack_forget()
@@ -255,4 +250,3 @@ class FrameCreateTable(GFrame):
         self.entryTableName.delete(0,END)
         self.listboxColumns.delete(0, END)
         self.listboxTypes.delete(0, END)
-           
