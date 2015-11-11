@@ -15,7 +15,7 @@ class View():
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        self.frameSwapper(self.frameLogin)
+        self.frameSwapper(self.frameCreateTable)
         #self.frameSwapper(self.frameUsersList)
 
         
@@ -193,12 +193,13 @@ class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         GFrame.addMenuBar(self, 1)
+        self.types=["number","string"]
         self.createButton=Button(self, text="Ajouter Table", width=10,command=self.createTable)  
         self.addColumnButton=Button(self, text="Ajouter Colonne", width=10,command=self.addColumn)
         self.listboxColumns=Listbox(self);
         self.entryColumnName=Entry(self)
         self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
-        self.comboBoxType=Combobox(self);
+        self.comboBoxType=Combobox(self,values=self.types);
         self.labelTableName=Label(self, text="Nom de la table : ",  width=25, anchor=W);
         self.entryTableName=Entry(self)
         self.labelType=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
@@ -206,8 +207,14 @@ class FrameCreateTable(GFrame):
         self.labelTableName.grid(column=0,row=0)
         self.entryTableName.grid(column=1,row=0)
         self.labelColumnName.grid(column=0,row=1)
-        self.entryColumnName.grid(column=0,row=2)
-        self.labelType.grid(column=0,row=3)
+        self.entryColumnName.grid(column=1,row=1)
+        self.labelType.grid(column=2,row=1)
+        self.comboBoxType.grid(column=3,row=1)
+        self.addColumnButton.grid(column=0,row=2)
+        self.listboxColumns.grid(column=0,row=3)
+        self.createButton.grid(column=0,row=4)
+        
+        
     def addColumn(self):
         self.listboxColumns.insert(END,self.entryColumnName.get() + "  " + self.comboBoxType.get() )
         self.currentTable[self.entryColumnName.get()]=self.comboBoxType.get()

@@ -65,12 +65,11 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
-<<<<<<< HEAD
-=======
-daemon = Pyro4.Daemon(host="10.57.47.23",port=48261)      #ce qui écoute les remote calls sur le serveur
->>>>>>> c22971302bf82e4658c393765fb01e74000eb376
 
-daemon = Pyro4.Daemon(host="10.57.47.24",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host="10.57.47.22",port=48261)      #ce qui écoute les remote calls sur le serveur
+
+
+
 #daemon = Pyro4.Daemon(host="127.0.0.1",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
 
 
