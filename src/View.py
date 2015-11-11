@@ -11,13 +11,13 @@ class View():
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
-        
         self.frameCreateTable=FrameCreateTable(self, self.root, "Create Table", width=900, height=500)
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
         #self.frameSwapper(self.frameUsersList)
+
         
     def show(self):
         self.root.mainloop()
@@ -50,7 +50,7 @@ class GFrame(Frame):
     def addMenuBar(self, showMenuBar):
         self.menuBar = Menu(self.parentWindow, tearoff=0)
         optionMenu = Menu(self.menuBar, tearoff=0)
-        optionMenu.add_command(label="Cree un usager", command=self.addUserToDB)
+        optionMenu.add_command(label="Cree un usager", command=self.callFrameUsersList)
         optionMenu.add_command(label="Cree un grope", command=self.addGroupToDB)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
@@ -60,9 +60,9 @@ class GFrame(Frame):
     def updateFrame(self):
         pass
             
-    def addUserToDB(self):
-        print("addUserToDB")
-    
+    def callFrameUsersList(self):
+        self.parentController.frameSwapper(self.parentController.frameUsersList)
+        
     def addGroupToDB(self):
         print("addGroupToDB")
         
@@ -139,13 +139,10 @@ class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         
-        
         self.label = Label(self)
         self.label.grid(row=0, column=0, sticky=W)
 
-
         self.labelName = Label(self, text="Usager : ", width=25, anchor=E)
-
         self.labelName.grid(row=1, column=0, sticky=E)
         self.entryName = Entry(self)
         self.entryName.focus_set()
@@ -173,7 +170,9 @@ class FrameLogin(GFrame):
 class FrameAcceuil(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
-        GFrame.addMenuBar(self, 1)  
+        GFrame.addMenuBar(self, 1)
+    
+        
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)      
