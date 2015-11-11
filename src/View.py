@@ -193,29 +193,40 @@ class FrameCreateTable(GFrame):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         GFrame.addMenuBar(self, 1)
         self.types=["number","string"]
-        self.createButton=Button(self, text="Ajouter Table", width=10,command=self.createTable)  
-        self.addColumnButton=Button(self, text="Ajouter Colonne", width=10,command=self.addColumn)
-        self.listboxColumns=Listbox(self);
+        self.createButton=Button(self, text="Ajouter Table", width=15,command=self.createTable)  
+        self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn)
+        
+        self.listboxColumns=Treeview(self, selectmode="extended",columns=("Type"))
+        
         self.entryColumnName=Entry(self)
         self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
         self.comboBoxType=Combobox(self,values=self.types);
         self.labelTableName=Label(self, text="Nom de la table : ",  width=25, anchor=W);
         self.entryTableName=Entry(self)
-        self.labelType=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
+        
+        self.listboxColumns.heading("#0", text="Nom de colonne",anchor=W)
+        self.listboxColumns.heading("Type", text="Type",anchor=W)
+        self.labelType=Label(self, text="Type de la colonne : ",  width=25, anchor=W);
+        self.comboBoxType.config(state="readonly")
         self.currentTable={}
+        
         self.labelTableName.grid(column=0,row=0)
         self.entryTableName.grid(column=1,row=0)
         self.labelColumnName.grid(column=0,row=1)
         self.entryColumnName.grid(column=1,row=1)
         self.labelType.grid(column=2,row=1)
         self.comboBoxType.grid(column=3,row=1)
-        self.addColumnButton.grid(column=0,row=2)
-        self.listboxColumns.grid(column=0,row=3)
+        self.addColumnButton.grid(column=4,row=1)
+        self.listboxColumns.grid(column=0,row=2,columnspan=2)
+        
+        
         self.createButton.grid(column=0,row=4)
         
         
+        
     def addColumn(self):
-        self.listboxColumns.insert(END,self.entryColumnName.get() + "  " + self.comboBoxType.get() )
+        self.listboxColumns.insert("", END,    text=self.entryColumnName.get(), values=(self.comboBoxType.get()))
+        
         self.currentTable[self.entryColumnName.get()]=self.comboBoxType.get()
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
@@ -224,4 +235,5 @@ class FrameCreateTable(GFrame):
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
         self.listboxColumns.delete(0, END)
+        self.listboxTypes.delete(0, END)
            
