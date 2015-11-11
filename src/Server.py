@@ -3,15 +3,15 @@ import DbManager
 import Pyro4
 import socket
 import shutil
-import os.path
-import smtplib
-from email.mime.text import MIMEText
 from threading import Timer
 
 
 class Server(object):
     def __init__(self):
+        self.ipDuServeur = "10.57.47.23"
+        self.portDuServeur = 48261
         self.dbManager=DbManager.DbManager("data1.db")
+
         self.databaseVersion = 0
         #f = open("Ressources/Database_Version.txt", "r")
         #print(f.readline())
@@ -46,6 +46,7 @@ class Server(object):
             self.writeIP()
 
             
+
     def executeSql(self, query, bindings = None):
         queryResult = self.dbManager.query(query,bindings)
         return queryResult
@@ -86,71 +87,44 @@ class Server(object):
         aFileName = "database_Backup_"+ str(self.databaseVersion) +".db"
         if( os.path.isfile(aFileName) ):
             shutil.move( aFileName, "Archives/"+aFileName)
-            
-        self.databaseVersion = int(self.databaseVersion)
-        self.databaseVersion += 1
+
         
-        aFileName = "database_Backup_"+ str(self.databaseVersion) +".db"
-        shutil.copyfile("data1.db", aFileName)
-        
-        #t = Timer( 3.0, serverPyro.backupDatabase)
-        #t.start()
-        
-    def sendEmail(self, subjectEmail, fromEmail, toEmail):    #Le ID de cette fonction est 2
-        msg['Subject'] = subjectEmail
-        msg['From'] = fromEmail             #NEEDS FIXING LATER
-        msg['To'] = toEmail
-        
-        s = smtplib.SMTP('localhost')       #RESTE A TESTER, voir c'est quoi un SMTP serveur
-        s.send_message(msg)
-        s.quit()
-    
-    def writeLog(self):              #Le ID de cette fonction est 3
-        pass
-    
-        
-    
+#     def executeCronJobs(self):
+#         existingCronJobsInDB = []
+#         activeCronJobs = []
+#         
+#         for i in existingCronJobs:
+#             newCronJob = CronJob("placeholder")
+#             activeCronJobs.append(newCronJob)
+# 
+#         for i in activeCronJobs:
+#             t = Timer(5.0, hello)
 
         
 class CronJob():
-    def __init__(self, parent, id, nom, fnctid, nbTemps, frequence, activeCron):
-        self.parent = parent
-        self.id = id
+    def __init__(self,nom):
         self.nom = nom
-        self.functionId = fnctid
-        self.nbTemps = nbTemps
-        self.frequence = frequence
-        self.activeCron = activeCron
-        
-    def timerExecution(self):
-        tempsAExecuter = self.frequence*nbTemps
-        self.t = Timer( tempsAExecuter ,timerExecution)
-        self.t.start()
-        if(self.functionId == 1):
-            self.parent.backupDatabase()
-        elif(self.functionId == 2):
-            self.parent.sendEmail()
-        elif(self.functionId == 3):
-            self.parent.writeLog()
             
-    def cancelTimer(self):
-        self.t.cancel()
-        
 
 serverPyro = Server()   #objet du serveur
 
-daemon = Pyro4.Daemon(host="10.57.47.25",port=48261)      #ce qui écoute les remote calls sur le serveur
+
+daemon = Pyro4.Daemon(host="10.57.47.22",port=48261)      #ce qui écoute les remote calls sur le serveur
+
+
+
+#daemon = Pyro4.Daemon(host="127.0.0.1",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
+
+
+#daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui écoute les remote calls sur le serveur
 
 
 uri = daemon.register(serverPyro,"foo")
 
-#serverPyro.writeIP()                #IP SHIT, NEEDS FIXING
-#serverPyro.correctIP()
+serverPyro.writeIP()
+serverPyro.correctIP()
 
-#serverPyro.createCronJob()            #TEST DE CRONJOB
+serverPyro.backupDatabase()
 
-#serverPyro.backupDatabase()           #TEST DE BACKUP
-
-
-print("Serveur ready")
+print("ready")
 daemon.requestLoop()

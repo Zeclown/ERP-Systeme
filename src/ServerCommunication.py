@@ -3,7 +3,6 @@ import Pyro4
 class ServerCommunication():
     def __init__(self):
         self.serverAdress = "PYRO:foo@10.57.47.25:48261"
-        #self.serverAdress = "PYRO:foo@10.57.47.23:43225"
         self.status = None
         self.server = None
         

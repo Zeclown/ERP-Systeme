@@ -11,19 +11,18 @@ class View():
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
-        
-        
+        self.frameCreateTable=FrameCreateTable(self, self.root, "Create Table", width=900, height=500)
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        self.frameSwapper(self.frameUsersList)
+        self.frameSwapper(self.frameCreateTable)
         #self.frameSwapper(self.frameUsersList)
+
         
     def show(self):
         self.root.mainloop()
     def styleCreation(self):
         self.style=Style()
-        self.style.configure("TButton", background="black",foreground="white")
         
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -50,8 +49,9 @@ class GFrame(Frame):
     def addMenuBar(self, showMenuBar):
         self.menuBar = Menu(self.parentWindow, tearoff=0)
         optionMenu = Menu(self.menuBar, tearoff=0)
-        optionMenu.add_command(label="Cree un usager", command=self.addUserToDB)
-        optionMenu.add_command(label="Cree un grope", command=self.addGroupToDB)
+        optionMenu.add_command(label="Cree un usager", command=self.showFrameUsersList)
+        optionMenu.add_command(label="Cree une table", command=self.showFrameCreateTable)
+        optionMenu.add_command(label="Cree un groupe", command=self.addGroupToDB)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
         self.menuBar.add_cascade(label="Options", menu=optionMenu)
@@ -60,9 +60,12 @@ class GFrame(Frame):
     def updateFrame(self):
         pass
             
-    def addUserToDB(self):
-        print("addUserToDB")
-    
+    def showFrameUsersList(self):
+        self.parentController.frameSwapper(self.parentController.frameUsersList)
+        
+    def showFrameCreateTable(self):
+        self.parentController.frameSwapper(self.parentController.frameCreateTable)
+        
     def addGroupToDB(self):
         print("addGroupToDB")
         
@@ -139,13 +142,10 @@ class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         
-        
         self.label = Label(self)
         self.label.grid(row=0, column=0, sticky=W)
 
-
         self.labelName = Label(self, text="Usager : ", width=25, anchor=E)
-
         self.labelName.grid(row=1, column=0, sticky=E)
         self.entryName = Entry(self)
         self.entryName.focus_set()
@@ -173,7 +173,9 @@ class FrameLogin(GFrame):
 class FrameAcceuil(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
-        GFrame.addMenuBar(self, 1)  
+        GFrame.addMenuBar(self, 1)
+    
+        
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)      
@@ -186,5 +188,40 @@ class FrameFormulaire(GFrame):
         self.labelTitle.pack()
         self.formsListBox.pack()
    
-
-
+class FrameCreateTable(GFrame):
+    def __init__(self,parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+        GFrame.addMenuBar(self, 1)
+        self.types=["number","string"]
+        self.createButton=Button(self, text="Ajouter Table", width=10,command=self.createTable)  
+        self.addColumnButton=Button(self, text="Ajouter Colonne", width=10,command=self.addColumn)
+        self.listboxColumns=Listbox(self);
+        self.entryColumnName=Entry(self)
+        self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
+        self.comboBoxType=Combobox(self,values=self.types);
+        self.labelTableName=Label(self, text="Nom de la table : ",  width=25, anchor=W);
+        self.entryTableName=Entry(self)
+        self.labelType=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
+        self.currentTable={}
+        self.labelTableName.grid(column=0,row=0)
+        self.entryTableName.grid(column=1,row=0)
+        self.labelColumnName.grid(column=0,row=1)
+        self.entryColumnName.grid(column=1,row=1)
+        self.labelType.grid(column=2,row=1)
+        self.comboBoxType.grid(column=3,row=1)
+        self.addColumnButton.grid(column=0,row=2)
+        self.listboxColumns.grid(column=0,row=3)
+        self.createButton.grid(column=0,row=4)
+        
+        
+    def addColumn(self):
+        self.listboxColumns.insert(END,self.entryColumnName.get() + "  " + self.comboBoxType.get() )
+        self.currentTable[self.entryColumnName.get()]=self.comboBoxType.get()
+        self.entryColumnName.config(text="")
+        self.comboBoxType.index(0)
+    def createTable(self):
+        self.parentController.parent.modele.createTable(self.entryTableName,self.entryColumnName.get())
+        self.entryColumnName.delete(0, END)
+        self.entryTableName.delete(0,END)
+        self.listboxColumns.delete(0, END)
+           
