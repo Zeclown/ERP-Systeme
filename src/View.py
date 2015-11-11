@@ -50,6 +50,7 @@ class GFrame(Frame):
     def addMenuBar(self, showMenuBar):
         self.menuBar = Menu(self.parentWindow, tearoff=0)
         optionMenu = Menu(self.menuBar, tearoff=0)
+        optionMenu.add_command(label="Cree une table", command=self.callFrameCreateTable)
         optionMenu.add_command(label="Cree un usager", command=self.callFrameUsersList)
         optionMenu.add_command(label="Cree un grope", command=self.addGroupToDB)
         optionMenu.add_separator()
@@ -62,6 +63,9 @@ class GFrame(Frame):
             
     def callFrameUsersList(self):
         self.parentController.frameSwapper(self.parentController.frameUsersList)
+        
+    def callFrameCreateTable(self):
+        self.parentController.frameSwapper(self.parentController.frameCreateTable)
         
     def addGroupToDB(self):
         print("addGroupToDB")
