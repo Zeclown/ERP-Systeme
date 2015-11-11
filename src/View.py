@@ -15,19 +15,16 @@ class View():
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        self.frameSwapper(self.frameCreateTable)
-        #self.frameSwapper(self.frameUsersList)
+        self.frameSwapper(self.frameLogin)
 
         
     def show(self):
         self.root.mainloop()
     def styleCreation(self):
         self.style=Style()
-<<<<<<< HEAD
         #self.style.configure("TButton", background="black",foreground="white")
-=======
+
         
->>>>>>> 290e5518cfa31c065e5ff34d0c6f023a2761e633
         
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -54,9 +51,10 @@ class GFrame(Frame):
     def addMenuBar(self, showMenuBar):
         self.menuBar = Menu(self.parentWindow, tearoff=0)
         optionMenu = Menu(self.menuBar, tearoff=0)
-        optionMenu.add_command(label="Cree un usager", command=self.showFrameUsersList)
-        optionMenu.add_command(label="Cree une table", command=self.showFrameCreateTable)
-        optionMenu.add_command(label="Cree un groupe", command=self.addGroupToDB)
+        optionMenu.add_command(label="Gestion d'usager", command=self.showFrameUsersList)
+        optionMenu.add_command(label="Gestion de groupe", command=self.addGroupToDB)
+        optionMenu.add_command(label="Gestion de table", command=self.showFrameCreateTable)
+        optionMenu.add_command(label="Gestion de formulaire", command=self.showFrameFormulaire)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
         self.menuBar.add_cascade(label="Options", menu=optionMenu)
@@ -70,6 +68,9 @@ class GFrame(Frame):
         
     def showFrameCreateTable(self):
         self.parentController.frameSwapper(self.parentController.frameCreateTable)
+    
+    def showFrameFormulaire(self):
+        self.parentController.frameSwapper(self.parentController.frameFormulaire)
         
     def addGroupToDB(self):
         print("addGroupToDB")
@@ -183,16 +184,26 @@ class FrameAcceuil(GFrame):
         
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
-        GFrame.__init__(self, parentController, parentWindow, title, **args)      
-        self.labelTitle = Label(self, text = "Formulaires")
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+              
+        """self.labelForms = Label(self, text = "Formulaires de la base de donnee")
+        self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
+        self.formsListBox.grid(row=1, column=0)
         print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
-            self.formsListBox.insert(END,i)
+            self.formsListBox.insert(END,i)"""
+        
+        self.labelTable = Label(self, text="Tables")
+        self.labelTable.grid(row=0, column=0)
+        self.tablesListBox = Listbox(self)
+        self.tablesListBox.grid(row=1, column=0)
+        
+        
             
-        self.labelTitle.pack()
-        self.formsListBox.pack()
-   
+        
+            
+            
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
