@@ -6,7 +6,7 @@ class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication()
         self.serverCommunication.connectToServer()
-        self.model = Model()
+        self.model = Model(self)
         self.view = View(self)
         self.view.root.mainloop()
         
