@@ -182,5 +182,28 @@ class FrameFormulaire(GFrame):
         self.labelTitle.pack()
         self.formsListBox.pack()
    
-
-
+class FrameCreateTable(GFrame):
+    def __init__(self,parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+        GFrame.addMenuBar(self, 1)
+        self.createButton=Button(self, text="Ajouter Table", width=10,command=self.createTable)  
+        self.addColumnButton=Button(self, text="Ajouter Colonne", width=10,command=self.addColumn)
+        self.listboxColumns=Listbox(self);
+        self.entryColumnName=Entry(self)
+        self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
+        self.comboBoxType=Combobox(self);
+        self.labelTableName=Label(self, text="Nom de la table : ",  width=25, anchor=W);
+        self.entryTableName=Entry(self)
+        self.labelType=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
+        self.currentTable={}
+    def addColumn(self):
+        self.listboxColumns.insert(END,self.entryColumnName.get() + "  " + self.comboBoxType.get() )
+        self.currentTable[self.entryColumnName.get()]=self.comboBoxType.get()
+        self.entryColumnName.config(text="")
+        self.comboBoxType.index(0)
+    def createTable(self):
+        sqlCommand="CREATE TABLE " + self.entryTableName.get() + " ("
+        for columns in self.currentTable.keys():
+            sqlCommand+=" " + columns + " " + self.currentTable[columns]
+        sqlCommand+=" )"
+           
