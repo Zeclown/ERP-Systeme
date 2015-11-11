@@ -23,7 +23,7 @@ class View():
         self.root.mainloop()
     def styleCreation(self):
         self.style=Style()
-        self.style.configure("TButton", background="black",foreground="white")
+        #self.style.configure("TButton", background="black",foreground="white")
         
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -52,7 +52,7 @@ class GFrame(Frame):
         optionMenu = Menu(self.menuBar, tearoff=0)
         optionMenu.add_command(label="Cree une table", command=self.callFrameCreateTable)
         optionMenu.add_command(label="Cree un usager", command=self.callFrameUsersList)
-        optionMenu.add_command(label="Cree un grope", command=self.addGroupToDB)
+        optionMenu.add_command(label="Cree un groupe", command=self.addGroupToDB)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
         self.menuBar.add_cascade(label="Options", menu=optionMenu)
