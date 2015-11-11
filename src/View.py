@@ -11,11 +11,12 @@ class View():
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
-        self.frameCreateUser = FrameCreateUser(self, self.root, "Cree un usager", width=400, height=300)
+        
+        
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
-        self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaires", width=900, height=500)
-        self.frameSwapper(self.frameFormulaire)
+        self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
+        self.frameSwapper(self.frameUsersList)
         #self.frameSwapper(self.frameUsersList)
         
     def show(self):
@@ -30,7 +31,7 @@ class View():
         frame.pack(fill=BOTH, expand=True)
         self.currentFrame = frame
         self.root.title(frame.titleFrame)
-        #self.currentFrame.updateFrame()
+        self.currentFrame.updateFrame()
 
 class Styles(Style):
     def __init__(self):
@@ -56,6 +57,8 @@ class GFrame(Frame):
         self.menuBar.add_cascade(label="Options", menu=optionMenu)
         if showMenuBar:
             self.parentWindow.config(menu=self.menuBar)
+    def updateFrame(self):
+        pass
             
     def addUserToDB(self):
         print("addUserToDB")
@@ -125,13 +128,8 @@ class FrameUsersList(GFrame):
         self.buttonDelete = Button(self,text="Supprimer utilisateur")
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
         self.frameCreation=Frame(self)
-        self.frameCreation.labelTitle=Label(self.frameCreation,text="Nouvel Utilisateur")
-        self.frameCreation.labelName=Label(self.frameCreation,text="Nom : ")
-        self.frameCreation.labelPassword=Label(self.frameCreation,text="Password : ")
-        self.frameCreation.nameVariable=StringVar()
-        self.frameCreation.nameVariable.trace("w", lambda name, index, mode,sv=self.frameCreation.nameVariable: self.verifyUserName(sv))
-        self.frameCreation.entryName=Label(self.frameCreation,textvariable=self.frameCreation.nameVariable)
-        self.frameCreation.entryPassword=Entry(self.frameCreation)
+        self.frameCreateUser = FrameCreateUser(parentController,self, "Cree un usager", width=400, height=300)
+        self.frameCreateUser.grid(column=2,row=1)
     def verifyUserName(self):
         pass
     def newUser(self):
@@ -178,34 +176,15 @@ class FrameAcceuil(GFrame):
         GFrame.addMenuBar(self, 1)  
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
-        GFrame.__init__(self, parentController, parentWindow, title, **args)
-        
-        self.labelTitle = Label(self, text = "Formulaires", font=("Cooper Black", 20))
-        self.formsListBox = Listbox(self, bd = 12, width = 40, bg = "#2ecc71", font=("Arial Black", 14))
-        self.formsListBox.bind('<<ListboxSelect>>', self.selectForm)
-        
-        self.labelTitleInfo = Label(self, text = "Information", font=("Cooper Black", 20))
-        
+        GFrame.__init__(self, parentController, parentWindow, title, **args)      
+        self.labelTitle = Label(self, text = "Formulaires")
+        self.formsListBox = Listbox(self)
         print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
             
-        self.labelTitle.grid(row = 0, column = 0)
-        self.formsListBox.grid(row = 1, column = 0)
-        self.labelTitleInfo.grid(row = 0, column = 1)
-    
-    def selectForm(self,evt):
-        try:
-            listBox = evt.widget
-            index = int(listBox.curselection()[0])
-            value = listBox.get(index)
-            print(value)
-            return value
-        except Exception: 
-            pass
-
-
-        
+        self.labelTitle.pack()
+        self.formsListBox.pack()
    
 
 
