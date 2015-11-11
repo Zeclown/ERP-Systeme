@@ -221,8 +221,11 @@ class FrameCreateTable(GFrame):
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
     def createTable(self):
-        sqlCommand="CREATE TABLE " + self.entryTableName.get() + " ("
+        sqlCommand="CREATE TABLE " + self.entryTableName.get() + " ("        
         for columns in self.currentTable.keys():
-            sqlCommand+=" " + columns + " " + self.currentTable[columns]
+            sqlCommand+=" " + columns + " " + self.currentTable[columns]+","
+        sqlCommand=sqlCommand[:-1]
         sqlCommand+=" )"
+        print(sqlCommand)
+        self.parentController.parent.serverCommunication.runSQLQuery(sqlCommand);
            
