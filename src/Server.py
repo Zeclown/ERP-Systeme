@@ -13,10 +13,10 @@ class Server(object):
     def __init__(self):
         self.dbManager=DbManager.DbManager("data1.db")
         self.databaseVersion = 0
-        f = open("Ressources/Database_Version.txt", "r")
+        #f = open("Ressources/Database_Version.txt", "r")
         #print(f.readline())
-        self.databaseVersion = f.readline()
-        f.close()
+        #self.databaseVersion = f.readline()
+        #f.close()
         #self.createCronJob()
     
     def loginValidation(self, user, mdp):
@@ -46,8 +46,8 @@ class Server(object):
             self.writeIP()
 
             
-    def executeSql(self, query):
-        queryResult = self.dbManager.query(query)
+    def executeSql(self, query, bindings = None):
+        queryResult = self.dbManager.query(query,bindings)
         return queryResult
     
     def createCronJob(self):
@@ -139,7 +139,7 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
-daemon = Pyro4.Daemon(host="10.57.47.23",port=43225)      #ce qui écoute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host="10.57.47.25",port=48261)      #ce qui écoute les remote calls sur le serveur
 
 
 uri = daemon.register(serverPyro,"foo")

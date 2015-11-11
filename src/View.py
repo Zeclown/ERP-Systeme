@@ -107,10 +107,10 @@ class FrameCreateUser(GFrame):
         self.entryName = Entry(self)
         self.entryName.grid(row=6, column=1, sticky=E)
         
-        self.ButtonCancel = Button(self, text="Annler", width=10,command=self.parentController.parent.userLogin)
+        self.ButtonCancel = Button(self, text="Annler", width=10)
         self.ButtonCancel.grid(row=7, column=1, sticky=E)
         
-        self.ButtonCreate = Button(self, text="Cree", width=10,command=self.parentController.parent.userLogin)
+        self.ButtonCreate = Button(self, text="Cree", width=10,command=self.parentController.parent.createUser)
         self.ButtonCreate.grid(row=7, column=2, sticky=E)
         
         
@@ -123,7 +123,7 @@ class FrameUsersList(GFrame):
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
         self.buttonModify = Button(self,text="Modifier utilisateur")
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonAdd = Button(self,text="Créer utilisateur")
+        self.buttonAdd = Button(self,text="Créer utilisateur", command=self.parentController.parent.createUser)
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
         self.buttonDelete = Button(self,text="Supprimer utilisateur")
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
