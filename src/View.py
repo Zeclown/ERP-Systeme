@@ -12,11 +12,11 @@ class View():
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         
-        
+        self.frameCreateTable=FrameCreateTable(self, self.root, "Create Table", width=900, height=500)
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        self.frameSwapper(self.frameUsersList)
+        self.frameSwapper(self.frameLogin)
         #self.frameSwapper(self.frameUsersList)
         
     def show(self):
@@ -200,6 +200,11 @@ class FrameCreateTable(GFrame):
         self.entryTableName=Entry(self)
         self.labelType=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
         self.currentTable={}
+        self.labelTableName.grid(column=0,row=0)
+        self.entryTableName.grid(column=1,row=0)
+        self.labelColumnName.grid(column=0,row=1)
+        self.entryColumnName.grid(column=0,row=2)
+        self.labelType.grid(column=0,row=3)
     def addColumn(self):
         self.listboxColumns.insert(END,self.entryColumnName.get() + "  " + self.comboBoxType.get() )
         self.currentTable[self.entryColumnName.get()]=self.comboBoxType.get()

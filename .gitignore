@@ -45,5 +45,6 @@ Temporary Items
 
 #fkn pycache a marde
 __pycache__/
-.metadata/.lock
+.metadata
 *.log
+.metadata/.plugins/org.eclipse.core.resources/.history/17/c0d57f017e88001513c0f45c7b3b70d6
