@@ -23,7 +23,7 @@ class View():
         self.root.mainloop()
     def styleCreation(self):
         self.style=Style()
-        self.style.configure("TButton", background="black",foreground="white")
+        
         
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -221,11 +221,8 @@ class FrameCreateTable(GFrame):
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
     def createTable(self):
-        sqlCommand="CREATE TABLE " + self.entryTableName.get() + " ("        
-        for columns in self.currentTable.keys():
-            sqlCommand+=" " + columns + " " + self.currentTable[columns]+","
-        sqlCommand=sqlCommand[:-1]
-        sqlCommand+=" )"
-        print(sqlCommand)
-        self.parentController.parent.serverCommunication.runSQLQuery(sqlCommand);
+        self.parentController.parent.modele.createTable(self.entryTableName,self.entryColumnName.get())
+        self.entryColumnName.delete(0, END)
+        self.entryTableName.delete(0,END)
+        self.listboxColumns.delete(0, END)
            
