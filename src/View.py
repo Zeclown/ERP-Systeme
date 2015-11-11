@@ -50,8 +50,8 @@ class GFrame(Frame):
     def addMenuBar(self, showMenuBar):
         self.menuBar = Menu(self.parentWindow, tearoff=0)
         optionMenu = Menu(self.menuBar, tearoff=0)
-        optionMenu.add_command(label="Cree une table", command=self.callFrameCreateTable)
-        optionMenu.add_command(label="Cree un usager", command=self.callFrameUsersList)
+        optionMenu.add_command(label="Cree un usager", command=self.showFrameUsersList)
+        optionMenu.add_command(label="Cree une table", command=self.showFrameCreateTable)
         optionMenu.add_command(label="Cree un groupe", command=self.addGroupToDB)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
@@ -61,10 +61,10 @@ class GFrame(Frame):
     def updateFrame(self):
         pass
             
-    def callFrameUsersList(self):
+    def showFrameUsersList(self):
         self.parentController.frameSwapper(self.parentController.frameUsersList)
         
-    def callFrameCreateTable(self):
+    def showFrameCreateTable(self):
         self.parentController.frameSwapper(self.parentController.frameCreateTable)
         
     def addGroupToDB(self):
