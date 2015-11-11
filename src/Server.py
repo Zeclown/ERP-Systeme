@@ -21,6 +21,7 @@ class Server(object):
         
         self.dbManager=DbManager.DbManager("data1.db")
         #self.databaseVersion = 0
+
         #f = open("Ressources/Database_Version.txt", "r")
         #print(f.readline())
         #self.databaseVersion = f.readline()
@@ -54,8 +55,9 @@ class Server(object):
 #             self.writeIP()
 
             
-    def executeSql(self, query):
-        queryResult = self.dbManager.query(query)
+
+    def executeSql(self, query, bindings = None):
+        queryResult = self.dbManager.query(query,bindings)
         return queryResult
     
 #     def createCronJob(self):
@@ -117,9 +119,17 @@ class Server(object):
 #         pass
     
         
-    
+#     def executeCronJobs(self):
+#         existingCronJobsInDB = []
+#         activeCronJobs = []
+#         
+#         for i in existingCronJobs:
+#             newCronJob = CronJob("placeholder")
+#             activeCronJobs.append(newCronJob)
+# 
+#         for i in activeCronJobs:
+#             t = Timer(5.0, hello)
 
-        
 # class CronJob():
 #     def __init__(self, parent, id, nom, fnctid, nbTemps, frequence, activeCron):
 #         self.parent = parent
@@ -151,16 +161,20 @@ serverPyro = Server()   #objet du serveur
 
 daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur,port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
 
+daemon = Pyro4.Daemon(host="10.57.47.22",port=48261)      #ce qui écoute les remote calls sur le serveur
+
+
+
+#daemon = Pyro4.Daemon(host="127.0.0.1",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
+
+
+#daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui écoute les remote calls sur le serveur
+
 
 uri = daemon.register(serverPyro,"foo")
-
-#serverPyro.writeIP()                #IP SHIT, NEEDS FIXING
-#serverPyro.correctIP()
-
-#serverPyro.createCronJob()            #TEST DE CRONJOB
 
 #serverPyro.backupDatabase()           #TEST DE BACKUP
 #serverPyro.sendEmail("un autre test esti","Subject: "+"un sujet","champsfuturs@gmail.com","A1?champsfutursouverture","unreaved@hotmail.com")    #TEST DE EMAIL
 
-print("Serveur ready")
+print("ready")
 daemon.requestLoop()

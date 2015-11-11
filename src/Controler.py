@@ -6,7 +6,7 @@ class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication()
         self.serverCommunication.connectToServer()
-        self.model = Model()
+        self.model = Model(self)
         self.view = View(self)
         self.view.root.mainloop()
         
@@ -28,6 +28,16 @@ class Controler():
         sqlQuery = "SELECT nom FROM Sys_Formulaires"
         self.model.formsList = self.serverCommunication.runSQLQuery(sqlQuery)
         return self.model.formsList
+    
+    def createUser(self):
+        
+        username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
+        password = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
+        groupeUtilisateur = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
+        
+        bindings = [ username, password, groupeUtilisateur]
+ 
+        self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
                
 if __name__ == '__main__':
     c = Controler()
