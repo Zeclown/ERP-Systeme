@@ -45,3 +45,5 @@ Temporary Items
 
 #fkn pycache a marde
 __pycache__/
+.metadata/.lock
+*.log
