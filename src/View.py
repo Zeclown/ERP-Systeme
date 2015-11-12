@@ -15,7 +15,7 @@ class View():
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        self.frameSwapper(self.frameLogin)
+        self.frameSwapper(self.frameCreateTable)
 
     def show(self):
         self.root.mainloop()
@@ -208,10 +208,8 @@ class FrameCreateTable(GFrame):
         GFrame.addMenuBar(self, 1)
         self.types=["number","string"]
         self.createButton=Button(self, text="Ajouter Table", width=15,command=self.createTable)  
-        self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn)
-        
-        self.listboxColumns=Treeview(self, selectmode="extended",columns=("Type"))
-        
+        self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn)      
+        self.listboxColumns=Treeview(self, selectmode="extended",columns=("Type"))        
         self.entryColumnName=Entry(self)
         self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
         self.comboBoxType=Combobox(self,values=self.types);
@@ -231,9 +229,7 @@ class FrameCreateTable(GFrame):
         self.labelType.grid(column=2,row=1)
         self.comboBoxType.grid(column=3,row=1)
         self.addColumnButton.grid(column=4,row=1)
-        self.listboxColumns.grid(column=0,row=2,columnspan=2)
-        
-        
+        self.listboxColumns.grid(column=0,row=2,columnspan=2) 
         self.createButton.grid(column=0,row=4)
         
         
@@ -245,7 +241,7 @@ class FrameCreateTable(GFrame):
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
     def createTable(self):
-        self.parentController.parent.modele.createTable(self.entryTableName,self.entryColumnName.get())
+        self.parentController.parent.model.createTable(self.entryTableName.get(),self.currentTable)
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
         self.listboxColumns.delete(0, END)
