@@ -196,6 +196,10 @@ class FrameFormulaire(GFrame):
         self.labelTable.grid(row=0, column=0)
         self.tablesListBox = Listbox(self)
         self.tablesListBox.grid(row=1, column=0)
+
+    def showAllTablesInListBox(self):
+       for i in self.parentController.parent.getAllTables():
+           self.tablesListBox.insert()
         
         
             
@@ -245,8 +249,9 @@ class FrameCreateTable(GFrame):
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
     def createTable(self):
-        self.parentController.parent.modele.createTable(self.entryTableName,self.entryColumnName.get())
+        self.parentController.parent.model.createTable(self.entryTableName,self.entryColumnName.get())
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
         self.listboxColumns.delete(0, END)
         self.listboxTypes.delete(0, END)
+

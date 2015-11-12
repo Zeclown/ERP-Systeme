@@ -23,6 +23,9 @@ class Controler():
             self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
             self.view.frameLogin.resetEntries()
 
+    def getAllTables(self):
+        pass
+
     
     def getFormsNameList(self):
         sqlQuery = "SELECT nom FROM Sys_Formulaires"
