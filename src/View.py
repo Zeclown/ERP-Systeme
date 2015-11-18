@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from tkinter import *
 from tkinter.ttk import *
+from tkinter.messagebox import showinfo, askyesno, askquestion, askretrycancel
 
 
 class View():
@@ -15,7 +16,7 @@ class View():
         self.frameLogin.addMenuBar(0)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        self.frameSwapper(self.frameCreateTable)
+        self.frameSwapper(self.frameLogin)
         #self.frameSwapper(self.frameUsersList)
 
         
@@ -23,6 +24,9 @@ class View():
         self.root.mainloop()
     def styleCreation(self):
         self.style=Style()
+    
+    def showError(self):
+        askretrycancel('Connection au serveur impossible', 'Veuillez vous assure que le serveur est actif')
         
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -181,9 +185,9 @@ class FrameFormulaire(GFrame):
         GFrame.__init__(self, parentController, parentWindow, title, **args)      
         self.labelTitle = Label(self, text = "Formulaires")
         self.formsListBox = Listbox(self)
-        print ( self.parentController.parent.getFormsNameList() )
-        for i in self.parentController.parent.getFormsNameList():
-            self.formsListBox.insert(END,i)
+        #print ( self.parentController.parent.getFormsNameList() )
+        #for i in self.parentController.parent.getFormsNameList():
+            #self.formsListBox.insert(END,i)
             
         self.labelTitle.pack()
         self.formsListBox.pack()

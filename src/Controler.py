@@ -4,10 +4,12 @@ from Model import *
 
 class Controler():
     def __init__(self):
-        self.serverCommunication = ServerCommunication()
-        self.serverCommunication.connectToServer()
+        #self.serverCommunication = ServerCommunication()
+        #self.serverCommunication.connectToServer()
         self.model = Model(self)
         self.view = View(self)
+        self.serverCommunication = ServerCommunication()
+        self.tryToConnectToServer()
         self.view.root.mainloop()
         
     def userLogin(self):
@@ -22,6 +24,16 @@ class Controler():
             print( "FALSE LOG IN" ) #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
             self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
             self.view.frameLogin.resetEntries()
+            
+    def tryToConnectToServer(self):
+        try:
+            self.serverCommunication.connectToServer()
+        except Exception:
+            print("HEY")
+            if self.view.showError():
+                self.serverCommunication.connectToServer()
+            else:
+                exit()
 
     
     def getFormsNameList(self):

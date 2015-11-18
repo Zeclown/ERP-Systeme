@@ -8,7 +8,7 @@ from threading import Timer
 
 class Server(object):
     def __init__(self):
-        self.ipDuServeur = "10.57.47.23"
+        self.ipDuServeur = "10.57.47.25"
         self.portDuServeur = 48261
         self.dbManager=DbManager.DbManager("data1.db")
 
@@ -33,7 +33,7 @@ class Server(object):
         f = open("ip address.txt", "w")
         print(self.monip)
         f.write(self.monip)
-        f.close()
+        f.close() 
         
     def correctIP(self):
         f = open("ip address.txt", "r")
@@ -83,10 +83,10 @@ class Server(object):
  
         #for i in activeCronJobs:
         
-    def backupDatabase(self):       #Le ID de cette fonction est 1
-        aFileName = "database_Backup_"+ str(self.databaseVersion) +".db"
-        if( os.path.isfile(aFileName) ):
-            shutil.move( aFileName, "Archives/"+aFileName)
+    #def backupDatabase(self):       #Le ID de cette fonction est 1
+        #aFileName = "database_Backup_"+ str(self.databaseVersion) +".db"
+        #if( os.path.isfile(aFileName) ):
+            #shutil.move( aFileName, "Archives/"+aFileName)
 
         
 #     def executeCronJobs(self):
@@ -109,7 +109,7 @@ class CronJob():
 serverPyro = Server()   #objet du serveur
 
 
-daemon = Pyro4.Daemon(host="10.57.47.22",port=48261)      #ce qui écoute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host="10.57.47.25",port=48261)      #ce qui écoute les remote calls sur le serveur
 
 
 
@@ -124,7 +124,7 @@ uri = daemon.register(serverPyro,"foo")
 serverPyro.writeIP()
 serverPyro.correctIP()
 
-serverPyro.backupDatabase()
+#serverPyro.backupDatabase()
 
 print("ready")
 daemon.requestLoop()
