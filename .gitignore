@@ -45,7 +45,14 @@ Temporary Items
 
 #fkn pycache a marde
 __pycache__
+<<<<<<< HEAD
+=======
 .metadata
 *.log
 .metadata/.plugins/org.eclipse.core.resources/.history/17/c0d57f017e88001513c0f45c7b3b70d6
 *.pyc
+>>>>>>> b438825029cb361036910a597415b9a814c22c54
+*.pydevproject
+src/.pydevproject
+*.prefs
+src/__pycache__/ServerCommunication.cpython-34.pyc

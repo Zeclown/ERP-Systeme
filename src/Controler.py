@@ -35,6 +35,9 @@ class Controler():
             else:
                 exit()
 
+    def getAllTables(self):
+        pass
+
     
     def getFormsNameList(self):
         sqlQuery = "SELECT nom FROM Sys_Formulaires"

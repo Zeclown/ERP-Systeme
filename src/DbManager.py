@@ -9,6 +9,12 @@ class DbManager():
         self.db=sqlite3.connect(dbPath,check_same_thread=False)
         self.cursorDB = self.db.cursor()
         self.createDB()
+
+    #def query(self,query):
+        #self.cursorDB.execute(query)
+        #self.db.commit()
+        #return self.cursorDB.fetchall()
+
     
     def query(self,query,bindings = None):
         
@@ -19,11 +25,11 @@ class DbManager():
             placeholders = ', '.join( [placeholder] * numberOfBindings )
             queryToExecute = query + '(%s)' % placeholders 
             self.cursorDB.execute(queryToExecute, bindings)
+            self.db.commit()
+            return self.cursorDB.fetchall()
         
-        
-        self.cursorDB.execute(query)
-        self.db.commit()
-        return self.cursorDB.fetchall()
+
+
     
     def login(self,name,pswd):
         self.cursorDB.execute('SELECT id From Sys_Usagers Where nom=? AND mdp=?', (name,pswd))        
