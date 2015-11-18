@@ -60,6 +60,7 @@ class GFrame(Frame):
         optionMenu.add_command(label="Gestion de formulaire", command=self.showFrameFormulaire)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
+        optionMenu.add_command(label="Quitter", command = self.parentController.root.destroy)
         self.menuBar.add_cascade(label="Options", menu=optionMenu)
         if showMenuBar:
             self.parentWindow.config(menu=self.menuBar)
