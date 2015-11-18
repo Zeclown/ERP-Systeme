@@ -35,19 +35,6 @@ class Controler():
                 self.userLogin()
             else:
                 self.view.root.destroy()
-                
-            
-    def tryToConnectToServer(self):
-        try:
-            self.serverCommunication.connectToServer()
-        except Exception:
-            print("HEY")
-            self.view.showError()
-            if self.view.showError():
-                self.serverCommunication.connectToServer()
-            else:
-                print("DESTROY")
-                self.view.root.quit()
 
     def getAllTables(self):
         return self.model.formsManager.getTables()
@@ -65,9 +52,11 @@ class Controler():
         
         username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
         password = self.view.frameUsersList.frameCreateUser.entryPass.get()
+
+
         groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
         
-        bindings = [ None, username, password, groupeUtilisateur]
+        bindings = [ None, username, password, groupeUtilisateur ] #None pour le id
  
         self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
                

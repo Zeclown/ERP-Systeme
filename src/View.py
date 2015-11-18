@@ -88,22 +88,24 @@ class GFrame(Frame):
 class FrameUsersList(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
+        self.frameCreateUser = FrameCreateUser(parentController,self, "Cree un usager", width=400, height=300)
         self.label=Label(self,text="Usagers",relief=GROOVE)
         self.label.grid(row=0, column=0, sticky=W,columnspan=2)
         self.listboxUsers = Listbox(self)
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
         self.buttonModify = Button(self,text="Modifier utilisateur")
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonAdd = Button(self,text="Créer utilisateur", command=self.enableTextFieldForUserCreation)
+        self.buttonAdd = Button(self,text="Créer utilisateur", command=lambda: self.frameCreateUser.setUserCreationTextFieldState('normal'))
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
         self.buttonDelete = Button(self,text="Supprimer utilisateur")
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
-        self.frameCreation=Frame(self)
-        self.frameCreateUser = FrameCreateUser(parentController,self, "Cree un usager", width=400, height=300)
-        self.frameCreateUser.grid(column=2,row=1)
-        self.isFrameCreateUserWidgetEnabled = False
 
-        #self.parentController.parent.getUsers()
+
+        self.frameCreation=Frame(self)
+        self.frameCreateUser.grid(column=2,row=1)
+
+
+       # self.parentController.parent.getUsers()
 
 
 
@@ -113,16 +115,6 @@ class FrameUsersList(GFrame):
     def newUser(self):
         pass
 
-    def enableTextFieldForUserCreation(self):
-
-        self.frameCreateUser.entryNameAccount.configure(state = 'normal')
-        self.frameCreateUser.entryPass.configure(state = 'normal')
-        self.frameCreateUser.entryPassConfirm.configure(state = 'normal')
-        self.frameCreateUser.comboBoxGroup.configure(state = 'normal')
-        self.frameCreateUser.entrySurname.configure(state = 'normal')
-        self.frameCreateUser.entryName.configure(state = 'normal')
-        self.frameCreateUser.ButtonCancel.configure(state = 'normal')
-        self.frameCreateUser.ButtonCreate.configure(state = 'normal')
 
 
 
@@ -165,13 +157,22 @@ class FrameCreateUser(GFrame):
         self.entryName = Entry(self, state='disable')
         self.entryName.grid(row=6, column=1, sticky=E)
         
-        self.ButtonCancel = Button(self, text="Annler", width=10, state='disable')
+        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=lambda: self.setUserCreationTextFieldState('disable'))
         self.ButtonCancel.grid(row=7, column=1, sticky=E)
         
         self.ButtonCreate = Button(self, text="Cree", width=10,state='disable', command=self.parentController.parent.createUser)
         self.ButtonCreate.grid(row=7, column=2, sticky=E)
-        
-        
+
+    def setUserCreationTextFieldState(self,widgetState): #normal or disable
+
+        self.entryNameAccount.configure(state = widgetState)
+        self.entryPass.configure(state = widgetState)
+        self.entryPassConfirm.configure(state = widgetState)
+        self.comboBoxGroup.configure(state = widgetState)
+        self.entrySurname.configure(state = widgetState)
+        self.entryName.configure(state = widgetState)
+        self.ButtonCreate.configure(state = widgetState)
+        self.ButtonCancel.configure(state = widgetState)
 
         
 class FrameLogin(GFrame):
