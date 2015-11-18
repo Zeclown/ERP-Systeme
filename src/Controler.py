@@ -23,11 +23,13 @@ class Controler():
             self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
             self.view.frameLogin.resetEntries()
 
+    def getAllTables(self):
+        return self.model.formsManager.getTables()
+
     
     def getFormsNameList(self):
-        sqlQuery = "SELECT nom FROM Sys_Formulaires"
-        self.model.formsList = self.serverCommunication.runSQLQuery(sqlQuery)
-        return self.model.formsList
+        return self.model.formsManager.getForms()
+        
     
     def createUser(self):
         

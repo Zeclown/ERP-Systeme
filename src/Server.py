@@ -56,8 +56,12 @@ class Server(object):
 
             
 
-    def executeSql(self, query, bindings = None):
+    """def executeSql(self, query, bindings = None):
         queryResult = self.dbManager.query(query,bindings)
+        return queryResult"""
+    
+    def executeSql(self, query):
+        queryResult = self.dbManager.query(query)
         return queryResult
     
 #     def createCronJob(self):
@@ -166,7 +170,7 @@ daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur,port=serverPyro.portDuServeur)
 
 
 
-daemon = Pyro4.Daemon(host="127.0.0.1",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host="localhost",port=43225)      #ce qui Ã©coute les remote calls sur le serveur
 
 
 #daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui écoute les remote calls sur le serveur

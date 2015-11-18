@@ -17,13 +17,13 @@ class View():
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
 
-        
     def show(self):
         self.root.mainloop()
+
     def styleCreation(self):
         self.style=Style()
-
-        #self.style.configure("TButton", background="black",foreground="white")       
+        #self.style.configure("TButton", background="black",foreground="white")
+        
     def frameSwapper(self, frame):
         if self.currentFrame:
             self.currentFrame.pack_forget()
@@ -183,19 +183,30 @@ class FrameAcceuil(GFrame):
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
-              
-        """self.labelForms = Label(self, text = "Formulaires de la base de donnee")
+        
+        self.labelForms = Label(self, text = "Formulaires de la base de donnee")
         self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
         self.formsListBox.grid(row=1, column=0)
+        self.showAllFormsInListView()
+            
+        self.labelTable = Label(self, text="Tables de la base de donnee")
+        self.labelTable.grid(row=0, column=1)
+        self.tablesTreeView = Treeview(self)
+        self.tablesTreeView.grid(row=1, column=1)
+        self.showAllTablesInTreeView()
+
+    def showAllTablesInTreeView(self):
+        count = 0;
+        for i in self.parentController.parent.getAllTables():
+            self.tablesTreeView.insert("", count, i, text=i)
+            self.tablesTreeView.insert(i, count, text="Sub Item Table")
+            count+=1
+           
+    def showAllFormsInListView(self):
         print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
-            self.formsListBox.insert(END,i)"""
-        
-        self.labelTable = Label(self, text="Tables")
-        self.labelTable.grid(row=0, column=0)
-        self.tablesListBox = Listbox(self)
-        self.tablesListBox.grid(row=1, column=0)
+            self.formsListBox.insert(END,i)
         
         
             
@@ -208,10 +219,8 @@ class FrameCreateTable(GFrame):
         GFrame.addMenuBar(self, 1)
         self.types=["number","string"]
         self.createButton=Button(self, text="Ajouter Table", width=15,command=self.createTable)  
-        self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn)
-        
-        self.listboxColumns=Treeview(self, selectmode="extended",columns=("Type"))
-        
+        self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn)      
+        self.listboxColumns=Treeview(self, selectmode="extended",columns=("Type"))        
         self.entryColumnName=Entry(self)
         self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
         self.comboBoxType=Combobox(self,values=self.types);
@@ -231,9 +240,7 @@ class FrameCreateTable(GFrame):
         self.labelType.grid(column=2,row=1)
         self.comboBoxType.grid(column=3,row=1)
         self.addColumnButton.grid(column=4,row=1)
-        self.listboxColumns.grid(column=0,row=2,columnspan=2)
-        
-        
+        self.listboxColumns.grid(column=0,row=2,columnspan=2) 
         self.createButton.grid(column=0,row=4)
         
         
@@ -245,9 +252,9 @@ class FrameCreateTable(GFrame):
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
     def createTable(self):
-        self.parentController.parent.modele.createTable(self.entryTableName,self.entryColumnName.get())
+        self.parentController.parent.model.createTable(self.entryTableName.get(),self.currentTable)
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
         self.listboxColumns.delete(0, END)
         self.listboxTypes.delete(0, END)
-           
+

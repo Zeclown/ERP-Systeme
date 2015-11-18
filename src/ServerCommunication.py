@@ -2,15 +2,18 @@ import Pyro4
 
 class ServerCommunication():
     def __init__(self):
-        #self.serverAdress = "PYRO:foo@127.0.0.1:43225"
-        self.serverAdress = "PYRO:foo@10.57.47.25:48261"
+        self.serverAdress = "PYRO:foo@localhost:43225"
+        #self.serverAdress = "PYRO:foo@10.57.47.25:48261"
         self.status = None
         self.server = None
         
     def connectToServer(self):
         self.server = Pyro4.Proxy(self.serverAdress)
         
-    def runSQLQuery(self,SQLquery, bindings = None):
+    """def runSQLQuery(self,SQLquery, bindings = None):
+        return self.server.executeSql(SQLquery)"""
+    
+    def runSQLQuery(self,SQLquery):
         return self.server.executeSql(SQLquery)
         
     def logIn(self,user,password):
@@ -20,4 +23,3 @@ class ServerCommunication():
             message= self.server.loginValidation(user,password)
             print(message)
             return message
-            
