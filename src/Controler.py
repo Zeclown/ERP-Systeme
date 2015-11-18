@@ -16,24 +16,37 @@ class Controler():
         username = self.view.frameLogin.entryName.get()
         password = self.view.frameLogin.entryPass.get()
         
-        testLogIn = self.serverCommunication.logIn(username,password )
+        try:
+            
+            testLogIn = self.serverCommunication.logIn(username,password )
         
-        if testLogIn :
-            self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
-        else:
-            print( "FALSE LOG IN" ) #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
-            self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
-            self.view.frameLogin.resetEntries()
+            if testLogIn :
+                self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
+            else:
+                print( "FALSE LOG IN" ) #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
+                self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
+                self.view.frameLogin.resetEntries()
+                
+        except Exception:
+            
+            if self.view.showError():
+                self.serverCommunication.connectToServer()
+                self.userLogin()
+            else:
+                self.view.root.destroy()
+                
             
     def tryToConnectToServer(self):
         try:
             self.serverCommunication.connectToServer()
         except Exception:
             print("HEY")
+            self.view.showError()
             if self.view.showError():
                 self.serverCommunication.connectToServer()
             else:
-                exit()
+                print("DESTROY")
+                self.view.root.quit()
 
     def getAllTables(self):
         pass

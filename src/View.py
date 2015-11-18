@@ -26,7 +26,7 @@ class View():
 
     
     def showError(self):
-        askretrycancel('Connection au serveur impossible', 'Veuillez vous assure que le serveur est actif')
+        return askretrycancel('Connection au serveur impossible', 'Veuillez vous assure que le serveur est actif')
         
 
     def frameSwapper(self, frame):
