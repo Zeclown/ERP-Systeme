@@ -7,9 +7,10 @@ class Controler():
         #self.serverCommunication = ServerCommunication()
         #self.serverCommunication.connectToServer()
         self.model = Model(self)
-        self.view = View(self)
         self.serverCommunication = ServerCommunication()
-        self.tryToConnectToServer()
+        self.serverCommunication.connectToServer()
+        self.view = View(self)
+        #self.tryToConnectToServer()
         self.view.root.mainloop()
         
     def userLogin(self):

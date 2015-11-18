@@ -23,17 +23,13 @@ class View():
 
     def styleCreation(self):
         self.style=Style()
-<<<<<<< HEAD
-        #self.style.configure("TButton", background="black",foreground="white")
-        
-=======
+
 
     
     def showError(self):
         return askretrycancel('Connection au serveur impossible', 'Veuillez vous assure que le serveur est actif')
         
 
->>>>>>> e8c5d103319d2eeca3ad9fd51e1c3fb091078e43
     def frameSwapper(self, frame):
         if self.currentFrame:
             self.currentFrame.pack_forget()
@@ -88,52 +84,7 @@ class GFrame(Frame):
         self.parentController.frameSwapper( self.parentController.frameLogin )
         self.parentController.frameLogin.entryName.focus()
         self.parentController.frameLogin.resetEntries()
-        
-class FrameCreateUser(GFrame):
-    def __init__(self, parentController, parentWindow, title, **args):
-        GFrame.__init__(self, parentController, parentWindow, title, **args)
-        
-        self.label = Label(self)
-        self.label.grid(row=0, column=0, sticky=W)
-        
-        self.labelNameAccount = Label(self, text="Nom de compte : ", width=25, anchor=E)
-        self.labelNameAccount.grid(row=1, column=0, sticky=E)
-        self.entryNameAccount = Entry(self)
-        self.entryNameAccount.focus_set()
-        self.entryNameAccount.grid(row=1, column=1, sticky=E)
-        
-        self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
-        self.labelPass.grid(row=2, column=0, sticky=E)
-        self.entryPass = Entry(self, show="*")
-        self.entryPass.grid(row=2, column=1, sticky=E)
-        
-        self.labelPassConfirm = Label(self, text="Confirmer le mot de passe : ",  width=25, anchor=E)
-        self.labelPassConfirm.grid(row=3, column=0, sticky=E)
-        self.entryPassConfirm = Entry(self, show="*")
-        self.entryPassConfirm.grid(row=3, column=1, sticky=E)
-        
-        self.labelGroup = Label(self, text="Groupe d'usagers : ", width=25, anchor=E)
-        self.labelGroup.grid(row=4, column=0, sticky=E)
-        self.comboBoxGroup = Combobox(self, text="Admin")
-        self.comboBoxGroup.grid(row=4, column=1, sticky=E)
-        
-        self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
-        self.labelSurname.grid(row=5, column=0, sticky=E)
-        self.entrySurname = Entry(self)
-        self.entrySurname.grid(row=5, column=1, sticky=E)
-        
-        self.labelName = Label(self, text="Prenom : ", width=25, anchor=E)
-        self.labelName.grid(row=6, column=0, sticky=E)
-        self.entryName = Entry(self)
-        self.entryName.grid(row=6, column=1, sticky=E)
-        
-        self.ButtonCancel = Button(self, text="Annler", width=10)
-        self.ButtonCancel.grid(row=7, column=1, sticky=E)
-        
-        self.ButtonCreate = Button(self, text="Cree", width=10,command=self.parentController.parent.createUser)
-        self.ButtonCreate.grid(row=7, column=2, sticky=E)
-        
-        
+
 class FrameUsersList(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
@@ -143,17 +94,83 @@ class FrameUsersList(GFrame):
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
         self.buttonModify = Button(self,text="Modifier utilisateur")
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonAdd = Button(self,text="Créer utilisateur", command=self.parentController.parent.createUser)
+        self.buttonAdd = Button(self,text="Créer utilisateur", command=self.enableTextFieldForUserCreation)
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
         self.buttonDelete = Button(self,text="Supprimer utilisateur")
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
         self.frameCreation=Frame(self)
         self.frameCreateUser = FrameCreateUser(parentController,self, "Cree un usager", width=400, height=300)
         self.frameCreateUser.grid(column=2,row=1)
+        self.isFrameCreateUserWidgetEnabled = False
+
+
+
     def verifyUserName(self):
         pass
+
     def newUser(self):
         pass
+
+    def enableTextFieldForUserCreation(self):
+
+        self.frameCreateUser.entryNameAccount.configure(state = 'normal')
+        self.frameCreateUser.entryPass.configure(state = 'normal')
+        self.frameCreateUser.entryPassConfirm.configure(state = 'normal')
+        self.frameCreateUser.comboBoxGroup.configure(state = 'normal')
+        self.frameCreateUser.entrySurname.configure(state = 'normal')
+        self.frameCreateUser.entryName.configure(state = 'normal')
+        self.frameCreateUser.ButtonCancel.configure(state = 'normal')
+        self.frameCreateUser.ButtonCreate.configure(state = 'normal')
+
+
+
+
+class FrameCreateUser(GFrame):
+    def __init__(self, parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+        
+        self.label = Label(self)
+        self.label.grid(row=0, column=0, sticky=W)
+        
+        self.labelNameAccount = Label(self, text="Nom de compte : ", width=25, anchor=E)
+        self.labelNameAccount.grid(row=1, column=0, sticky=E)
+        self.entryNameAccount = Entry(self, state='disable')
+        self.entryNameAccount.focus_set()
+        self.entryNameAccount.grid(row=1, column=1, sticky=E)
+        
+        self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
+        self.labelPass.grid(row=2, column=0, sticky=E)
+        self.entryPass = Entry(self, show="*", state='disable')
+        self.entryPass.grid(row=2, column=1, sticky=E)
+        
+        self.labelPassConfirm = Label(self, text="Confirmer le mot de passe : ",  width=25, anchor=E)
+        self.labelPassConfirm.grid(row=3, column=0, sticky=E)
+        self.entryPassConfirm = Entry(self, show="*", state='disable')
+        self.entryPassConfirm.grid(row=3, column=1, sticky=E)
+        
+        self.labelGroup = Label(self, text="Groupe d'usagers : ", width=25, anchor=E)
+        self.labelGroup.grid(row=4, column=0, sticky=E)
+        self.comboBoxGroup = Combobox(self, text="Admin", state='disable')
+        self.comboBoxGroup.grid(row=4, column=1, sticky=E)
+        
+        self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
+        self.labelSurname.grid(row=5, column=0, sticky=E)
+        self.entrySurname = Entry(self, state='disable')
+        self.entrySurname.grid(row=5, column=1, sticky=E)
+        
+        self.labelName = Label(self, text="Prenom : ", width=25, anchor=E)
+        self.labelName.grid(row=6, column=0, sticky=E)
+        self.entryName = Entry(self, state='disable')
+        self.entryName.grid(row=6, column=1, sticky=E)
+        
+        self.ButtonCancel = Button(self, text="Annler", width=10, state='disable')
+        self.ButtonCancel.grid(row=7, column=1, sticky=E)
+        
+        self.ButtonCreate = Button(self, text="Cree", width=10,state='disable', command=self.parentController.parent.createUser)
+        self.ButtonCreate.grid(row=7, column=2, sticky=E)
+        
+        
+
         
 class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -172,9 +189,10 @@ class FrameLogin(GFrame):
         self.labelPass.grid(row=2, column=0, sticky=E)
         self.entryPass = Entry(self, show="*")
         self.entryPass.grid(row=2, column=1, sticky=E)
+        self.entryPass.bind("<Return>", self.callBackLogIn)
 
-        self.ButtonLogin = Button(self, text="Se connecter", width=10,command=self.parentController.parent.userLogin)
-        self.ButtonLogin.grid(row=3, column=1, sticky=E)
+        self.ButtonLogin = Button(self, text="Se connecter", width=13,command=self.parentController.parent.userLogin)
+        self.ButtonLogin.grid(row=3, column=1, sticky=E, ipady = 5, pady = 10)
         
         self.labelWrongPassword = Label(self, text="Le nom d'usager et ou le mot de passe sont invalides")
         self.labelWrongPassword = None
@@ -182,6 +200,9 @@ class FrameLogin(GFrame):
     def showErrorMsg(self, msg):
         labelErrorMsg = Label(self, text= msg)
         labelErrorMsg.grid(row=4, columnspan=2, sticky=E)
+
+    def callBackLogIn(self,evt):
+        self.parentController.parent.userLogin()
     
     def resetEntries(self):
         self.entryName.delete(0, END)
@@ -200,19 +221,19 @@ class FrameFormulaire(GFrame):
         self.labelForms = Label(self, text = "Formulaires de la base de donnee")
         self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
-<<<<<<< HEAD
+
         #print ( self.parentController.parent.getFormsNameList() )
         #for i in self.parentController.parent.getFormsNameList():
             #self.formsListBox.insert(END,i)
-=======
+
         self.formsListBox.grid(row=1, column=0)
-        self.showAllFormsInListView()
+        #self.showAllFormsInListView()
             
         self.labelTable = Label(self, text="Tables de la base de donnee")
         self.labelTable.grid(row=0, column=1)
         self.tablesTreeView = Treeview(self)
         self.tablesTreeView.grid(row=1, column=1)
-        self.showAllTablesInTreeView()
+        #self.showAllTablesInTreeView()
 
     def showAllTablesInTreeView(self):
         count = 0;

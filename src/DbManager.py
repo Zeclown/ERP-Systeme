@@ -13,9 +13,10 @@ class DbManager():
 
     def query(self,query,bindings = None):
         
-        numberOfBindings = len(bindings)
-        
-        if bindings != None:
+
+        if bindings:
+            print("YOO")
+            numberOfBindings = len(bindings)
             placeholder = '?'
             placeholders = ', '.join( [placeholder] * numberOfBindings )
             queryToExecute = query + '(%s)' % placeholders 
@@ -57,6 +58,6 @@ class DbManager():
         
 if __name__ == "__main__":
     db=DbManager("data1.db")
-    binds = [ None, 'jaime', 'python', 'beaucoup']
+    binds = [ None, 'jaime', 'python', 'beaucoupa']
     db.query('INSERT INTO Sys_Usagers values', binds )
     db.db.commit()
