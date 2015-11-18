@@ -2,12 +2,8 @@ import Pyro4
 
 class ServerCommunication():
     def __init__(self):
-<<<<<<< HEAD
-        #self.serverAdress = "PYRO:foo@10.57.47.22:48261"
-        self.serverAdress = "PYRO:foo@127.0.0.1:43225"
-=======
+        #self.serverAdress = "PYRO:foo@127.0.0.1:43225"
         self.serverAdress = "PYRO:foo@10.57.47.25:48261"
->>>>>>> 1dfe00b95e9bb655a7ce5e9341131a3e55402497
         self.status = None
         self.server = None
         

@@ -22,13 +22,8 @@ class View():
         self.root.mainloop()
     def styleCreation(self):
         self.style=Style()
-<<<<<<< HEAD
-        #self.style.configure("TButton", background="black",foreground="white")
 
-        
-=======
->>>>>>> 1dfe00b95e9bb655a7ce5e9341131a3e55402497
-        
+        #self.style.configure("TButton", background="black",foreground="white")       
     def frameSwapper(self, frame):
         if self.currentFrame:
             self.currentFrame.pack_forget()
