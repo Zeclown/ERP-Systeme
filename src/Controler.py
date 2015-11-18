@@ -63,7 +63,7 @@ class Controler():
         password = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
         groupeUtilisateur = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
         
-        bindings = [ username, password, groupeUtilisateur]
+        bindings = [ 8, username, password, groupeUtilisateur]
  
         self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
                

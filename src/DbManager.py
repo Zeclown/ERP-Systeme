@@ -41,23 +41,26 @@ class DbManager():
         
     def createDB(self):
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_GroupesUtilisateurs
-             (id integer primary key, nom text NOT NULL, droits text NOT NULL)''')
+             (id integer primary key autoincrement, nom text NOT NULL, droits text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Usagers
-             (id integer primary key, nom text NOT NULL, mdp text NOT NULL, groupUtilisateur integer  ,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
+             (id integer primary key autoincrement, nom text NOT NULL, mdp text NOT NULL, groupUtilisateur integer  ,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Formulaires
-             ( id integer primary key,nom text NOT NULL, date_creation Date NOT NULL, derniere_modif Date NOT NULL  , acces_utilisation integer  ,acces_modification integer   )''')
+             ( id integer primary key autoincrement,nom text NOT NULL, date_creation Date NOT NULL, derniere_modif Date NOT NULL  , acces_utilisation integer  ,acces_modification integer   )''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Specificite
              (id integer, nomChamp text NOT NULL, type text NOT NULL,nomTable text,colonne text,action text,FOREIGN KEY(id) REFERENCES Sys_Formulaires(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumType
-             (id integer primary key, nom text NOT NULL)''')
+             (id integer primary key autoincrement, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumList
              (id integer, nom text NOT NULL,FOREIGN KEY(id) REFERENCES Sys_EnumType(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Crons
-             (id integer primary key, nom text NOT NULL,fnct_id integer, nbTemps text, frequence integer ,actif INTEGER,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
+             (id integer primary key autoincrement, nom text NOT NULL,fnct_id integer, nbTemps text, frequence integer ,actif INTEGER,FOREIGN KEY(fnct_id) REFERENCES Sys_RegleAffaire(id))''')    
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaire
-             (id integer primary key, nom text NOT NULL)''')
+             (id integer primary key autoincrement, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
-             (id integer primary key, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
+             (id integer primary key autoincrement, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
         
 if __name__ == "__main__":
-    db=DbManager("data1.db")        
+    db=DbManager("data1.db")
+    binds = [ None, 'jaime', 'python', 'beaucoup']
+    db.query('INSERT INTO Sys_Usagers values', binds )
+    db.db.commit()
