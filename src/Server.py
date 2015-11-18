@@ -60,7 +60,7 @@ class Server(object):
         queryResult = self.dbManager.query(query,bindings)
         return queryResult"""
     
-    def executeSql(self, query, bindings = None):
+    def executeSql(self, query, bindings):
         queryResult = self.dbManager.query(query,bindings)
         return queryResult
     

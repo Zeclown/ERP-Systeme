@@ -55,13 +55,17 @@ class Controler():
     
     def getFormsNameList(self):
         return self.model.formsManager.getForms()
+
+    def getUsers(self):
+        query = 'SELECT * FROM Sys_Usagers'
+        return self.serverCommunication.runSQLQuery(query)
         
     
     def createUser(self):
         
         username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
-        password = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
-        groupeUtilisateur = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
+        password = self.view.frameUsersList.frameCreateUser.entryPass.get()
+        groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
         
         bindings = [ None, username, password, groupeUtilisateur]
  

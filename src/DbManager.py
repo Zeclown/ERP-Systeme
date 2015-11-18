@@ -11,7 +11,7 @@ class DbManager():
         self.createDB()
 
 
-    def query(self,query,bindings = None):
+    def query(self,query,bindings):
         
 
         if bindings:
@@ -19,11 +19,11 @@ class DbManager():
             numberOfBindings = len(bindings)
             placeholder = '?'
             placeholders = ', '.join( [placeholder] * numberOfBindings )
-            queryToExecute = query + '(%s)' % placeholders 
+            queryToExecute = query + '(%s)' % placeholders
             self.cursorDB.execute(queryToExecute, bindings)
             self.db.commit()
             return self.cursorDB.fetchall()
-        
+
         self.cursorDB.execute(query)
         self.db.commit()
         return self.cursorDB.fetchall()
