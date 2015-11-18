@@ -80,7 +80,9 @@ class GFrame(Frame):
         print("addGroupToDB")
         
     def logOutUser(self):
-        print("logOutUser")
+        self.parentController.frameSwapper( self.parentController.frameLogin )
+        self.parentController.frameLogin.entryName.focus()
+        self.parentController.frameLogin.resetEntries()
         
 class FrameCreateUser(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
