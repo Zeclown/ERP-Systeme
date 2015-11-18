@@ -162,10 +162,9 @@ class Server(object):
 serverPyro = Server()   #objet du serveur
 
 
-
-
 daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur,port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
 
+<<<<<<< HEAD
 #daemon = Pyro4.Daemon(host="10.57.47.22",port=48261)      #ce qui écoute les remote calls sur le serveur
 
 
@@ -175,6 +174,8 @@ daemon = Pyro4.Daemon(host="localhost",port=43225)      #ce qui Ã©coute les re
 
 #daemon = Pyro4.Daemon(host="10.57.47.22",port=43225)      #ce qui écoute les remote calls sur le serveur
 
+=======
+>>>>>>> e8c5d103319d2eeca3ad9fd51e1c3fb091078e43
 
 uri = daemon.register(serverPyro,"foo")
 

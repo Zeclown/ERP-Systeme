@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from tkinter import *
 from tkinter.ttk import *
+from tkinter.messagebox import showinfo, askyesno, askquestion, askretrycancel
 
 
 class View():
@@ -22,8 +23,17 @@ class View():
 
     def styleCreation(self):
         self.style=Style()
+<<<<<<< HEAD
         #self.style.configure("TButton", background="black",foreground="white")
         
+=======
+
+    
+    def showError(self):
+        return askretrycancel('Connection au serveur impossible', 'Veuillez vous assure que le serveur est actif')
+        
+
+>>>>>>> e8c5d103319d2eeca3ad9fd51e1c3fb091078e43
     def frameSwapper(self, frame):
         if self.currentFrame:
             self.currentFrame.pack_forget()
@@ -55,6 +65,7 @@ class GFrame(Frame):
         optionMenu.add_command(label="Gestion de formulaire", command=self.showFrameFormulaire)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
+        optionMenu.add_command(label="Quitter", command = self.parentController.root.destroy)
         self.menuBar.add_cascade(label="Options", menu=optionMenu)
         if showMenuBar:
             self.parentWindow.config(menu=self.menuBar)
@@ -74,7 +85,9 @@ class GFrame(Frame):
         print("addGroupToDB")
         
     def logOutUser(self):
-        print("logOutUser")
+        self.parentController.frameSwapper( self.parentController.frameLogin )
+        self.parentController.frameLogin.entryName.focus()
+        self.parentController.frameLogin.resetEntries()
         
 class FrameCreateUser(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -187,6 +200,11 @@ class FrameFormulaire(GFrame):
         self.labelForms = Label(self, text = "Formulaires de la base de donnee")
         self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
+<<<<<<< HEAD
+        #print ( self.parentController.parent.getFormsNameList() )
+        #for i in self.parentController.parent.getFormsNameList():
+            #self.formsListBox.insert(END,i)
+=======
         self.formsListBox.grid(row=1, column=0)
         self.showAllFormsInListView()
             
@@ -208,11 +226,7 @@ class FrameFormulaire(GFrame):
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
         
-        
-            
-        
-            
-            
+                
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
