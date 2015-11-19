@@ -89,15 +89,16 @@ class FrameUsersList(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         self.frameCreateUser = FrameCreateUser(parentController,self, "Cree un usager", width=400, height=300)
-
-        self.label=Label(self,text="Usagers",relief=GROOVE)
-        self.label.grid(row=0, column=0, sticky=W,columnspan=2)
+        self.label=Label(self,text="Usagers", width = 10, font = ("Bell Gothic Std Black", 18))
+        self.label.grid(row=0, column=0, sticky=W,columnspan=2, pady = 5, padx = 5)
         self.listboxUsers = Listbox(self)
         self.listboxUsers.bind('<<ListboxSelect>>', self.selectListBoxItem)
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
-        self.buttonModify = Button(self,text="Modifier utilisateur")
+        self.buttonModify = Button(self,text="Modifier utilisateur", command=lambda: self.frameCreateUser.setUserCreationTextFieldState('normal'))
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonAdd = Button(self,text="Créer utilisateur", command=lambda: self.frameCreateUser.setUserCreationTextFieldState('normal'))
+        self.buttonAdd = Button(self,text="Créer utilisateur", 
+        command=lambda: self.combine_funcs(self.frameCreateUser.setUserCreationTextFieldState('normal'),
+                                           self.frameCreateUser.clearUserCreationTextFields()))
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
         self.buttonDelete = Button(self,text="Supprimer utilisateur")
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
@@ -105,7 +106,7 @@ class FrameUsersList(GFrame):
         self.frameCreation=Frame(self)
         self.frameCreateUser.grid(column=2,row=1)
 
-        self.refreshUserListe()
+        self.refreshUsersInList()
 
     def refreshCurrentlySelectedUser(self,index):
         listofUsers = self.parentController.parent.getUsers()
@@ -123,7 +124,8 @@ class FrameUsersList(GFrame):
         self.refreshCurrentlySelectedUser(index)
         print("INDEX: ", index, "VALEUR:", value)
 
-    def refreshUserListe(self):
+    def refreshUsersInList(self):
+        self.listboxUsers.delete(0,END)
         listofUsers = self.parentController.parent.getUsers()
         nameOfUsers = []
 
@@ -134,6 +136,12 @@ class FrameUsersList(GFrame):
 
         for i in nameOfUsers:
             self.listboxUsers.insert(END,i)
+            
+    def combine_funcs(self,*funcs):
+        def combined_func(*args, **kwargs):
+            for f in funcs:
+                f(*args, **kwargs)
+        return combined_func
 
 
     def verifyUserName(self):
@@ -185,15 +193,30 @@ class FrameCreateUser(GFrame):
         self.entryName = Entry(self, state='disable', textvariable = self.stringVarEntryNameOfUser)
         self.entryName.grid(row=6, column=1, sticky=E)
 
-        self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=self.parentController.parent.createUser)
+        self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=lambda:
+                                   self.combine_funcs(self.parentController.parent.createUser(),
+                                                      self.parentWindow.refreshUsersInList()))
         self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
         
-        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=lambda: self.setUserCreationTextFieldState('disable'))
-        self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
+        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=lambda: 
+                                   self.setUserCreationTextFieldState('disable'))
         
+        self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
+    
+    def combine_funcs(self,*funcs):
+        def combined_func(*args, **kwargs):
+            for f in funcs:
+                f(*args, **kwargs)
+        return combined_func
 
+    def clearUserCreationTextFields(self):
+        self.stringVarEntryName.set("")
+        self.stringVarEntryPass.set("")
+        self.stringVarGroupeUsager.set("")
+        self.stringVarEntrySurname.set("")
+        self.stringVarEntryNameOfUser.set("")
 
-    def setUserCreationTextFieldState(self,widgetState): #normal or disable
+    def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
 
         self.entryNameAccount.configure(state = widgetState)
         self.entryPass.configure(state = widgetState)

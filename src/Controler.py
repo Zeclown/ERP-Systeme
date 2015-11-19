@@ -6,11 +6,26 @@ from Model import *
 class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication(self)
-        self.serverCommunication.connectToServer()
+        #self.serverCommunication.connectToServer()
+        self.setUpClient()
         self.model = Model(self)
         self.view = View(self)
         #self.tryToConnectToServer()
         self.view.root.mainloop()
+        
+    def setUpClient(self):
+        
+        try:
+            self.serverCommunication.connectToServer()
+            self.serverCommunication.server.testConnection()
+        except Exception:
+            print("yo")
+            if self.view.showError():
+                self.serverCommunication.connectToServer()
+                self.userLogin()
+            else:
+                self.view.root.destroy()
+            
         
     def userLogin(self):
         username = self.view.frameLogin.entryName.get()
@@ -53,6 +68,7 @@ class Controler():
         
     
     def createUser(self):
+        
         
         username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
         password = self.view.frameUsersList.frameCreateUser.entryPass.get()
