@@ -6,7 +6,7 @@ class Formulaire():
 
     def getTables(self):
         sqlQuery = "SELECT nom FROM Sys_Formulaires"
-        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery)
+        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery,None)
         return self.formsList 
         
     def getForms(self):
