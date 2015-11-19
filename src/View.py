@@ -103,7 +103,7 @@ class FrameUsersList(GFrame):
         self.frameCreation=Frame(self)
         self.frameCreateUser.grid(column=2,row=1)
 
-        #self.parentController.parent.getUsers()
+        print(self.parentController.parent.getUsers())
 
     def verifyUserName(self):
         pass

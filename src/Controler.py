@@ -46,7 +46,7 @@ class Controler():
 
     def getUsers(self):
         query = 'SELECT * FROM Sys_Usagers'
-        return self.serverCommunication.runSQLQuery(query)
+        return self.serverCommunication.runSQLQuery(query,None)
         
     
     def createUser(self):
