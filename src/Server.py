@@ -58,6 +58,9 @@ class Server(object):
         queryResult = self.dbManager.query(query,bindings)
         return queryResult
     
+    def testConnection(self):
+        return True
+    
 #     def createCronJob(self):
 #         uneQuerySQL = "SELECT * FROM Sys_Crons"
 #         cronJobResult = self.executeSql(uneQuerySQL)

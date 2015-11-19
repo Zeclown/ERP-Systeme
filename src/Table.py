@@ -12,6 +12,6 @@ class Table():
             sqlCommand+=" " + column + " " + columns[column]+","
         sqlCommand=sqlCommand[:-1]
         sqlCommand+=" )"
-        print(sqlCommand)
         self.parent.parent.serverCommunication.runSQLQuery(sqlCommand,None);
+
 

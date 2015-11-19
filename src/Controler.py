@@ -6,11 +6,26 @@ from Model import *
 class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication(self)
-        self.serverCommunication.connectToServer()
+        #self.serverCommunication.connectToServer()
+        self.setUpClient()
         self.model = Model(self)
         self.view = View(self)
         #self.tryToConnectToServer()
         self.view.root.mainloop()
+        
+    def setUpClient(self):
+        
+        try:
+            self.serverCommunication.connectToServer()
+            self.serverCommunication.server.testConnection()
+        except Exception:
+            print("yo")
+            if self.view.showError():
+                self.serverCommunication.connectToServer()
+                self.userLogin()
+            else:
+                self.view.root.destroy()
+            
         
     def userLogin(self):
         username = self.view.frameLogin.entryName.get()
@@ -57,7 +72,6 @@ class Controler():
         username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
         password = self.view.frameUsersList.frameCreateUser.entryPass.get()
 
-
         groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
         
         bindings = [ None, username, password, groupeUtilisateur ] #None pour le id
@@ -65,6 +79,15 @@ class Controler():
         self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
 
         print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
+        
+    def deleteUser(self,nameOfUserToDelete):
+        
+        query = "DELETE FROM Sys_Usagers WHERE nom = '%s'" % (nameOfUserToDelete)
+        print("deleted")
+        print(query)
+        self.serverCommunication.runSQLQuery(query, None)
+        
+        
                
 if __name__ == '__main__':
     c = Controler()
