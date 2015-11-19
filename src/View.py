@@ -100,7 +100,11 @@ class FrameUsersList(GFrame):
         command=lambda: self.combine_funcs(self.frameCreateUser.setUserCreationTextFieldState('normal'),
                                            self.frameCreateUser.clearUserCreationTextFields()))
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonDelete = Button(self,text="Supprimer utilisateur")
+        
+        #self.selectionCourrante = self.listboxUsers.get(self.listboxUsers.curselection())
+        self.buttonDelete = Button(self,text="Supprimer utilisateur", command=lambda:
+                                   self.combine_funcs(self.parentController.parent.deleteUser(self.listboxUsers.get(self.listboxUsers.curselection())),
+                                                      self.refreshUsersInList() ))
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
 
         self.frameCreation=Frame(self)

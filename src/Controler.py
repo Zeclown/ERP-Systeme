@@ -69,10 +69,8 @@ class Controler():
     
     def createUser(self):
         
-        
         username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
         password = self.view.frameUsersList.frameCreateUser.entryPass.get()
-
 
         groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
         
@@ -81,6 +79,15 @@ class Controler():
         self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
 
         print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
+        
+    def deleteUser(self,nameOfUserToDelete):
+        
+        query = "DELETE FROM Sys_Usagers WHERE nom = '%s'" % (nameOfUserToDelete)
+        print("deleted")
+        print(query)
+        self.serverCommunication.runSQLQuery(query, None)
+        
+        
                
 if __name__ == '__main__':
     c = Controler()

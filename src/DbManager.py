@@ -55,3 +55,12 @@ class DbManager():
              (id integer primary key autoincrement, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
 if __name__ == "__main__":
     db=DbManager("data1.db")
+    
+    def deleteUser(nameOfUserToDelete):
+        
+        query = "DELETE FROM Sys_Usagers WHERE nom = '%s'" % (nameOfUserToDelete)
+        print(query)
+        
+        db.query(query, None)
+        
+    deleteUser("Francis est cave")
