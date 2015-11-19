@@ -6,12 +6,14 @@ class Formulaire():
 
     def getTables(self):
         sqlQuery = "SELECT nom FROM Sys_Formulaires"
-        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery)
+        bindings = [None]
+        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery, bindings)
         return self.formsList 
         
     def getForms(self):
         sqlQuery = "SELECT nom FROM Sys_Formulaires"
         print("YOO", self.parent)
         print("YOO#2", self.parent.parent)
-        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery)
+        bindings = [None]
+        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery, bindings)
         return self.formsList
