@@ -5,7 +5,7 @@ from Model import *
 
 class Controler():
     def __init__(self):
-        self.serverCommunication = ServerCommunication()
+        self.serverCommunication = ServerCommunication(self)
         self.serverCommunication.connectToServer()
         self.model = Model(self)
         self.view = View(self)
@@ -17,13 +17,11 @@ class Controler():
         password = self.view.frameLogin.entryPass.get()
         
         try:
-            
             testLogIn = self.serverCommunication.logIn(username,password )
         
             if testLogIn :
                 self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
             else:
-                print( "FALSE LOG IN" ) #TEMPORAIRE!!!! A FAIRE: Affiche msg d'erreur et efface les champs texte
                 self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
                 self.view.frameLogin.resetEntries()
                 
@@ -37,6 +35,13 @@ class Controler():
 
     def getAllTables(self):
         return self.model.formsManager.getTables()
+
+    def exception(self):
+        if self.view.showError():
+            self.serverCommunication.connectToServer()
+            self.userLogin()
+        else:
+            self.view.root.destroy()
 
     
     def getFormsNameList(self):
