@@ -100,24 +100,16 @@ class FrameUsersList(GFrame):
         self.buttonDelete = Button(self,text="Supprimer utilisateur")
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
 
-
         self.frameCreation=Frame(self)
         self.frameCreateUser.grid(column=2,row=1)
 
-
-       # self.parentController.parent.getUsers()
-
-
+        #self.parentController.parent.getUsers()
 
     def verifyUserName(self):
         pass
 
     def newUser(self):
         pass
-
-
-
-
 
 class FrameCreateUser(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -156,12 +148,14 @@ class FrameCreateUser(GFrame):
         self.labelName.grid(row=6, column=0, sticky=E)
         self.entryName = Entry(self, state='disable')
         self.entryName.grid(row=6, column=1, sticky=E)
+
+        self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=self.parentController.parent.createUser)
+        self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
         
         self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=lambda: self.setUserCreationTextFieldState('disable'))
-        self.ButtonCancel.grid(row=7, column=1, sticky=E)
+        self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
         
-        self.ButtonCreate = Button(self, text="Cree", width=10,state='disable', command=self.parentController.parent.createUser)
-        self.ButtonCreate.grid(row=7, column=2, sticky=E)
+
 
     def setUserCreationTextFieldState(self,widgetState): #normal or disable
 

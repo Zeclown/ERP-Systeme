@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ServerCommunication import *
 from View import *
 from Model import *
@@ -59,6 +60,8 @@ class Controler():
         bindings = [ None, username, password, groupeUtilisateur ] #None pour le id
  
         self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
+
+        print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
                
 if __name__ == '__main__':
     c = Controler()
