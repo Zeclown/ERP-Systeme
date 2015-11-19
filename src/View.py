@@ -89,9 +89,11 @@ class FrameUsersList(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         self.frameCreateUser = FrameCreateUser(parentController,self, "Cree un usager", width=400, height=300)
+
         self.label=Label(self,text="Usagers",relief=GROOVE)
         self.label.grid(row=0, column=0, sticky=W,columnspan=2)
         self.listboxUsers = Listbox(self)
+        self.listboxUsers.bind('<<ListboxSelect>>', self.selectListBoxItem)
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
         self.buttonModify = Button(self,text="Modifier utilisateur")
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
@@ -105,10 +107,21 @@ class FrameUsersList(GFrame):
 
         self.refreshUserListe()
 
+    def refreshCurrentlySelectedUser(self,index):
+        listofUsers = self.parentController.parent.getUsers()
+        nameOfUserToRefresh = listofUsers[index][1]
+        print("NAME TO REFRESH:", nameOfUserToRefresh)
+        self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
+        self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
+        self.frameCreateUser.stringVarGroupeUsager.set("Test comboBox StringVar()")
 
 
-
-        #print(self.parentController.parent.getUsers())
+    def selectListBoxItem(self,evt):
+        selectedListBox = evt.widget
+        index = int(selectedListBox.curselection()[0])
+        value = selectedListBox.get(index)
+        self.refreshCurrentlySelectedUser(index)
+        print("INDEX: ", index, "VALEUR:", value)
 
     def refreshUserListe(self):
         listofUsers = self.parentController.parent.getUsers()
@@ -138,33 +151,38 @@ class FrameCreateUser(GFrame):
         
         self.labelNameAccount = Label(self, text="Nom de compte : ", width=25, anchor=E)
         self.labelNameAccount.grid(row=1, column=0, sticky=E)
-        self.entryNameAccount = Entry(self, state='disable')
+        self.stringVarEntryName = StringVar()
+        self.entryNameAccount = Entry(self, state='disable', textvariable = self.stringVarEntryName)
         self.entryNameAccount.focus_set()
         self.entryNameAccount.grid(row=1, column=1, sticky=E)
         
         self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
         self.labelPass.grid(row=2, column=0, sticky=E)
-        self.entryPass = Entry(self, show="*", state='disable')
+        self.stringVarEntryPass = StringVar()
+        self.entryPass = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
         self.entryPass.grid(row=2, column=1, sticky=E)
         
         self.labelPassConfirm = Label(self, text="Confirmer le mot de passe : ",  width=25, anchor=E)
         self.labelPassConfirm.grid(row=3, column=0, sticky=E)
-        self.entryPassConfirm = Entry(self, show="*", state='disable')
+        self.entryPassConfirm = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
         self.entryPassConfirm.grid(row=3, column=1, sticky=E)
         
         self.labelGroup = Label(self, text="Groupe d'usagers : ", width=25, anchor=E)
         self.labelGroup.grid(row=4, column=0, sticky=E)
-        self.comboBoxGroup = Combobox(self, text="Admin", state='disable')
+        self.stringVarGroupeUsager = StringVar()
+        self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager)
         self.comboBoxGroup.grid(row=4, column=1, sticky=E)
         
         self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
         self.labelSurname.grid(row=5, column=0, sticky=E)
-        self.entrySurname = Entry(self, state='disable')
+        self.stringVarEntrySurname = StringVar()
+        self.entrySurname = Entry(self, state='disable', textvariable = self.stringVarEntrySurname)
         self.entrySurname.grid(row=5, column=1, sticky=E)
         
         self.labelName = Label(self, text="Prenom : ", width=25, anchor=E)
         self.labelName.grid(row=6, column=0, sticky=E)
-        self.entryName = Entry(self, state='disable')
+        self.stringVarEntryNameOfUser = StringVar()
+        self.entryName = Entry(self, state='disable', textvariable = self.stringVarEntryNameOfUser)
         self.entryName.grid(row=6, column=1, sticky=E)
 
         self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=self.parentController.parent.createUser)
