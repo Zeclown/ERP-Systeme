@@ -13,5 +13,5 @@ class Formulaire():
         sqlQuery = "SELECT nom FROM Sys_Formulaires"
         print("YOO", self.parent)
         print("YOO#2", self.parent.parent)
-        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery)
+        self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery,None)
         return self.formsList

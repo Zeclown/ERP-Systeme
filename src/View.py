@@ -219,18 +219,18 @@ class FrameFormulaire(GFrame):
         self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
 
-        #print ( self.parentController.parent.getFormsNameList() )
-        #for i in self.parentController.parent.getFormsNameList():
-            #self.formsListBox.insert(END,i)
+        print ( self.parentController.parent.getFormsNameList() )
+        for i in self.parentController.parent.getFormsNameList():
+            self.formsListBox.insert(END,i)
 
         self.formsListBox.grid(row=1, column=0)
-        #self.showAllFormsInListView()
+        self.showAllFormsInListView()
             
         self.labelTable = Label(self, text="Tables de la base de donnee")
         self.labelTable.grid(row=0, column=1)
         self.tablesTreeView = Treeview(self)
         self.tablesTreeView.grid(row=1, column=1)
-        #self.showAllTablesInTreeView()
+        self.showAllTablesInTreeView()
 
     def showAllTablesInTreeView(self):
         count = 0;
