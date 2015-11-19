@@ -12,7 +12,6 @@ class DbManager():
 
 
     def query(self,query,bindings):
-
         if bindings:
             print("YOO")
             numberOfBindings = len(bindings)
@@ -56,8 +55,3 @@ class DbManager():
              (id integer primary key autoincrement, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
 if __name__ == "__main__":
     db=DbManager("data1.db")
-    binds = [ None, 'jaime', 'python', 'beaucoupa']
-    #db.query('INSERT INTO Sys_Usagers values', binds )
-    yo = db.query('SELECT * FROM Sys_Usagers', None)
-    print( yo )
-    db.db.commit()

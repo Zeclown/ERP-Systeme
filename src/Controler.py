@@ -5,11 +5,9 @@ from Model import *
 
 class Controler():
     def __init__(self):
-        #self.serverCommunication = ServerCommunication()
-        #self.serverCommunication.connectToServer()
-        self.model = Model(self)
         self.serverCommunication = ServerCommunication()
         self.serverCommunication.connectToServer()
+        self.model = Model(self)
         self.view = View(self)
         #self.tryToConnectToServer()
         self.view.root.mainloop()

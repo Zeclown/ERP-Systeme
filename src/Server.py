@@ -53,12 +53,6 @@ class Server(object):
 #         
 #         if(f.readline() != self.monip):
 #             self.writeIP()
-
-            
-
-    """def executeSql(self, query, bindings = None):
-        queryResult = self.dbManager.query(query,bindings)
-        return queryResult"""
     
     def executeSql(self, query, bindings):
         queryResult = self.dbManager.query(query,bindings)
