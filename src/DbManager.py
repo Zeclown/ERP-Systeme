@@ -53,9 +53,5 @@ class DbManager():
              (id integer primary key autoincrement, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
              (id integer primary key autoincrement, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
-        
 if __name__ == "__main__":
     db=DbManager("data1.db")
-    binds = [ None, 'jaime', 'python', 'beaucoupa']
-    db.query('INSERT INTO Sys_Usagers values', binds )
-    db.db.commit()

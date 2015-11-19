@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ServerCommunication import *
 from View import *
 from Model import *
@@ -43,7 +44,7 @@ class Controler():
 
     def getUsers(self):
         query = 'SELECT * FROM Sys_Usagers'
-        return self.serverCommunication.runSQLQuery(query)
+        return self.serverCommunication.runSQLQuery(query,None)
         
     
     def createUser(self):
@@ -57,6 +58,8 @@ class Controler():
         bindings = [ None, username, password, groupeUtilisateur ] #None pour le id
  
         self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
+
+        print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
                
 if __name__ == '__main__':
     c = Controler()

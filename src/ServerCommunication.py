@@ -12,7 +12,7 @@ class ServerCommunication():
         self.server = Pyro4.Proxy(self.serverAdress)
         
 
-    def runSQLQuery(self,SQLquery, bindings = None):
+    def runSQLQuery(self,SQLquery, bindings):
         return self.server.executeSql(SQLquery,bindings)
 
         
