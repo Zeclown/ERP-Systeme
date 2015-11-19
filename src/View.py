@@ -103,7 +103,25 @@ class FrameUsersList(GFrame):
         self.frameCreation=Frame(self)
         self.frameCreateUser.grid(column=2,row=1)
 
-        print(self.parentController.parent.getUsers())
+        self.refreshUserListe()
+
+
+
+
+        #print(self.parentController.parent.getUsers())
+
+    def refreshUserListe(self):
+        listofUsers = self.parentController.parent.getUsers()
+        nameOfUsers = []
+
+        for i in range (len(listofUsers)):
+            nameOfUsers.append(listofUsers[i][1])
+
+        print("NOM D'USAGER: ", nameOfUsers)
+
+        for i in nameOfUsers:
+            self.listboxUsers.insert(END,i)
+
 
     def verifyUserName(self):
         pass
@@ -219,7 +237,6 @@ class FrameFormulaire(GFrame):
         self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
 
-        print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
 
@@ -240,7 +257,6 @@ class FrameFormulaire(GFrame):
             count+=1
            
     def showAllFormsInListView(self):
-        print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
         
