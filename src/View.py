@@ -89,21 +89,63 @@ class FrameUsersList(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         self.frameCreateUser = FrameCreateUser(parentController,self, "Cree un usager", width=400, height=300)
-        self.label=Label(self,text="Usagers",relief=GROOVE)
-        self.label.grid(row=0, column=0, sticky=W,columnspan=2)
+        self.label=Label(self,text="Usagers", width = 10, font = ("Bell Gothic Std Black", 18))
+        self.label.grid(row=0, column=0, sticky=W,columnspan=2, pady = 5, padx = 5)
         self.listboxUsers = Listbox(self)
+        self.listboxUsers.bind('<<ListboxSelect>>', self.selectListBoxItem)
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
-        self.buttonModify = Button(self,text="Modifier utilisateur")
+        self.buttonModify = Button(self,text="Modifier utilisateur", command=lambda: self.frameCreateUser.setUserCreationTextFieldState('normal'))
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonAdd = Button(self,text="Créer utilisateur", command=lambda: self.frameCreateUser.setUserCreationTextFieldState('normal'))
+        self.buttonAdd = Button(self,text="Créer utilisateur", 
+        command=lambda: self.combine_funcs(self.frameCreateUser.setUserCreationTextFieldState('normal'),
+                                           self.frameCreateUser.clearUserCreationTextFields()))
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonDelete = Button(self,text="Supprimer utilisateur")
+        
+        #self.selectionCourrante = self.listboxUsers.get(self.listboxUsers.curselection())
+        self.buttonDelete = Button(self,text="Supprimer utilisateur", command=lambda:
+                                   self.combine_funcs(self.parentController.parent.deleteUser(self.listboxUsers.get(self.listboxUsers.curselection())),
+                                                      self.refreshUsersInList() ))
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
 
         self.frameCreation=Frame(self)
         self.frameCreateUser.grid(column=2,row=1)
 
-        #print(self.parentController.parent.getUsers())
+        self.refreshUsersInList()
+
+    def refreshCurrentlySelectedUser(self,index):
+        listofUsers = self.parentController.parent.getUsers()
+        nameOfUserToRefresh = listofUsers[index][1]
+        print("NAME TO REFRESH:", nameOfUserToRefresh)
+        self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
+        self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
+        self.frameCreateUser.stringVarGroupeUsager.set("Test comboBox StringVar()")
+
+
+    def selectListBoxItem(self,evt):
+        selectedListBox = evt.widget
+        index = int(selectedListBox.curselection()[0])
+        value = selectedListBox.get(index)
+        self.refreshCurrentlySelectedUser(index)
+        print("INDEX: ", index, "VALEUR:", value)
+
+    def refreshUsersInList(self):
+        self.listboxUsers.delete(0,END)
+        listofUsers = self.parentController.parent.getUsers()
+        nameOfUsers = []
+
+        for i in range (len(listofUsers)):
+            nameOfUsers.append(listofUsers[i][1])
+
+        print("NOM D'USAGER: ", nameOfUsers)
+
+        for i in nameOfUsers:
+            self.listboxUsers.insert(END,i)
+            
+    def combine_funcs(self,*funcs):
+        def combined_func(*args, **kwargs):
+            for f in funcs:
+                f(*args, **kwargs)
+        return combined_func
 
     def verifyUserName(self):
         pass
@@ -120,44 +162,64 @@ class FrameCreateUser(GFrame):
         
         self.labelNameAccount = Label(self, text="Nom de compte : ", width=25, anchor=E)
         self.labelNameAccount.grid(row=1, column=0, sticky=E)
-        self.entryNameAccount = Entry(self, state='disable')
+        self.stringVarEntryName = StringVar()
+        self.entryNameAccount = Entry(self, state='disable', textvariable = self.stringVarEntryName)
         self.entryNameAccount.focus_set()
         self.entryNameAccount.grid(row=1, column=1, sticky=E)
         
         self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
         self.labelPass.grid(row=2, column=0, sticky=E)
-        self.entryPass = Entry(self, show="*", state='disable')
+        self.stringVarEntryPass = StringVar()
+        self.entryPass = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
         self.entryPass.grid(row=2, column=1, sticky=E)
         
         self.labelPassConfirm = Label(self, text="Confirmer le mot de passe : ",  width=25, anchor=E)
         self.labelPassConfirm.grid(row=3, column=0, sticky=E)
-        self.entryPassConfirm = Entry(self, show="*", state='disable')
+        self.entryPassConfirm = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
         self.entryPassConfirm.grid(row=3, column=1, sticky=E)
         
         self.labelGroup = Label(self, text="Groupe d'usagers : ", width=25, anchor=E)
         self.labelGroup.grid(row=4, column=0, sticky=E)
-        self.comboBoxGroup = Combobox(self, text="Admin", state='disable')
+        self.stringVarGroupeUsager = StringVar()
+        self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager)
         self.comboBoxGroup.grid(row=4, column=1, sticky=E)
         
         self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
         self.labelSurname.grid(row=5, column=0, sticky=E)
-        self.entrySurname = Entry(self, state='disable')
+        self.stringVarEntrySurname = StringVar()
+        self.entrySurname = Entry(self, state='disable', textvariable = self.stringVarEntrySurname)
         self.entrySurname.grid(row=5, column=1, sticky=E)
         
         self.labelName = Label(self, text="Prenom : ", width=25, anchor=E)
         self.labelName.grid(row=6, column=0, sticky=E)
-        self.entryName = Entry(self, state='disable')
+        self.stringVarEntryNameOfUser = StringVar()
+        self.entryName = Entry(self, state='disable', textvariable = self.stringVarEntryNameOfUser)
         self.entryName.grid(row=6, column=1, sticky=E)
 
-        self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=self.parentController.parent.createUser)
+        self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=lambda:
+                                   self.combine_funcs(self.parentController.parent.createUser(),
+                                                      self.parentWindow.refreshUsersInList()))
         self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
         
-        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=lambda: self.setUserCreationTextFieldState('disable'))
-        self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
+        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=lambda: 
+                                   self.setUserCreationTextFieldState('disable'))
         
+        self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
+    
+    def combine_funcs(self,*funcs):
+        def combined_func(*args, **kwargs):
+            for f in funcs:
+                f(*args, **kwargs)
+        return combined_func
 
+    def clearUserCreationTextFields(self):
+        self.stringVarEntryName.set("")
+        self.stringVarEntryPass.set("")
+        self.stringVarGroupeUsager.set("")
+        self.stringVarEntrySurname.set("")
+        self.stringVarEntryNameOfUser.set("")
 
-    def setUserCreationTextFieldState(self,widgetState): #normal or disable
+    def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
 
         self.entryNameAccount.configure(state = widgetState)
         self.entryPass.configure(state = widgetState)
@@ -236,7 +298,6 @@ class FrameFormulaire(GFrame):
                 count+=1
            
     def showAllFormsInListView(self):
-        #print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
         
@@ -246,8 +307,13 @@ class FrameCreateTable(GFrame):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         GFrame.addMenuBar(self, 1)
         self.types=["number","string"]
-        self.createButton=Button(self, text="Ajouter Table", width=15,command=self.createTable)  
-        self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn)      
+        self.listboxTables=Listbox(self)
+        self.labelTables=Label(self, text="Tables",  width=25, anchor=W);
+        self.modifyTableButton=Button(self,text="Modifier la table",width=15,command=self.activateModify)
+        self.createButton=Button(self, text="Sauvegarder", width=15,command=self.createTable)
+        self.cancelButton= Button(self, text="Annuler", width=15,command=self.cancelTable) 
+        self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn) 
+        self.deleteColumnButton=Button(self,text="Supprimer Colonne",width=15,command=self.deleteColumn)     
         self.listboxColumns=Treeview(self, selectmode="extended",columns=("Type"))        
         self.entryColumnName=Entry(self)
         self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
@@ -261,27 +327,62 @@ class FrameCreateTable(GFrame):
         self.comboBoxType.config(state="readonly")
         self.currentTable={}
         
-        self.labelTableName.grid(column=0,row=0)
-        self.entryTableName.grid(column=1,row=0)
-        self.labelColumnName.grid(column=0,row=1)
-        self.entryColumnName.grid(column=1,row=1)
-        self.labelType.grid(column=2,row=1)
-        self.comboBoxType.grid(column=3,row=1)
-        self.addColumnButton.grid(column=4,row=1)
-        self.listboxColumns.grid(column=0,row=2,columnspan=2) 
-        self.createButton.grid(column=0,row=4)
+        self.labelTables.grid(column=0,row=0)
+        self.listboxTables.grid(column=0,row=1,rowspan=3,padx=30)
+        self.labelTableName.grid(column=1,row=0)
+        self.entryTableName.grid(column=2,row=0)
+        self.labelColumnName.grid(column=1,row=1)
+        self.entryColumnName.grid(column=2,row=1)
+        self.labelType.grid(column=1,row=2)
+        self.comboBoxType.grid(column=2,row=2)
+        self.addColumnButton.grid(column=3,row=2)
+        self.deleteColumnButton.grid(column=3,row=1)
+        self.listboxColumns.grid(column=1,row=3,columnspan=2) 
+        self.createButton.grid(column=1,row=4)
+        self.modifyTableButton.grid(column=0,row=4)
+        self.cancelButton.grid(column=2,row=4)
+        self.deactivateModify()
         
-        
+    def activateModify(self):
+        self.addColumnButton['state']='normal'
+        self.modifyTableButton['state']='disabled'
+        self.comboBoxType['state']='normal'
+        self.deleteColumnButton['state']='normal'
+        self.createButton['state']='normal'
+        self.entryTableName['state']='normal'
+        self.entryColumnName['state']='normal'
+        self.cancelButton['state']='normal'
+    def deactivateModify(self):
+        self.addColumnButton['state']='disabled'
+        self.modifyTableButton['state']='Normal'
+        self.comboBoxType['state']='disabled'
+        self.deleteColumnButton['state']='disabled'
+        self.createButton['state']='disabled'
+        self.entryTableName['state']='disabled'
+        self.entryColumnName['state']='disabled'
+        self.cancelButton['state']='disabled'
+    def cancelTable(self):
+        self.entryColumnName.delete(0, END)
+        self.entryTableName.delete(0,END)
+        self.listboxColumns.delete(*self.listboxColumns.get_children())
+        self.currentTable.clear()
+        self.deactivateModify()
         
     def addColumn(self):
-        self.listboxColumns.insert("", END,    text=self.entryColumnName.get(), values=(self.comboBoxType.get()))
-        
+        self.listboxColumns.insert("", END,    text=self.entryColumnName.get(), values=(self.comboBoxType.get()))       
         self.currentTable[self.entryColumnName.get()]=self.comboBoxType.get()
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
+    def deleteColumn(self):
+        curItem = self.listboxColumns.focus()
+        self.currentTable.pop(self.listboxColumns.item(curItem)['text'],None)
+        
+        self.listboxColumns.delete(curItem)
+         
     def createTable(self):
         self.parentController.parent.model.createTable(self.entryTableName.get(),self.currentTable)
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
-        self.listboxColumns.delete(0, END)
-        self.listboxTypes.delete(0, END)
+        self.listboxColumns.delete(*self.listboxColumns.get_children())
+        self.currentTable.clear()
+        self.deactivateModify()

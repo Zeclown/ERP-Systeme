@@ -2,14 +2,18 @@ import Pyro4
 
 
 class ServerCommunication():
-    def __init__(self):
+    def __init__(self,parent):
         #self.serverAdress = "PYRO:foo@localhost:48261"
         self.serverAdress = "PYRO:foo@localhost:48261"
+        self.parent = parent
         self.status = None
         self.server = None
         
     def connectToServer(self):
-        self.server = Pyro4.Proxy(self.serverAdress)
+        try:
+            self.server = Pyro4.Proxy(self.serverAdress)
+        except Exception:
+            self.parent.exception()
         
 
     def runSQLQuery(self,SQLquery, bindings):
