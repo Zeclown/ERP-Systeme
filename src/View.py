@@ -354,21 +354,22 @@ class FrameCreateTable(GFrame):
         GFrame.addMenuBar(self, 1)
         self.types=["number","string"]
         self.listboxTables=Listbox(self)
+        self.listboxTables.bind('<<ListboxSelect>>', self.selectTable)
         self.labelTables=Label(self, text="Tables",  width=25, anchor=W);
         self.modifyTableButton=Button(self,text="Modifier la table",width=15,command=self.activateModify)
         self.createButton=Button(self, text="Sauvegarder", width=15,command=self.createTable)
         self.cancelButton= Button(self, text="Annuler", width=15,command=self.cancelTable) 
         self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn) 
         self.deleteColumnButton=Button(self,text="Supprimer Colonne",width=15,command=self.deleteColumn)     
-        self.listboxColumns=Treeview(self, selectmode="extended",columns=("Type"))        
+        self.treeviewColumns=Treeview(self, selectmode="extended",columns=("Type"))        
         self.entryColumnName=Entry(self)
         self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
         self.comboBoxType=Combobox(self,values=self.types);
         self.labelTableName=Label(self, text="Nom de la table : ",  width=25, anchor=W);
         self.entryTableName=Entry(self)
         
-        self.listboxColumns.heading("#0", text="Nom de colonne",anchor=W)
-        self.listboxColumns.heading("Type", text="Type",anchor=W)
+        self.treeviewColumns.heading("#0", text="Nom de colonne",anchor=W)
+        self.treeviewColumns.heading("Type", text="Type",anchor=W)
         self.labelType=Label(self, text="Type de la colonne : ",  width=25, anchor=W);
         self.comboBoxType.config(state="readonly")
         self.currentTable={}
@@ -383,11 +384,22 @@ class FrameCreateTable(GFrame):
         self.comboBoxType.grid(column=2,row=2)
         self.addColumnButton.grid(column=3,row=2)
         self.deleteColumnButton.grid(column=3,row=1)
-        self.listboxColumns.grid(column=1,row=3,columnspan=2) 
+        self.treeviewColumns.grid(column=1,row=3,columnspan=2) 
         self.createButton.grid(column=1,row=4)
         self.modifyTableButton.grid(column=0,row=4)
         self.cancelButton.grid(column=2,row=4)
         self.deactivateModify()
+        self.showAllTablesInListbox()
+    def selectTable(self,evt):
+        self.entryTableName.insert(0, self.listboxTables.get(ACTIVE))
+    def updateFrame(self):
+        GFrame.updateFrame(self)
+        self.showAllTablesInListbox()
+    def showAllTablesInListbox(self): 
+        self.listboxTables.delete(0, END)     
+        for i in self.parentController.parent.getAllTables():
+            self.listboxTables.insert(END, i)
+            
         
     def activateModify(self):
         self.addColumnButton['state']='normal'
@@ -410,25 +422,25 @@ class FrameCreateTable(GFrame):
     def cancelTable(self):
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
-        self.listboxColumns.delete(*self.listboxColumns.get_children())
+        self.treeviewColumns.delete(*self.treeviewColumns.get_children())
         self.currentTable.clear()
         self.deactivateModify()
         
     def addColumn(self):
-        self.listboxColumns.insert("", END,    text=self.entryColumnName.get(), values=(self.comboBoxType.get()))       
+        self.treeviewColumns.insert("", END,    text=self.entryColumnName.get(), values=(self.comboBoxType.get()))       
         self.currentTable[self.entryColumnName.get()]=self.comboBoxType.get()
         self.entryColumnName.config(text="")
         self.comboBoxType.index(0)
     def deleteColumn(self):
-        curItem = self.listboxColumns.focus()
+        curItem = self.treeviewColumns.focus()
         self.currentTable.pop(self.listboxColumns.item(curItem)['text'],None)
         
-        self.listboxColumns.delete(curItem)
+        self.treeviewColumns.delete(curItem)
          
     def createTable(self):
         self.parentController.parent.model.createTable(self.entryTableName.get(),self.currentTable)
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
-        self.listboxColumns.delete(*self.listboxColumns.get_children())
+        self.treeviewColumns.delete(*self.treeviewColumns.get_children())
         self.currentTable.clear()
         self.deactivateModify()
