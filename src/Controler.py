@@ -64,7 +64,7 @@ class Controler():
 
     def getUsers(self):
         query = 'SELECT * FROM Sys_Usagers'
-        return self.serverCommunication.runSQLQuery(query,None)
+        return self.serverCommunication.runSQLQuery(query, None)
         
     
     def createUser(self):
@@ -80,12 +80,15 @@ class Controler():
 
         print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
         
-    def deleteUser(self,nameOfUserToDelete):
+    def deleteUser(self,accountToDelete):
         
-        query = "DELETE FROM Sys_Usagers WHERE nom = '%s'" % (nameOfUserToDelete)
+        query = "DELETE FROM Sys_Usagers WHERE nom = '%s'" % (accountToDelete)
+
         print("deleted")
         print(query)
+
         self.serverCommunication.runSQLQuery(query, None)
+
         
         
                

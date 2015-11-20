@@ -62,7 +62,7 @@ class GFrame(Frame):
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
         optionMenu.add_command(label="Quitter", command = self.parentController.root.destroy)
-        self.menuBar.add_cascade(label="Options", menu=optionMenu)
+        self.menuBar.add_cascade(label="Modules", menu=optionMenu)
         if showMenuBar:
             self.parentWindow.config(menu=self.menuBar)
     def updateFrame(self):
@@ -105,6 +105,7 @@ class FrameUsersList(GFrame):
         self.buttonDelete = Button(self,text="Supprimer utilisateur", command=lambda:
                                    self.combine_funcs(self.parentController.parent.deleteUser(self.listboxUsers.get(self.listboxUsers.curselection())),
                                                       self.refreshUsersInList() ))
+
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
 
         self.frameCreation=Frame(self)
@@ -146,7 +147,6 @@ class FrameUsersList(GFrame):
             for f in funcs:
                 f(*args, **kwargs)
         return combined_func
-
 
     def verifyUserName(self):
         pass
@@ -346,7 +346,7 @@ class FrameCreateTable(GFrame):
         self.modifyTableButton.grid(column=0,row=4)
         self.cancelButton.grid(column=2,row=4)
         self.deactivateModify()
-        
+    #THE CODE BELLOW MAKES MY EYES BLEED, PLEASE FIX THIS SHIT.
     def activateModify(self):
         self.addColumnButton['state']='normal'
         self.modifyTableButton['state']='disabled'
@@ -365,6 +365,8 @@ class FrameCreateTable(GFrame):
         self.entryTableName['state']='disabled'
         self.entryColumnName['state']='disabled'
         self.cancelButton['state']='disabled'
+    #####THIS IS WHERE THE SHIT ENDS########################
+
     def cancelTable(self):
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
