@@ -36,7 +36,10 @@ class Controler():
                 self.view.root.destroy()
 
     def getAllTables(self):
-        return self.model.formsManager.getTables()
+        return self.model.formsManager.getAllTablesOfDataBase()
+
+    def getTableColumnName(self, table):
+        return self.model.formsManager.getTableColumnName(table)
 
     
     def getFormsNameList(self):

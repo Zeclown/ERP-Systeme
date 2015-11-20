@@ -13,5 +13,5 @@ class Table():
         sqlCommand=sqlCommand[:-1]
         sqlCommand+=" )"
         
-        self.parent.parent.serverCommunication.runSQLQuery(sqlCommand);
+        self.parent.parent.serverCommunication.runSQLQuery(sqlCommand,None);
 

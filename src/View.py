@@ -103,7 +103,7 @@ class FrameUsersList(GFrame):
         self.frameCreation=Frame(self)
         self.frameCreateUser.grid(column=2,row=1)
 
-        print(self.parentController.parent.getUsers())
+        #print(self.parentController.parent.getUsers())
 
     def verifyUserName(self):
         pass
@@ -218,11 +218,6 @@ class FrameFormulaire(GFrame):
         self.labelForms = Label(self, text = "Formulaires de la base de donnee")
         self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
-
-        print ( self.parentController.parent.getFormsNameList() )
-        for i in self.parentController.parent.getFormsNameList():
-            self.formsListBox.insert(END,i)
-
         self.formsListBox.grid(row=1, column=0)
         self.showAllFormsInListView()
             
@@ -233,14 +228,15 @@ class FrameFormulaire(GFrame):
         self.showAllTablesInTreeView()
 
     def showAllTablesInTreeView(self):
-        count = 0;
+        count = 0
         for i in self.parentController.parent.getAllTables():
             self.tablesTreeView.insert("", count, i, text=i)
-            self.tablesTreeView.insert(i, count, text="Sub Item Table")
-            count+=1
+            for j in self.parentController.parent.getTableColumnName(i):
+                self.tablesTreeView.insert(i, count, text=j)
+                count+=1
            
     def showAllFormsInListView(self):
-        print ( self.parentController.parent.getFormsNameList() )
+        #print ( self.parentController.parent.getFormsNameList() )
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
         
@@ -289,4 +285,3 @@ class FrameCreateTable(GFrame):
         self.entryTableName.delete(0,END)
         self.listboxColumns.delete(0, END)
         self.listboxTypes.delete(0, END)
-
