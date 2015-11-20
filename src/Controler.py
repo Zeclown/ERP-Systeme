@@ -90,7 +90,8 @@ class Controler():
         print(query)
         self.serverCommunication.runSQLQuery(query, None)
         
-        
+    def saveGroup(self):
+        pass    
                
 if __name__ == '__main__':
     c = Controler()

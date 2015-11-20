@@ -12,12 +12,13 @@ class View():
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
-        self.frameCreateTable=FrameCreateTable(self, self.root, "Create Table", width=900, height=500)
+        self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
+        self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
-
+        
     def show(self):
         self.root.mainloop()
 
@@ -78,7 +79,7 @@ class GFrame(Frame):
         self.parentController.frameSwapper(self.parentController.frameFormulaire)
         
     def addGroupToDB(self):
-        print("addGroupToDB")
+        self.parentController.frameSwapper(self.parentController.frameGroups)
         
     def logOutUser(self):
         self.parentController.frameSwapper( self.parentController.frameLogin )
@@ -152,14 +153,44 @@ class FrameUsersList(GFrame):
 
     def newUser(self):
         pass
+class FrameGroups(GFrame):
+    def __init__(self,parentController,parentWindow,title,**args):
+        
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+        self.labelNameAccount = Label(self, text="Nom de groupe : ", width=25, anchor=E)
+        self.labelNameAccount.grid(row=1, column=0, sticky=E)
+        self.stringVarEntryName = StringVar()
+        self.entryNameAccount = Entry(self, state='disable', textvariable = self.stringVarEntryName)
+        self.entryNameAccount.focus_set()
+        self.entryNameAccount.grid(row=1, column=1, sticky=E)              
+        self.labelGroup = Label(self, text="Niveau de sécurité : ", width=25, anchor=E)
+        self.labelGroup.grid(row=4, column=0, sticky=E)
+        self.stringVarGroupeUsager = StringVar()
+        self.comboBoxGroup = Combobox(self, text="0", state='disable', textvariable = self.stringVarGroupeUsager)
+        self.comboBoxGroup.grid(row=4, column=1, sticky=E)
+        self.ButtonCreate = Button(self, text="Sauvegarder", width=10,state='disable', command=self.saveGroup)
+        self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)        
+        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=self.cancel)     
+        self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
+        
+    def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
 
+        self.entryNameAccount.configure(state = widgetState)
+        self.entryPass.configure(state = widgetState)
+        self.entryPassConfirm.configure(state = widgetState)
+        self.comboBoxGroup.configure(state = widgetState)
+        self.entrySurname.configure(state = widgetState)
+        self.entryName.configure(state = widgetState)
+        self.ButtonCreate.configure(state = widgetState)
+        self.ButtonCancel.configure(state = widgetState) 
+    def cancel(self):       
+        self.setUserCreationTextFieldState("disable") 
+    def saveGroup(self):
+        self.parentController.saveGroup();
 class FrameCreateUser(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
-        
-        self.label = Label(self)
-        self.label.grid(row=0, column=0, sticky=W)
-        
+       
         self.labelNameAccount = Label(self, text="Nom de compte : ", width=25, anchor=E)
         self.labelNameAccount.grid(row=1, column=0, sticky=E)
         self.stringVarEntryName = StringVar()

@@ -13,7 +13,6 @@ class DbManager():
 
     def query(self,query,bindings):
         if bindings:
-            print("YOO")
             numberOfBindings = len(bindings)
             placeholder = '?'
             placeholders = ', '.join( [placeholder] * numberOfBindings )

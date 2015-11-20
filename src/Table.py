@@ -1,4 +1,4 @@
-__author__ = 'Drago'
+
 
 
 class Table():
