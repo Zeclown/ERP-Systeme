@@ -2,6 +2,8 @@
 from tkinter import *
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo, askyesno, askquestion, askretrycancel
+from tkinter.tix import *
+
 
 
 class View():
@@ -102,7 +104,6 @@ class FrameUsersList(GFrame):
                                            self.frameCreateUser.clearUserCreationTextFields()))
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
         
-        #self.selectionCourrante = self.listboxUsers.get(self.listboxUsers.curselection())
         self.buttonDelete = Button(self,text="Supprimer utilisateur", command=lambda:
                                    self.combine_funcs(self.parentController.parent.deleteUser(self.listboxUsers.get(self.listboxUsers.curselection())),
                                                       self.refreshUsersInList() ))
@@ -157,22 +158,34 @@ class FrameGroups(GFrame):
     def __init__(self,parentController,parentWindow,title,**args):
         
         GFrame.__init__(self, parentController, parentWindow, title, **args)
-        self.labelNameAccount = Label(self, text="Nom de groupe : ", width=25, anchor=E)
-        self.labelNameAccount.grid(row=1, column=0, sticky=E)
+        self.labelNameGroup = Label(self, text="Nom de groupe  ", width=25, anchor=W)
+        self.labelNameGroup.grid(row=0, column=2, sticky=W)
         self.stringVarEntryName = StringVar()
         self.entryNameAccount = Entry(self, state='disable', textvariable = self.stringVarEntryName)
         self.entryNameAccount.focus_set()
-        self.entryNameAccount.grid(row=1, column=1, sticky=E)              
-        self.labelGroup = Label(self, text="Niveau de sécurité : ", width=25, anchor=E)
-        self.labelGroup.grid(row=4, column=0, sticky=E)
-        self.stringVarGroupeUsager = StringVar()
-        self.comboBoxGroup = Combobox(self, text="0", state='disable', textvariable = self.stringVarGroupeUsager)
-        self.comboBoxGroup.grid(row=4, column=1, sticky=E)
+        self.entryNameAccount.grid(row=0, column=3, sticky=W)              
+        self.labelNiveau = Label(self, text="Niveau de sécurité  ", width=25, anchor=W)
+        self.labelNiveau.grid(row=1, column=2, sticky=W)
+        self.stringVarLevel = StringVar()
+        self.comboBoxLevel = Combobox(self, text="0", state='disable', textvariable = self.stringVarLevel)
+        self.comboBoxLevel.grid(row=1, column=3, sticky=W)
         self.ButtonCreate = Button(self, text="Sauvegarder", width=10,state='disable', command=self.saveGroup)
-        self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)        
+        self.ButtonCreate.grid(row=4, column=2, sticky=N,ipady = 5, pady = 15)        
         self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=self.cancel)     
-        self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
-        
+        self.ButtonCancel.grid(row=4, column=3, sticky=N, ipady = 5, pady = 15)
+        self.listboxGroups=Listbox(self)
+        self.listboxGroups.grid(column=0,row=1,rowspan=2,columnspan=2)
+        self.labelGroups=Label(self,text="Groupes")
+        self.labelGroups.grid(column=0,row=0)
+        self.permissionCheckList=CheckList(self)
+        self.permissionCheckList.grid(row=2,column=2,columnspan=2,sticky=E+W+S+N)
+        self.permissionCheckList.hlist.add("CL1", text="Modification d'usagers")
+        self.permissionCheckList.hlist.add("CL2", text="Lecture d'usagers")
+        self.permissionCheckList.hlist.add("CL3", text="Modification de groupes")
+        self.permissionCheckList.setstatus("CL1", "off")
+        self.permissionCheckList.setstatus("CL2", "off")
+        self.permissionCheckList.setstatus("CL3", "off")
+        self.permissionCheckList.autosetmode()
     def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
 
         self.entryNameAccount.configure(state = widgetState)
@@ -182,7 +195,9 @@ class FrameGroups(GFrame):
         self.entrySurname.configure(state = widgetState)
         self.entryName.configure(state = widgetState)
         self.ButtonCreate.configure(state = widgetState)
-        self.ButtonCancel.configure(state = widgetState) 
+        self.ButtonCancel.configure(state = widgetState)
+    def selectItem(self):
+        pass 
     def cancel(self):       
         self.setUserCreationTextFieldState("disable") 
     def saveGroup(self):
@@ -385,7 +400,7 @@ class FrameCreateTable(GFrame):
         self.cancelButton['state']='normal'
     def deactivateModify(self):
         self.addColumnButton['state']='disabled'
-        self.modifyTableButton['state']='Normal'
+        self.modifyTableButton['state']='normal'
         self.comboBoxType['state']='disabled'
         self.deleteColumnButton['state']='disabled'
         self.createButton['state']='disabled'
