@@ -344,12 +344,14 @@ class FrameGroups(GFrame):
         self.stringVarLevel = StringVar()
         self.comboBoxLevel = Combobox(self, text="0", state='disable', textvariable = self.stringVarLevel)
         self.comboBoxLevel.grid(row=1, column=3, sticky=W)
-        self.ButtonCreate = Button(self, text="Sauvegarder", width=10,state='disable', command=self.saveGroup)
-        self.ButtonCreate.grid(row=4, column=2, sticky=N,ipady = 5, pady = 15)
-        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=self.cancel)
-        self.ButtonCancel.grid(row=4, column=3, sticky=N, ipady = 5, pady = 15)
+        self.buttonModif = Button(self, text="Sauvegarder", width=10,state='disable', command=self.saveGroup)
+        self.buttonModif.grid(row=4, column=2, sticky=N,ipady = 5, pady = 15)
+        self.buttonCancel = Button(self, text="Annuler", width=10, state='disable', command=self.cancel)
+        self.buttonCancel.grid(row=4, column=3, sticky=N, ipady = 5, pady = 15)
         self.listboxGroups=Listbox(self)
         self.listboxGroups.grid(column=0,row=1,rowspan=2,columnspan=2)
+        self.buttonCreate=Button(self,text="Create", width=10, state='enable', command=self.createGroup)
+        self.buttonCreate.grid(column=0,row=4,sticky=N, ipady = 5, pady = 15)
         self.labelGroups=Label(self,text="Groupes")
         self.labelGroups.grid(column=0,row=0)
         self.permissionCheckList=CheckList(self)
@@ -361,18 +363,23 @@ class FrameGroups(GFrame):
         self.permissionCheckList.setstatus("CL2", "off")
         self.permissionCheckList.setstatus("CL3", "off")
         self.permissionCheckList.autosetmode()
-        self.widgetGroupMod=[self.permissionCheckList,self.ButtonCancel,self.entryNameAccount]
-        self.widgetGroupNoMod=[]
-
+        
+        self.widgetActivate=[self.permissionCheckList,self.buttonCancel,self.buttonCreate]#liste des widget a activer a la modification
+        self.widgetDeactivate=[self.buttonModif]
         #configure(state = widgetState)
 
-    def setGroupCreationTextFieldState(self,widgetState): #'normal' or 'disable'
-
-        for widg in self.widgetGroupMod:
-            widg.configure(state = widgetState)
-        for widg in self.widgetGroupNoMod:
-            widg.configure(state = widgetState)
-
+    def activateModifs(self):
+        for widg in self.widgetActivate:
+            widg.config(state="enable")
+        for widg in self.widgetDeactivate:
+            widg.config(state="disable")   
+    def deactivateModifs(self):
+        for widg in self.widgetActivate:
+            widg.config(state="disable")
+        for widg in self.widgetDeactivate:
+            widg.config(state="enable")
+    def createGroup(self):
+        pass     
     def selectItem(self):
         pass
     def cancel(self):
