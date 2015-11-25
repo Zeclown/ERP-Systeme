@@ -93,6 +93,46 @@ class GFrame(Frame):
         self.parentController.frameSwapper( self.parentController.frameLogin )
         self.parentController.frameLogin.entryName.focus()
         self.parentController.frameLogin.resetEntries()
+class FrameLogin(GFrame):
+    def __init__(self, parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+
+        self.label = Label(self)
+        self.label.grid(row=0, column=0, sticky=W)
+
+        self.labelName = Label(self, text="Usager : ", width=25, anchor=E)
+        self.labelName.grid(row=1, column=0, sticky=E)
+        self.entryName = Entry(self)
+        self.entryName.focus_set()
+        self.entryName.grid(row=1, column=1, sticky=E)
+
+        self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
+        self.labelPass.grid(row=2, column=0, sticky=E)
+        self.entryPass = Entry(self, show="*")
+        self.entryPass.grid(row=2, column=1, sticky=E)
+        self.entryPass.bind("<Return>", self.callBackLogIn)
+
+        self.ButtonLogin = Button(self, text="Se connecter", width=13,command=self.parentController.parent.userLogin)
+        self.ButtonLogin.grid(row=3, column=1, sticky=E, ipady = 5, pady = 10)
+
+        self.labelWrongPassword = Label(self, text="Le nom d'usager et ou le mot de passe sont invalides")
+        self.labelWrongPassword = None
+
+    def showErrorMsg(self, msg):
+        labelErrorMsg = Label(self, text= msg)
+        labelErrorMsg.grid(row=4, columnspan=2, sticky=E)
+
+    def callBackLogIn(self,evt):
+        self.parentController.parent.userLogin()
+
+    def resetEntries(self):
+        self.entryName.delete(0, END)
+        self.entryPass.delete(0, END)
+
+class FrameAcceuil(GFrame):
+    def __init__(self, parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+        GFrame.addMenuBar(self, 1)
 
 class FrameUsersList(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -115,11 +155,13 @@ class FrameUsersList(GFrame):
 
         self.refreshUsersInList()
         self.userToModify = None
+        self.usernameArray = self.parentController.parent.getUsers()
 
 
     def buttonCreateUserTodo(self):
         self.frameCreateUser.setUserCreationTextFieldState('normal')
         self.frameCreateUser.clearUserCreationTextFields()
+        self.refreshUserNameArray()
 
 
     def buttonDeleteUserToDo(self):
@@ -127,6 +169,7 @@ class FrameUsersList(GFrame):
             self.parentController.parent.deleteUser(self.listboxUsers.get(self.listboxUsers.curselection()))
             self.refreshUsersInList()
             self.frameCreateUser.clearUserCreationTextFields()
+            self.refreshUserNameArray()
             self.currentListBoxSelection = None
         else:
             self.parentController.showError("Aucune selection","Veuillez svp faire une selection")
@@ -143,27 +186,24 @@ class FrameUsersList(GFrame):
     def buttonConfirmitationTodo(self):
 
         self.parentController.parent.deleteUser(self.userToModify)
-
         self.parentController.parent.createUser()
-
         self.refreshUsersInList()
         self.frameCreateUser.buttonConfirmModification.grid_forget()
         self.frameCreateUser.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
         self.frameCreateUser.setUserCreationTextFieldState('disable')
         self.currentListBoxSelection = None
 
+    def refreshUserNameArray(self): #to refresh, when needed the local data struct of users that was feteched by query getUsers()
+        self.usernameArray = self.parentController.parent.getUsers()
+
 
     def refreshCurrentlySelectedUser(self,index):
-        listofUsers = self.parentController.parent.getUsers()
-        nameOfUserToRefresh = listofUsers[index][1]
+        nameOfUserToRefresh = self.usernameArray[index][1]
         self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
-        self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
-        self.frameCreateUser.stringVarGroupeUsager.set(listofUsers[index][3])
-        self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][4])
-        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
-
-
-        print("USER TO REFRESH" , listofUsers[index])
+        self.frameCreateUser.stringVarEntryPass.set(self.usernameArray[index][2])
+        self.frameCreateUser.stringVarGroupeUsager.set(self.usernameArray[index][3])
+        self.frameCreateUser.stringVarEntryNameOfUser.set(self.usernameArray[index][4])
+        self.frameCreateUser.stringVarEntrySurname.set(self.usernameArray[index][5])
 
 
     def selectListBoxItem(self,evt):
@@ -278,6 +318,7 @@ class FrameCreateUser(GFrame):
         self.parentWindow.refreshUsersInList()
         self.clearUserCreationTextFields()
         self.setUserCreationTextFieldState('disable')
+        self.parentWindow.refreshUserNameArray()
 
     def clearUserCreationTextFields(self):
         self.stringVarEntryName.set("")
@@ -311,46 +352,7 @@ class FrameCreateUser(GFrame):
         for i in self.widgetUserCreation:
             i.configure(state = widgetState)
 
-class FrameLogin(GFrame):
-    def __init__(self, parentController, parentWindow, title, **args):
-        GFrame.__init__(self, parentController, parentWindow, title, **args)
-        
-        self.label = Label(self)
-        self.label.grid(row=0, column=0, sticky=W)
 
-        self.labelName = Label(self, text="Usager : ", width=25, anchor=E)
-        self.labelName.grid(row=1, column=0, sticky=E)
-        self.entryName = Entry(self)
-        self.entryName.focus_set()
-        self.entryName.grid(row=1, column=1, sticky=E)
-
-        self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
-        self.labelPass.grid(row=2, column=0, sticky=E)
-        self.entryPass = Entry(self, show="*")
-        self.entryPass.grid(row=2, column=1, sticky=E)
-        self.entryPass.bind("<Return>", self.callBackLogIn)
-
-        self.ButtonLogin = Button(self, text="Se connecter", width=13,command=self.parentController.parent.userLogin)
-        self.ButtonLogin.grid(row=3, column=1, sticky=E, ipady = 5, pady = 10)
-        
-        self.labelWrongPassword = Label(self, text="Le nom d'usager et ou le mot de passe sont invalides")
-        self.labelWrongPassword = None
-    
-    def showErrorMsg(self, msg):
-        labelErrorMsg = Label(self, text= msg)
-        labelErrorMsg.grid(row=4, columnspan=2, sticky=E)
-
-    def callBackLogIn(self,evt):
-        self.parentController.parent.userLogin()
-    
-    def resetEntries(self):
-        self.entryName.delete(0, END)
-        self.entryPass.delete(0, END)
-
-class FrameAcceuil(GFrame):
-    def __init__(self, parentController, parentWindow, title, **args):
-        GFrame.__init__(self, parentController, parentWindow, title, **args)
-        GFrame.addMenuBar(self, 1)
     
         
 class FrameFormulaire(GFrame):
