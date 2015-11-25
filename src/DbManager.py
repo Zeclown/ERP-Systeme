@@ -13,7 +13,6 @@ class DbManager():
 
     def query(self,query,bindings):
         if bindings:
-            print("YOO")
             numberOfBindings = len(bindings)
             placeholder = '?'
             placeholders = ', '.join( [placeholder] * numberOfBindings )
@@ -38,7 +37,7 @@ class DbManager():
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_GroupesUtilisateurs
              (id integer primary key autoincrement, nom text NOT NULL, droits text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Usagers
-             (id integer primary key autoincrement, nom text NOT NULL, mdp text NOT NULL, groupUtilisateur integer  ,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
+             (id integer primary key autoincrement, nom text NOT NULL UNIQUE, mdp text NOT NULL, groupUtilisateur integer  ,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Formulaires
              ( id integer primary key autoincrement,nom text NOT NULL, date_creation Date NOT NULL, derniere_modif Date NOT NULL  , acces_utilisation integer  ,acces_modification integer   )''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Specificite
@@ -55,12 +54,4 @@ class DbManager():
              (id integer primary key autoincrement, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
 if __name__ == "__main__":
     db=DbManager("data1.db")
-    
-    def deleteUser(nameOfUserToDelete):
-        
-        query = "DELETE FROM Sys_Usagers WHERE nom = '%s'" % (nameOfUserToDelete)
-        print(query)
-        
-        db.query(query, None)
-        
-    deleteUser("Francis est cave")
+
