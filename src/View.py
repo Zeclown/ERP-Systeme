@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+
 from tkinter import *
+from tkinter.tix import *
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo, askyesno, askquestion, askretrycancel
-from tkinter.tix import *
+
 
 
 
@@ -309,6 +311,18 @@ class FrameFormulaire(GFrame):
         self.tablesTreeView.grid(row=1, column=1)
         self.showAllTablesInTreeView()
 
+        self.buttonAdd = Button(self, text=">", width=3)
+        self.buttonAdd.grid(rowspan=1, column=2)
+        self.buttonRemove = Button(self, text="<", width=3)
+        self.buttonRemove.grid(rowspan=1, column=2)
+
+        self.labelNameForm = Label(self, text="Nom du formulaire : ")
+        self.labelNameForm.grid(row=0, column=3)
+        self.entryNameForm = Entry(self)
+        self.entryNameForm.grid(row=0, column=4)
+
+
+
     def showAllTablesInTreeView(self):
         count = 0
         for i in self.parentController.parent.getAllTables():
@@ -353,15 +367,18 @@ class FrameGroups(GFrame):
         self.permissionCheckList.setstatus("CL2", "off")
         self.permissionCheckList.setstatus("CL3", "off")
         self.permissionCheckList.autosetmode()
-
-        self.widgetFrameGroupe = [
-
-        ]
+        self.widgetGroupMod=[self.permissionCheckList,self.ButtonCancel,self.entryNameAccount]
+        self.widgetGroupNoMod=[]
 
         #configure(state = widgetState)
 
-    def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
-        pass
+    def setGroupCreationTextFieldState(self,widgetState): #'normal' or 'disable'
+
+        for widg in self.widgetGroupMod:
+            widg.configure(state = widgetState)
+        for widg in self.widgetGroupNoMod:
+            widg.configure(state = widgetState)
+
     def selectItem(self):
         pass
     def cancel(self):
