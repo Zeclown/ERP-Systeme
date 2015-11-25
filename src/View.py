@@ -37,11 +37,8 @@ class View():
     def styleCreation(self):
         self.style=Style()
 
-
-
     def showError(self,titre,message):
         return askretrycancel(titre, message)
-
 
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -131,9 +128,10 @@ class FrameUsersList(GFrame):
         nameOfUserToRefresh = listofUsers[index][1]
         self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
         self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
-        self.frameCreateUser.stringVarGroupeUsager.set("Test comboBox StringVar()")
-        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][4])
-        self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][5])
+        self.frameCreateUser.stringVarGroupeUsager.set(listofUsers[index][3])
+        self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][4])
+        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
+
 
 
 
@@ -199,6 +197,7 @@ class FrameCreateUser(GFrame):
         self.labelGroup.grid(row=4, column=0, sticky=E)
         self.stringVarGroupeUsager = StringVar()
         self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager)
+
         self.comboBoxGroup.grid(row=4, column=1, sticky=E)
         
         self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
@@ -233,6 +232,31 @@ class FrameCreateUser(GFrame):
             self.ButtonCreate,
             self.ButtonCancel,
         ]
+
+        self.addItemsToComboBox()
+
+    def addItemsToComboBox(self):
+        groups = self.parentController.parent.getGroups()
+
+        nameOfGroups = []
+
+        for i in range (len(groups)):
+            nameOfGroups.append(groups[i][1])
+
+        print(nameOfGroups)
+
+        self.comboBoxGroup['values'] = nameOfGroups
+            #self.comboBoxGroup.set(i)
+
+
+
+
+
+
+
+
+
+        #self.comboBoxGroup.insert(END,)
     
     def combine_funcs(self,*funcs):
         def combined_func(*args, **kwargs):
