@@ -129,10 +129,16 @@ class FrameUsersList(GFrame):
     def refreshCurrentlySelectedUser(self,index):
         listofUsers = self.parentController.parent.getUsers()
         nameOfUserToRefresh = listofUsers[index][1]
-        print("NAME TO REFRESH:", nameOfUserToRefresh)
         self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
         self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
         self.frameCreateUser.stringVarGroupeUsager.set("Test comboBox StringVar()")
+        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][4])
+        self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][5])
+
+
+
+
+        print("USER TO REFRESH" , listofUsers[index])
 
 
     def selectListBoxItem(self,evt):
