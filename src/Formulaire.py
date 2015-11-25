@@ -20,8 +20,9 @@ class Formulaire():
         #print("Number of items",len(self.tableColumns))
         self.columnsNames.clear()
         for i in self.tableColumns:
-            self.columnsNames.append(i[1])
-        #print("Name of columns : ",self.columnsNames)
+            print(i)
+            self.columnsNames.append([i[1],i[2]])
+        print("Name of columns : ",self.columnsNames)
         return self.columnsNames
 
         
