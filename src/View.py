@@ -227,12 +227,6 @@ class FrameUsersList(GFrame):
 
         for i in nameOfUsers:
             self.listboxUsers.insert(END,i)
-            
-    def combine_funcs(self,*funcs):
-        def combined_func(*args, **kwargs):
-            for f in funcs:
-                f(*args, **kwargs)
-        return combined_func
 
     def verifyUserName(self):
         pass
@@ -328,7 +322,6 @@ class FrameCreateUser(GFrame):
         self.stringVarEntrySurname.set("")
         self.stringVarEntryNameOfUser.set("")
 
-
     def addItemsToComboBox(self):
         groups = self.parentController.parent.getGroups()
 
@@ -341,21 +334,11 @@ class FrameCreateUser(GFrame):
 
         self.comboBoxGroup['values'] = nameOfGroups
 
-    
-    def combine_funcs(self,*funcs):
-        def combined_func(*args, **kwargs):
-            for f in funcs:
-                f(*args, **kwargs)
-        return combined_func
-
     def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
 
         for i in self.widgetUserCreation:
             i.configure(state = widgetState)
 
-
-    
-        
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
