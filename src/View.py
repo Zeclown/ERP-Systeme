@@ -126,11 +126,7 @@ class FrameUsersList(GFrame):
 
     def buttonModifyToDo(self):
         self.frameCreateUser.setUserCreationTextFieldState('normal')
-
-        
-
         self.userToModify = self.frameCreateUser.stringVarEntryName.get()
-
         self.frameCreateUser.ButtonCreate.grid_forget()
         self.frameCreateUser.buttonConfirmModification.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
 
@@ -146,11 +142,6 @@ class FrameUsersList(GFrame):
         self.frameCreateUser.setUserCreationTextFieldState('disable')
 
 
-
-
-
-
-
     def refreshCurrentlySelectedUser(self,index):
         listofUsers = self.parentController.parent.getUsers()
         nameOfUserToRefresh = listofUsers[index][1]
@@ -159,9 +150,6 @@ class FrameUsersList(GFrame):
         self.frameCreateUser.stringVarGroupeUsager.set(listofUsers[index][3])
         self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][4])
         self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
-
-
-
 
 
         print("USER TO REFRESH" , listofUsers[index])
@@ -535,6 +523,14 @@ class FrameCreateTable(GFrame):
     def selectTable(self,evt):
         self.entryNameString.set(self.listboxTables.get(self.listboxTables.curselection()))
         columns=self.parentController.parent.getTableColumnName(self.listboxTables.get(self.listboxTables.curselection()))
+        self.treeviewColumns.delete(*self.treeviewColumns.get_children())
+        for column in columns:
+            self.treeviewColumns.insert("", END,    text=column[0], values=(column[1]))       
+            self.currentTable[column[0]]=(column[1])
+            self.entryColumnName.config(text="")
+            
+        
+        print(columns)
     def updateFrame(self):
         GFrame.updateFrame(self)
         self.showAllTablesInListbox()

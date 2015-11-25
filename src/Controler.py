@@ -80,6 +80,9 @@ class Controler():
             username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
             password = self.view.frameUsersList.frameCreateUser.entryPass.get()
 
+            if username.strip()== "" or password.strip() == "":
+                return False
+
             groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
 
 
