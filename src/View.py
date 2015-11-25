@@ -199,6 +199,9 @@ class FrameCreateUser(GFrame):
         self.labelGroup.grid(row=4, column=0, sticky=E)
         self.stringVarGroupeUsager = StringVar()
         self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager)
+        self.parentController.parent.
+        self.comboBoxGroup.insert(END, )
+
         self.comboBoxGroup.grid(row=4, column=1, sticky=E)
         
         self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
