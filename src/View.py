@@ -386,7 +386,8 @@ class FrameFormulaire(GFrame):
     def selectTreeViewItem(self ,event):
         selectedTreeView = event.widget
         itemID = selectedTreeView.identify_row(event.y)
-        print(itemID)
+        print("print ->", itemID)
+
 
 
     def fetchSelectedItemFromTreeView(self):
