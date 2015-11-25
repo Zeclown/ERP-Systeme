@@ -104,7 +104,7 @@ class FrameUsersList(GFrame):
         self.listboxUsers = Listbox(self)
         self.listboxUsers.bind('<<ListboxSelect>>', self.selectListBoxItem)
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
-        self.buttonModify = Button(self,text="Modifier utilisateur", command=lambda: self.frameCreateUser.setUserCreationTextFieldState('normal'))
+        self.buttonModify = Button(self,text="Modifier utilisateur", command=self.buttonModifyToDo)
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
         self.buttonAdd = Button(self,text="Créer utilisateur", 
         command=lambda: self.combine_funcs(self.frameCreateUser.setUserCreationTextFieldState('normal'),
@@ -121,6 +121,34 @@ class FrameUsersList(GFrame):
         self.frameCreateUser.grid(column=2,row=1)
 
         self.refreshUsersInList()
+
+        self.userToModify = None
+
+    def buttonModifyToDo(self):
+        self.frameCreateUser.setUserCreationTextFieldState('normal')
+
+        
+
+        self.userToModify = self.frameCreateUser.stringVarEntryName.get()
+
+        self.frameCreateUser.ButtonCreate.grid_forget()
+        self.frameCreateUser.buttonConfirmModification.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
+
+    def buttonConfirmitationTodo(self):
+
+        self.parentController.parent.deleteUser(self.userToModify)
+
+        self.parentController.parent.createUser()
+
+        self.refreshUsersInList()
+        self.frameCreateUser.buttonConfirmModification.grid_forget()
+        self.frameCreateUser.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
+        self.frameCreateUser.setUserCreationTextFieldState('disable')
+
+
+
+
+
 
 
     def refreshCurrentlySelectedUser(self,index):
@@ -216,6 +244,8 @@ class FrameCreateUser(GFrame):
                                    self.combine_funcs(self.parentController.parent.createUser(),
                                                       self.parentWindow.refreshUsersInList()))
         self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
+
+        self.buttonConfirmModification = Button(self, text = "Accepter", command=self.parentWindow.buttonConfirmitationTodo )
         
         self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=lambda: 
                                    self.setUserCreationTextFieldState('disable'))
@@ -231,6 +261,15 @@ class FrameCreateUser(GFrame):
             self.entryName,
             self.ButtonCreate,
             self.ButtonCancel,
+        ]
+
+        self.stringVars = [
+
+            self.stringVarEntryName.get(),
+            self.stringVarEntryPass.get(),
+            self.stringVarGroupeUsager.get(),
+            self.stringVarEntryName.get(),
+            self.stringVarEntrySurname.get()
         ]
 
         self.addItemsToComboBox()
@@ -334,6 +373,7 @@ class FrameFormulaire(GFrame):
         self.tablesTreeView = Treeview(self)
         self.tablesTreeView.grid(row=1, column=1)
         self.showAllTablesInTreeView()
+        self.tablesTreeView.bind("<Double-Button-1>", self.selectTreeViewItem)
 
         self.buttonAdd = Button(self, text=">", width=3)
         self.buttonAdd.grid(rowspan=1, column=2)
@@ -345,6 +385,23 @@ class FrameFormulaire(GFrame):
         self.entryNameForm = Entry(self)
         self.entryNameForm.grid(row=0, column=4)
 
+        self.columns = ("Nom du champs", "Type du vue")
+        self.editFormTreeView = Treeview(self, columns=self.columns)
+        self.editFormTreeView.column("#0", width=120)
+        self.editFormTreeView.heading('#0', text="Type du champs")
+        self.editFormTreeView.column("Nom du champs", width=120)
+        self.editFormTreeView.heading('Nom du champs', text="Nom du champs")
+        self.editFormTreeView.column("Type du vue", width=120)
+        self.editFormTreeView.heading('Type du vue', text="Type du vue")
+        self.editFormTreeView.grid(row=1, column=4)
+
+    def selectTreeViewItem(self ,evt):
+        itemParent = ""
+        itemID = 0
+
+
+    def fetchSelectedItemFromTreeView(self):
+        pass
 
 
     def showAllTablesInTreeView(self):
@@ -352,7 +409,7 @@ class FrameFormulaire(GFrame):
         for i in self.parentController.parent.getAllTables():
             self.tablesTreeView.insert("", count, i, text=i)
             for j in self.parentController.parent.getTableColumnName(i):
-                self.tablesTreeView.insert(i, count, text=j)
+                self.tablesTreeView.insert(i, count, text=j[0])
                 count+=1
            
     def showAllFormsInListView(self):

@@ -21,8 +21,9 @@ class Formulaire():
         self.columnsNames.clear()
         for i in self.tableColumns:
             print(i)
-            self.columnsNames.append(i[1])
-        #print("Name of columns : ",self.columnsNames)
+            self.columnsNames.append([i[1],i[2]])
+        print("Name of columns : ",self.columnsNames)
+
         return self.columnsNames
 
         
