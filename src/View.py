@@ -384,6 +384,12 @@ class FrameGroups(GFrame):
             widg.config(state="disable")
         for widg in self.widgetDeactivate:
             widg.config(state="enable")
+    def updateFrame(self):
+        GFrame.update(self)
+        self.listboxGroups.delete(0, END)
+        print(self.parentController.parent.getGroups())
+        #for groups in self.parentController.getGroups():
+            #self.listboxGroups
     def createGroup(self):
         pass     
     def selectItem(self):

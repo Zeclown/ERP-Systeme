@@ -9,5 +9,5 @@ class Model():
     def createTable(self,tablename,columns):
         self.tableManager.createNewTable(tablename,columns)
     def getGroups(self):
-        sqlCommand="SELECT Sys_GroupesUtilisateurs"
-        return self.parent.parent.serverCommunication.runSQLQuery(sqlCommand,None)
+        sqlCommand="SELECT * FROM Sys_GroupesUtilisateurs"
+        return self.parent.serverCommunication.runSQLQuery(sqlCommand,None)
