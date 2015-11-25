@@ -11,3 +11,5 @@ class Model():
     def getGroups(self):
         sqlCommand="SELECT * FROM Sys_GroupesUtilisateurs"
         return self.parent.serverCommunication.runSQLQuery(sqlCommand,None)
+    def modifyTable(self,tablename,columns):
+        self.tableManager.modifyTable(tablename,columns)
