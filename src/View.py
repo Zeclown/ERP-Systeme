@@ -289,6 +289,18 @@ class FrameFormulaire(GFrame):
         self.tablesTreeView.grid(row=1, column=1)
         self.showAllTablesInTreeView()
 
+        self.buttonAdd = Button(self, text=">", width=3)
+        self.buttonAdd.grid(rowspan=1, column=2)
+        self.buttonRemove = Button(self, text="<", width=3)
+        self.buttonRemove.grid(rowspan=1, column=2)
+
+        self.labelNameForm = Label(self, text="Nom du formulaire : ")
+        self.labelNameForm.grid(row=0, column=3)
+        self.entryNameForm = Entry(self)
+        self.entryNameForm.grid(row=0, column=4)
+
+
+
     def showAllTablesInTreeView(self):
         count = 0
         for i in self.parentController.parent.getAllTables():
