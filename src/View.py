@@ -23,7 +23,6 @@ class View():
         #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
 
-
     def initFrames(self):
         self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
@@ -103,32 +102,43 @@ class FrameUsersList(GFrame):
         self.label.grid(row=0, column=0, sticky=W,columnspan=2, pady = 5, padx = 5)
         self.listboxUsers = Listbox(self)
         self.listboxUsers.bind('<<ListboxSelect>>', self.selectListBoxItem)
+        self.currentListBoxSelection = None
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
         self.buttonModify = Button(self,text="Modifier utilisateur", command=self.buttonModifyToDo)
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
-        self.buttonAdd = Button(self,text="Créer utilisateur", 
-        command=lambda: self.combine_funcs(self.frameCreateUser.setUserCreationTextFieldState('normal'),
-                                           self.frameCreateUser.clearUserCreationTextFields()))
+        self.buttonAdd = Button(self,text="Créer utilisateur", command=self.buttonCreateUserTodo)
         self.buttonAdd.grid(row=3,column=0,padx=0,sticky=W+E+N+S)
-        
-        self.buttonDelete = Button(self,text="Supprimer utilisateur", command=lambda:
-                                   self.combine_funcs(self.parentController.parent.deleteUser(self.listboxUsers.get(self.listboxUsers.curselection())),
-                                                      self.refreshUsersInList() ))
-
+        self.buttonDelete = Button(self,text="Supprimer utilisateur", command=self.buttonDeleteUserToDo )
         self.buttonDelete.grid(row=4,column=0,padx=0,sticky=W+E+N+S)
-
         self.frameCreation=Frame(self)
         self.frameCreateUser.grid(column=2,row=1)
 
         self.refreshUsersInList()
-
         self.userToModify = None
 
-    def buttonModifyToDo(self):
+
+    def buttonCreateUserTodo(self):
         self.frameCreateUser.setUserCreationTextFieldState('normal')
-        self.userToModify = self.frameCreateUser.stringVarEntryName.get()
-        self.frameCreateUser.ButtonCreate.grid_forget()
-        self.frameCreateUser.buttonConfirmModification.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
+        self.frameCreateUser.clearUserCreationTextFields()
+
+
+    def buttonDeleteUserToDo(self):
+        if self.currentListBoxSelection:
+            self.parentController.parent.deleteUser(self.listboxUsers.get(self.listboxUsers.curselection()))
+            self.refreshUsersInList()
+            self.frameCreateUser.clearUserCreationTextFields()
+            self.currentListBoxSelection = None
+        else:
+            self.parentController.showError("Aucune selection","Veuillez svp faire une selection")
+
+    def buttonModifyToDo(self):
+        if self.currentListBoxSelection:
+            self.frameCreateUser.setUserCreationTextFieldState('normal')
+            self.userToModify = self.frameCreateUser.stringVarEntryName.get()
+            self.frameCreateUser.ButtonCreate.grid_forget()
+            self.frameCreateUser.buttonConfirmModification.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
+        else:
+            self.parentController.showError("Aucune selection","Veuillez svp faire une selection")
 
     def buttonConfirmitationTodo(self):
 
@@ -140,6 +150,7 @@ class FrameUsersList(GFrame):
         self.frameCreateUser.buttonConfirmModification.grid_forget()
         self.frameCreateUser.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
         self.frameCreateUser.setUserCreationTextFieldState('disable')
+        self.currentListBoxSelection = None
 
 
     def refreshCurrentlySelectedUser(self,index):
@@ -159,6 +170,7 @@ class FrameUsersList(GFrame):
         selectedListBox = evt.widget
         index = int(selectedListBox.curselection()[0])
         value = selectedListBox.get(index)
+        self.currentListBoxSelection = value
         self.refreshCurrentlySelectedUser(index)
         print("INDEX: ", index, "VALEUR:", value)
 
@@ -228,9 +240,7 @@ class FrameCreateUser(GFrame):
         self.entryName = Entry(self, state='disable', textvariable = self.stringVarEntryNameOfUser)
         self.entryName.grid(row=6, column=1, sticky=E)
 
-        self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=lambda:
-                                   self.combine_funcs(self.parentController.parent.createUser(),
-                                                      self.parentWindow.refreshUsersInList()))
+        self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=self.buttonCreateConfirmToDo)
         self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
 
         self.buttonConfirmModification = Button(self, text = "Accepter", command=self.parentWindow.buttonConfirmitationTodo )
@@ -239,6 +249,7 @@ class FrameCreateUser(GFrame):
                                    self.setUserCreationTextFieldState('disable'))
         
         self.ButtonCancel.grid(row=7, column=1, sticky=E, ipady = 5, pady = 15)
+
 
         self.widgetUserCreation = [
             self.entryNameAccount,
@@ -253,14 +264,28 @@ class FrameCreateUser(GFrame):
 
         self.stringVars = [
 
-            self.stringVarEntryName.get(),
-            self.stringVarEntryPass.get(),
-            self.stringVarGroupeUsager.get(),
-            self.stringVarEntryName.get(),
-            self.stringVarEntrySurname.get()
+            self.stringVarEntryName,
+            self.stringVarEntryPass,
+            self.stringVarGroupeUsager,
+            self.stringVarEntryName,
+            self.stringVarEntrySurname
         ]
 
         self.addItemsToComboBox()
+
+    def buttonCreateConfirmToDo(self):
+        self.parentController.parent.createUser()
+        self.parentWindow.refreshUsersInList()
+        self.clearUserCreationTextFields()
+        self.setUserCreationTextFieldState('disable')
+
+    def clearUserCreationTextFields(self):
+        self.stringVarEntryName.set("")
+        self.stringVarEntryPass.set("")
+        self.stringVarGroupeUsager.set("")
+        self.stringVarEntrySurname.set("")
+        self.stringVarEntryNameOfUser.set("")
+
 
     def addItemsToComboBox(self):
         groups = self.parentController.parent.getGroups()
@@ -273,17 +298,7 @@ class FrameCreateUser(GFrame):
         print(nameOfGroups)
 
         self.comboBoxGroup['values'] = nameOfGroups
-            #self.comboBoxGroup.set(i)
 
-
-
-
-
-
-
-
-
-        #self.comboBoxGroup.insert(END,)
     
     def combine_funcs(self,*funcs):
         def combined_func(*args, **kwargs):
@@ -291,19 +306,11 @@ class FrameCreateUser(GFrame):
                 f(*args, **kwargs)
         return combined_func
 
-    def clearUserCreationTextFields(self):
-        self.stringVarEntryName.set("")
-        self.stringVarEntryPass.set("")
-        self.stringVarGroupeUsager.set("")
-        self.stringVarEntrySurname.set("")
-        self.stringVarEntryNameOfUser.set("")
-
     def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
 
         for i in self.widgetUserCreation:
             i.configure(state = widgetState)
 
-        
 class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
@@ -444,6 +451,10 @@ class FrameGroups(GFrame):
         
         self.widgetActivate=[self.buttonCancel,self.buttonModif,self.entryName,self.comboBoxLevel]#liste des widget a activer a la modification
         self.widgetDeactivate=[self.buttonCreate]
+
+        self.updateFrame()
+
+        #print()
         
         #configure(state = widgetState)
         self.deactivateModifs()
@@ -472,9 +483,16 @@ class FrameGroups(GFrame):
         self.stringVarLevel.set(str(self.groupSelected[2]))
     def cancel(self):
         self.setUserCreationTextFieldState("disable")
+
+    def setUserCreationTextFieldState(self,state):
+        pass
+
+
     def saveGroup(self):
-        self.parentController.saveGroup();
+        self.parentController.parent.saveGroup();
         self.deactivateModifs()
+        self.stringVarEntryName.set("")
+        self.stringVarLevel.set("")
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)

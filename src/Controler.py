@@ -95,7 +95,6 @@ class Controler():
             self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
 
             print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
-
         except sqlite3.IntegrityError:
             self.view.showError("Usager existant","Pogne en un autre")
 

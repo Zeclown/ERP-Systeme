@@ -169,9 +169,9 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
-daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur ,port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur, port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
 
-uri = daemon.register(serverPyro,"foo")
+uri = daemon.register(serverPyro, "foo")
 
 #serverPyro.backupDatabase()           #TEST DE BACKUP
 #serverPyro.sendEmail("un autre test esti","Subject: "+"un sujet","champsfuturs@gmail.com","A1?champsfutursouverture","unreaved@hotmail.com")    #TEST DE EMAIL
