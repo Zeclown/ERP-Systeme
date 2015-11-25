@@ -126,11 +126,7 @@ class FrameUsersList(GFrame):
 
     def buttonModifyToDo(self):
         self.frameCreateUser.setUserCreationTextFieldState('normal')
-
-        
-
         self.userToModify = self.frameCreateUser.stringVarEntryName.get()
-
         self.frameCreateUser.ButtonCreate.grid_forget()
         self.frameCreateUser.buttonConfirmModification.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
 
