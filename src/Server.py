@@ -129,10 +129,10 @@ class Server(object):
         server.quit()
         
     def writeLog(self, messageToSave, typeOfLog):              #Le ID de cette fonction est 3
-        currentDate = time.strftime("%d-%m-%Y")
-        currentTime = time.strftime("%I%M%S")
-        f = open("Logs/"+currentDate+"_"+currentTime+"_"+typeOfLog+".txt", "w")
-        f.write(messageToSave+" -"+currentTime)
+        currentDate = time.strftime("%d/%m/%Y")
+        currentTime = time.strftime("%I:%M:%S")
+        f = open("Logs/"+typeOfLog+"_Log.txt", "a")
+        f.write(messageToSave+" ---"+currentTime+" - "+currentDate+"---\n")
         f.close()
     
         
@@ -152,6 +152,9 @@ class CronJob():
         tempsAExecuter = self.frequence*self.nbTemps
         self.t = Timer( tempsAExecuter ,self.timerExecution)
         self.t.start()
+        if(self.activeCron == 0):
+            self.cancelTimer()
+            
         if(self.functionId == 1):
             self.parent.backupDatabase()
         elif(self.functionId == 2):
@@ -166,7 +169,7 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
-daemon = Pyro4.Daemon(host="127.0.0.1",port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur ,port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
 
 uri = daemon.register(serverPyro,"foo")
 
