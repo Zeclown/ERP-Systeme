@@ -146,11 +146,6 @@ class FrameUsersList(GFrame):
         self.frameCreateUser.setUserCreationTextFieldState('disable')
 
 
-
-
-
-
-
     def refreshCurrentlySelectedUser(self,index):
         listofUsers = self.parentController.parent.getUsers()
         nameOfUserToRefresh = listofUsers[index][1]
@@ -159,9 +154,6 @@ class FrameUsersList(GFrame):
         self.frameCreateUser.stringVarGroupeUsager.set(listofUsers[index][3])
         self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][4])
         self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
-
-
-
 
 
         print("USER TO REFRESH" , listofUsers[index])
