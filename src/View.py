@@ -188,6 +188,7 @@ class FrameUsersList(GFrame):
         self.parentController.parent.deleteUser(self.userToModify)
         self.parentController.parent.createUser()
         self.refreshUsersInList()
+        self.refreshUserNameArray()
         self.frameCreateUser.buttonConfirmModification.grid_forget()
         self.frameCreateUser.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
         self.frameCreateUser.setUserCreationTextFieldState('disable')

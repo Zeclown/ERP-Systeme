@@ -8,13 +8,10 @@ import Pyro4
 class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication(self)
-        #self.serverCommunication.connectToServer()
+        self.model = Model(self)
         self.view = View(self)
         self.setUpClient()
-        self.model = Model(self)
         self.view.initFrames()
-
-        #self.tryToConnectToServer()
         self.view.root.mainloop()
         
     def setUpClient(self):
