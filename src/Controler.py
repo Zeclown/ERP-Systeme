@@ -105,7 +105,8 @@ class Controler():
 
         self.serverCommunication.runSQLQuery(query, None)
 
-
+    def getGroups(self):
+        self.model.getGroups()
         
     def saveGroup(self):
         pass    
