@@ -131,9 +131,9 @@ class FrameUsersList(GFrame):
         nameOfUserToRefresh = listofUsers[index][1]
         self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
         self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
-        self.frameCreateUser.stringVarGroupeUsager.set("Test comboBox StringVar()")
-        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][4])
-        self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][5])
+        self.frameCreateUser.stringVarGroupeUsager.set(listofUsers[index][3])
+        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
+        self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][4])
 
 
 
@@ -238,7 +238,24 @@ class FrameCreateUser(GFrame):
         self.addItemsToComboBox()
 
     def addItemsToComboBox(self):
-        self.parentController.parent.getGroups()
+        groups = self.parentController.parent.getGroups()
+
+        nameOfGroups = []
+
+        for i in range (len(groups)):
+            nameOfGroups.append(groups[i][1])
+
+        print(nameOfGroups)
+
+        self.comboBoxGroup['values'] = nameOfGroups
+            #self.comboBoxGroup.set(i)
+
+
+
+
+
+
+
 
 
         #self.comboBoxGroup.insert(END,)
