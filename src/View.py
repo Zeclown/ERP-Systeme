@@ -37,11 +37,8 @@ class View():
     def styleCreation(self):
         self.style=Style()
 
-
-
     def showError(self,titre,message):
         return askretrycancel(titre, message)
-
 
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -132,8 +129,9 @@ class FrameUsersList(GFrame):
         self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
         self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
         self.frameCreateUser.stringVarGroupeUsager.set(listofUsers[index][3])
-        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
         self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][4])
+        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
+
 
 
 
