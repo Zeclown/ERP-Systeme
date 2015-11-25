@@ -3,6 +3,7 @@ from ServerCommunication import *
 from View import *
 from Model import *
 import sqlite3
+import Pyro4
 
 class Controler():
     def __init__(self):
@@ -81,17 +82,23 @@ class Controler():
 
             groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
 
-            bindings = [ None, username, password, groupeUtilisateur ] #None pour le id
+
+            firstName = self.view.frameUsersList.frameCreateUser.entryName.get()
+            lastName = self.view.frameUsersList.frameCreateUser.entrySurname.get()
+
+
+            bindings = [ None, username, password, groupeUtilisateur, firstName, lastName ] #None pour le id
 
             self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
 
             print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
+
         except sqlite3.IntegrityError:
             self.view.showError("Usager existant","Pogne en un autre")
 
     def deleteUser(self,accountToDelete):
         
-        query = "DELETE FROM Sys_Usagers WHERE nom = '%s'" % (accountToDelete)
+        query = "DELETE FROM Sys_Usagers WHERE username = '%s'" % (accountToDelete)
 
         print("deleted")
         print("QUERY",query)
