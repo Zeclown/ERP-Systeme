@@ -235,8 +235,13 @@ class FrameCreateUser(GFrame):
             self.ButtonCancel,
         ]
 
+        self.addItemsToComboBox()
+
     def addItemsToComboBox(self):
-        pass
+        self.parentController.parent.getGroups()
+
+
+        #self.comboBoxGroup.insert(END,)
     
     def combine_funcs(self,*funcs):
         def combined_func(*args, **kwargs):
