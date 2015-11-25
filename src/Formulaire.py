@@ -23,6 +23,7 @@ class Formulaire():
             print(i)
             self.columnsNames.append([i[1],i[2]])
         print("Name of columns : ",self.columnsNames)
+
         return self.columnsNames
 
         

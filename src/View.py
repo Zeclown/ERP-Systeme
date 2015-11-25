@@ -522,6 +522,14 @@ class FrameCreateTable(GFrame):
     def selectTable(self,evt):
         self.entryNameString.set(self.listboxTables.get(self.listboxTables.curselection()))
         columns=self.parentController.parent.getTableColumnName(self.listboxTables.get(self.listboxTables.curselection()))
+        self.treeviewColumns.delete(*self.treeviewColumns.get_children())
+        for column in columns:
+            self.treeviewColumns.insert("", END,    text=column[0], values=(column[1]))       
+            self.currentTable[column[0]]=(column[1])
+            self.entryColumnName.config(text="")
+            
+        
+        print(columns)
     def updateFrame(self):
         GFrame.updateFrame(self)
         self.showAllTablesInListbox()
