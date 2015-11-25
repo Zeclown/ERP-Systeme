@@ -395,9 +395,10 @@ class FrameFormulaire(GFrame):
         self.editFormTreeView.heading('Type du vue', text="Type du vue")
         self.editFormTreeView.grid(row=1, column=4)
 
-    def selectTreeViewItem(self ,evt):
-        itemParent = ""
-        itemID = 0
+    def selectTreeViewItem(self ,event):
+        selectedTreeView = event.widget
+        itemID = selectedTreeView.identify_row(event.y)
+        print(itemID)
 
 
     def fetchSelectedItemFromTreeView(self):
