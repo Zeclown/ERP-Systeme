@@ -8,3 +8,6 @@ class Model():
         self.formsManager=Formulaire(self)
     def createTable(self,tablename,columns):
         self.tableManager.createNewTable(tablename,columns)
+    def getGroups(self):
+        sqlCommand="SELECT * FROM Sys_GroupesUtilisateurs"
+        return self.parent.serverCommunication.runSQLQuery(sqlCommand,None)

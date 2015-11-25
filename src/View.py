@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+
 from tkinter import *
+from tkinter.tix import *
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo, askyesno, askquestion, askretrycancel
-from tkinter.tix import *
+
 
 
 
@@ -35,11 +37,8 @@ class View():
     def styleCreation(self):
         self.style=Style()
 
-
-
     def showError(self,titre,message):
         return askretrycancel(titre, message)
-
 
     def frameSwapper(self, frame):
         if self.currentFrame:
@@ -127,10 +126,17 @@ class FrameUsersList(GFrame):
     def refreshCurrentlySelectedUser(self,index):
         listofUsers = self.parentController.parent.getUsers()
         nameOfUserToRefresh = listofUsers[index][1]
-        print("NAME TO REFRESH:", nameOfUserToRefresh)
         self.frameCreateUser.stringVarEntryName.set(nameOfUserToRefresh)
         self.frameCreateUser.stringVarEntryPass.set(listofUsers[index][2])
-        self.frameCreateUser.stringVarGroupeUsager.set("Test comboBox StringVar()")
+        self.frameCreateUser.stringVarGroupeUsager.set(listofUsers[index][3])
+        self.frameCreateUser.stringVarEntryNameOfUser.set(listofUsers[index][4])
+        self.frameCreateUser.stringVarEntrySurname.set(listofUsers[index][5])
+
+
+
+
+
+        print("USER TO REFRESH" , listofUsers[index])
 
 
     def selectListBoxItem(self,evt):
@@ -191,6 +197,7 @@ class FrameCreateUser(GFrame):
         self.labelGroup.grid(row=4, column=0, sticky=E)
         self.stringVarGroupeUsager = StringVar()
         self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager)
+
         self.comboBoxGroup.grid(row=4, column=1, sticky=E)
         
         self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
@@ -225,6 +232,31 @@ class FrameCreateUser(GFrame):
             self.ButtonCreate,
             self.ButtonCancel,
         ]
+
+        self.addItemsToComboBox()
+
+    def addItemsToComboBox(self):
+        groups = self.parentController.parent.getGroups()
+
+        nameOfGroups = []
+
+        for i in range (len(groups)):
+            nameOfGroups.append(groups[i][1])
+
+        print(nameOfGroups)
+
+        self.comboBoxGroup['values'] = nameOfGroups
+            #self.comboBoxGroup.set(i)
+
+
+
+
+
+
+
+
+
+        #self.comboBoxGroup.insert(END,)
     
     def combine_funcs(self,*funcs):
         def combined_func(*args, **kwargs):
@@ -303,6 +335,18 @@ class FrameFormulaire(GFrame):
         self.tablesTreeView.grid(row=1, column=1)
         self.showAllTablesInTreeView()
 
+        self.buttonAdd = Button(self, text=">", width=3)
+        self.buttonAdd.grid(rowspan=1, column=2)
+        self.buttonRemove = Button(self, text="<", width=3)
+        self.buttonRemove.grid(rowspan=1, column=2)
+
+        self.labelNameForm = Label(self, text="Nom du formulaire : ")
+        self.labelNameForm.grid(row=0, column=3)
+        self.entryNameForm = Entry(self)
+        self.entryNameForm.grid(row=0, column=4)
+
+
+
     def showAllTablesInTreeView(self):
         count = 0
         for i in self.parentController.parent.getAllTables():
@@ -330,12 +374,14 @@ class FrameGroups(GFrame):
         self.stringVarLevel = StringVar()
         self.comboBoxLevel = Combobox(self, text="0", state='disable', textvariable = self.stringVarLevel)
         self.comboBoxLevel.grid(row=1, column=3, sticky=W)
-        self.ButtonCreate = Button(self, text="Sauvegarder", width=10,state='disable', command=self.saveGroup)
-        self.ButtonCreate.grid(row=4, column=2, sticky=N,ipady = 5, pady = 15)
-        self.ButtonCancel = Button(self, text="Annuler", width=10, state='disable', command=self.cancel)
-        self.ButtonCancel.grid(row=4, column=3, sticky=N, ipady = 5, pady = 15)
+        self.buttonModif = Button(self, text="Sauvegarder", width=10,state='disable', command=self.saveGroup)
+        self.buttonModif.grid(row=4, column=2, sticky=N,ipady = 5, pady = 15)
+        self.buttonCancel = Button(self, text="Annuler", width=10, state='disable', command=self.cancel)
+        self.buttonCancel.grid(row=4, column=3, sticky=N, ipady = 5, pady = 15)
         self.listboxGroups=Listbox(self)
         self.listboxGroups.grid(column=0,row=1,rowspan=2,columnspan=2)
+        self.buttonCreate=Button(self,text="Create", width=10, state='enable', command=self.createGroup)
+        self.buttonCreate.grid(column=0,row=4,sticky=N, ipady = 5, pady = 15)
         self.labelGroups=Label(self,text="Groupes")
         self.labelGroups.grid(column=0,row=0)
         self.permissionCheckList=CheckList(self)
@@ -347,15 +393,29 @@ class FrameGroups(GFrame):
         self.permissionCheckList.setstatus("CL2", "off")
         self.permissionCheckList.setstatus("CL3", "off")
         self.permissionCheckList.autosetmode()
-
-        self.widgetFrameGroupe = [
-
-        ]
-
+        
+        self.widgetActivate=[self.permissionCheckList,self.buttonCancel,self.buttonCreate]#liste des widget a activer a la modification
+        self.widgetDeactivate=[self.buttonModif]
         #configure(state = widgetState)
 
-    def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
-        pass
+    def activateModifs(self):
+        for widg in self.widgetActivate:
+            widg.config(state="enable")
+        for widg in self.widgetDeactivate:
+            widg.config(state="disable")   
+    def deactivateModifs(self):
+        for widg in self.widgetActivate:
+            widg.config(state="disable")
+        for widg in self.widgetDeactivate:
+            widg.config(state="enable")
+    def updateFrame(self):
+        GFrame.update(self)
+        self.listboxGroups.delete(0, END)
+        print(self.parentController.parent.getGroups())
+        #for groups in self.parentController.getGroups():
+            #self.listboxGroups
+    def createGroup(self):
+        pass     
     def selectItem(self):
         pass
     def cancel(self):
