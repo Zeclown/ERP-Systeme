@@ -35,7 +35,7 @@ class DbManager():
         
     def createDB(self):
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_GroupesUtilisateurs
-             (id integer primary key autoincrement, nom text NOT NULL, droits text NOT NULL)''')
+             (id integer primary key autoincrement, nom text NOT NULL,niveau integer, droits text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Usagers
              (id integer primary key autoincrement, username text NOT NULL UNIQUE, password text NOT NULL, groupUtilisateur integer  , firstName text, lastName text,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Formulaires

@@ -405,21 +405,22 @@ class FrameGroups(GFrame):
         self.labelNameGroup = Label(self, text="Nom de groupe  ", width=25, anchor=W)
         self.labelNameGroup.grid(row=0, column=2, sticky=W)
         self.stringVarEntryName = StringVar()
-        self.entryNameAccount = Entry(self, state='disable', textvariable = self.stringVarEntryName)
-        self.entryNameAccount.focus_set()
-        self.entryNameAccount.grid(row=0, column=3, sticky=W)
+        self.entryName = Entry(self, state='disable', textvariable = self.stringVarEntryName)
+        self.entryName.focus_set()
+        self.entryName.grid(row=0, column=3, sticky=W)
         self.labelNiveau = Label(self, text="Niveau de sécurité  ", width=25, anchor=W)
         self.labelNiveau.grid(row=1, column=2, sticky=W)
         self.stringVarLevel = StringVar()
-        self.comboBoxLevel = Combobox(self, text="0", state='disable', textvariable = self.stringVarLevel)
+        self.comboBoxLevel = Combobox(self, text="0", state='disable',values=(0,1,2,3,4,5,6,7,8,9,10), textvariable = self.stringVarLevel)
         self.comboBoxLevel.grid(row=1, column=3, sticky=W)
-        self.buttonModif = Button(self, text="Sauvegarder", width=10,state='disable', command=self.saveGroup)
+        self.buttonModif = Button(self, text="Sauvegarder", width=15,state='disable', command=self.saveGroup)
         self.buttonModif.grid(row=4, column=2, sticky=N,ipady = 5, pady = 15)
-        self.buttonCancel = Button(self, text="Annuler", width=10, state='disable', command=self.cancel)
+        self.buttonCancel = Button(self, text="Annuler", width=15, state='disable', command=self.cancel)
         self.buttonCancel.grid(row=4, column=3, sticky=N, ipady = 5, pady = 15)
         self.listboxGroups=Listbox(self)
         self.listboxGroups.grid(column=0,row=1,rowspan=2,columnspan=2)
-        self.buttonCreate=Button(self,text="Create", width=10, state='enable', command=self.createGroup)
+        self.listboxGroups.bind('<<ListboxSelect>>', self.selectItem)
+        self.buttonCreate=Button(self,text="Nouveau Groupe", width=20, state='enable', command=self.createGroup)
         self.buttonCreate.grid(column=0,row=4,sticky=N, ipady = 5, pady = 15)
         self.labelGroups=Label(self,text="Groupes")
         self.labelGroups.grid(column=0,row=0)
@@ -433,10 +434,11 @@ class FrameGroups(GFrame):
         self.permissionCheckList.setstatus("CL3", "off")
         self.permissionCheckList.autosetmode()
         
-        self.widgetActivate=[self.permissionCheckList,self.buttonCancel,self.buttonCreate]#liste des widget a activer a la modification
-        self.widgetDeactivate=[self.buttonModif]
+        self.widgetActivate=[self.buttonCancel,self.buttonModif,self.entryName,self.comboBoxLevel]#liste des widget a activer a la modification
+        self.widgetDeactivate=[self.buttonCreate]
+        
         #configure(state = widgetState)
-
+        self.deactivateModifs()
     def activateModifs(self):
         for widg in self.widgetActivate:
             widg.config(state="enable")
@@ -449,18 +451,22 @@ class FrameGroups(GFrame):
             widg.config(state="enable")
     def updateFrame(self):
         GFrame.update(self)
-        self.listboxGroups.delete(0, END)
-        print(self.parentController.parent.getGroups())
-        #for groups in self.parentController.getGroups():
-            #self.listboxGroups
+        self.listboxGroups.delete(0, END)       
+        for groups in self.parentController.parent.getGroups():
+            self.listboxGroups.insert(END,groups[1])
     def createGroup(self):
-        pass     
-    def selectItem(self):
-        pass
+        self.activateModifs()    
+    def selectItem(self,evt):
+        
+        self.stringVarEntryName.set(self.listboxGroups.get(ACTIVE))
+        self.groupSelected=self.parentController.parent.getGroups()[int(self.listboxGroups.curselection()[0])]
+            
+        self.stringVarLevel.set(str(self.groupSelected[2]))
     def cancel(self):
         self.setUserCreationTextFieldState("disable")
     def saveGroup(self):
         self.parentController.saveGroup();
+        self.deactivateModifs()
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
@@ -469,8 +475,10 @@ class FrameCreateTable(GFrame):
         self.listboxTables=Listbox(self)
         self.listboxTables.bind('<<ListboxSelect>>', self.selectTable)
         self.labelTables=Label(self, text="Tables",  width=25, anchor=W);
-        self.modifyTableButton=Button(self,text="Modifier la table",width=15,command=self.activateModify)
+        self.modifyTableButton=Button(self,text="Modifier la table",width=15,command=self.modifyTableActivate)
+        self.createTableButton=Button(self,text="Nouvelle Table",width=15,command=self.newTable)       
         self.createButton=Button(self, text="Sauvegarder", width=15,command=self.createTable)
+        self.modifyButton=Button(self,text="Sauvegarder",width=15,command=self.modifyTable)
         self.cancelButton= Button(self, text="Annuler", width=15,command=self.cancelTable) 
         self.addColumnButton=Button(self, text="Ajouter Colonne", width=15,command=self.addColumn) 
         self.deleteColumnButton=Button(self,text="Supprimer Colonne",width=15,command=self.deleteColumn)     
@@ -479,7 +487,8 @@ class FrameCreateTable(GFrame):
         self.labelColumnName=Label(self, text="Nouvelle Colonne : ",  width=25, anchor=W);
         self.comboBoxType=Combobox(self,values=self.types);
         self.labelTableName=Label(self, text="Nom de la table : ",  width=25, anchor=W);
-        self.entryTableName=Entry(self)
+        self.entryNameString=StringVar()
+        self.entryTableName=Entry(self,textvariable=self.entryNameString)
         
         self.treeviewColumns.heading("#0", text="Nom de colonne",anchor=W)
         self.treeviewColumns.heading("Type", text="Type",anchor=W)
@@ -500,11 +509,13 @@ class FrameCreateTable(GFrame):
         self.treeviewColumns.grid(column=1,row=3,columnspan=2) 
         self.createButton.grid(column=1,row=4)
         self.modifyTableButton.grid(column=0,row=4)
+        self.createTableButton.grid(column=0,row=5)
         self.cancelButton.grid(column=2,row=4)
         self.deactivateModify()
         self.showAllTablesInListbox()
     def selectTable(self,evt):
-        self.entryTableName.insert(0, self.listboxTables.get(ACTIVE))
+        self.entryNameString.set(self.listboxTables.get(self.listboxTables.curselection()))
+        columns=self.parentController.parent.getTableColumnName(self.listboxTables.get(self.listboxTables.curselection()))
     def updateFrame(self):
         GFrame.updateFrame(self)
         self.showAllTablesInListbox()
@@ -512,7 +523,16 @@ class FrameCreateTable(GFrame):
         self.listboxTables.delete(0, END)     
         for i in self.parentController.parent.getAllTables():
             self.listboxTables.insert(END, i)
-
+    def modifyTableActivate(self):
+        self.createButton.grid_forget()
+        self.modifyButton.grid(column=1,row=4)
+        self.activateModify()
+    def newTable(self):
+        self.activateModify()
+        self.entryTableName.insert(0,"")
+        self.entryColumnName.insert(0,"")
+        self.modifyButton.grid_forget()
+        self.createButton.grid(column=1,row=4)
     def activateModify(self):
         self.addColumnButton['state']='normal'
         self.modifyTableButton['state']='disabled'
@@ -522,6 +542,7 @@ class FrameCreateTable(GFrame):
         self.entryTableName['state']='normal'
         self.entryColumnName['state']='normal'
         self.cancelButton['state']='normal'
+        
     def deactivateModify(self):
         self.addColumnButton['state']='disabled'
         self.modifyTableButton['state']='normal'
@@ -549,7 +570,14 @@ class FrameCreateTable(GFrame):
         self.currentTable.pop(self.listboxColumns.item(curItem)['text'],None)
         
         self.treeviewColumns.delete(curItem)
-         
+    def modifyTable(self):
+        self.parentController.parent.model.modifyTable(self.entryTableName.get(),self.currentTable)
+        self.entryColumnName.delete(0, END)
+        self.entryTableName.delete(0,END)
+        self.treeviewColumns.delete(*self.treeviewColumns.get_children())
+        self.currentTable.clear()
+        self.deactivateModify()
+        self.updateFrame()   
     def createTable(self):
         self.parentController.parent.model.createTable(self.entryTableName.get(),self.currentTable)
         self.entryColumnName.delete(0, END)
@@ -557,3 +585,4 @@ class FrameCreateTable(GFrame):
         self.treeviewColumns.delete(*self.treeviewColumns.get_children())
         self.currentTable.clear()
         self.deactivateModify()
+        self.updateFrame()
