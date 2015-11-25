@@ -370,7 +370,7 @@ class FrameFormulaire(GFrame):
         for i in self.parentController.parent.getAllTables():
             self.tablesTreeView.insert("", count, i, text=i)
             for j in self.parentController.parent.getTableColumnName(i):
-                self.tablesTreeView.insert(i, count, text=j)
+                self.tablesTreeView.insert(i, count, text=j[0])
                 count+=1
            
     def showAllFormsInListView(self):
