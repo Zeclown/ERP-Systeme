@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+
 from tkinter import *
+from tkinter.tix import *
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo, askyesno, askquestion, askretrycancel
-from tkinter.tix import *
+
 
 
 
@@ -359,15 +361,18 @@ class FrameGroups(GFrame):
         self.permissionCheckList.setstatus("CL2", "off")
         self.permissionCheckList.setstatus("CL3", "off")
         self.permissionCheckList.autosetmode()
-
-        self.widgetFrameGroupe = [
-
-        ]
+        self.widgetGroupMod=[self.permissionCheckList,self.ButtonCancel,self.entryNameAccount]
+        self.widgetGroupNoMod=[]
 
         #configure(state = widgetState)
 
-    def setUserCreationTextFieldState(self,widgetState): #'normal' or 'disable'
-        pass
+    def setGroupCreationTextFieldState(self,widgetState): #'normal' or 'disable'
+
+        for widg in self.widgetGroupMod:
+            widg.configure(state = widgetState)
+        for widg in self.widgetGroupNoMod:
+            widg.configure(state = widgetState)
+
     def selectItem(self):
         pass
     def cancel(self):
