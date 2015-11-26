@@ -11,6 +11,7 @@ class Controler():
         self.model = Model(self)
         self.view = View(self)
         self.setUpClient()
+        #self.testOfDestruction()
         self.view.initFrames()
         self.view.root.mainloop()
         
@@ -20,14 +21,12 @@ class Controler():
             self.serverCommunication.connectToServer()
             self.serverCommunication.server.testConnection()
         except Exception:
-            print("yo")
+
             if self.view.showError("Impossible de se connecter au serveur", "Veuillez vous assurer que le serveur est bien actif"):
-                self.serverCommunication.connectToServer()
-                self.userLogin()
+                self.setUpClient()
             else:
                 self.view.root.destroy()
-            
-        
+
     def userLogin(self):
         username = self.view.frameLogin.entryName.get()
         password = self.view.frameLogin.entryPass.get()
@@ -94,6 +93,12 @@ class Controler():
             print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
         except sqlite3.IntegrityError:
             self.view.showError("Usager existant","Pogne en un autre")
+
+    def testOfDestruction(self):
+
+        for i in range (50000):
+            bindings = [ None, "dragomir"+str(i),"allo" , "ca va", "yooo", "allo" ]
+            self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
 
     def deleteUser(self,accountToDelete):
         
