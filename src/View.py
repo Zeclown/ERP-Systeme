@@ -22,6 +22,7 @@ class View():
         #self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
+        self.root.iconbitmap('icon_erp.ico')
 
     def initFrames(self):
         #self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
