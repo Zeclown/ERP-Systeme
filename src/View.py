@@ -374,13 +374,13 @@ class FrameFormulaire(GFrame):
         self.entryNameForm = Entry(self)
         self.entryNameForm.grid(row=0, column=4)
 
-        self.columns = ("Nom du champs", "Type du vue")
-        self.editFormTreeView = Treeview(self, columns=self.columns)
-        self.editFormTreeView.column("#0", width=120)
-        self.editFormTreeView.heading('#0', text="Type du champs")
-        self.editFormTreeView.column("Nom du champs", width=120)
+        self.columns = ("Type du champs", "Nom du champs", "Type du vue")
+        self.editFormTreeView = Treeview(self, columns=self.columns, show="headings")
+        self.editFormTreeView.column("Type du champs", width=170)
+        self.editFormTreeView.heading("Type du champs", text="Type du champs")
+        self.editFormTreeView.column("Nom du champs", width=100)
         self.editFormTreeView.heading('Nom du champs', text="Nom du champs")
-        self.editFormTreeView.column("Type du vue", width=120)
+        self.editFormTreeView.column("Type du vue", width=80)
         self.editFormTreeView.heading('Type du vue', text="Type du vue")
         self.editFormTreeView.grid(row=1, column=4)
 
@@ -420,7 +420,6 @@ class FrameFormulaire(GFrame):
         self.buttonCreatForm = Button(self, text="Crée formulaire")
         self.buttonCreatForm.grid(row=7, column=4)
 
-
     def selectTreeViewItem(self ,event):
         selectedTreeView = event.widget
         itemID = selectedTreeView.identify_row(event.y)
@@ -442,12 +441,11 @@ class FrameFormulaire(GFrame):
         print("Index ->", selectedTreeView.index(itemID))
         print("-------------------------")
 
-
     def fetchListOfItemsToEditFormTreeView(self, listItems, parentItem):
         for item in listItems:
-            self.editFormTreeView.insert("", END, text=parentItem + "." + item)
+            self.editFormTreeView.insert("", END, values=(parentItem + "." + item, self.entryNomChamps.get(),self.comboBoxTypeVue.get()))
 
-
+    
 
     def showAllTablesInTreeView(self):
         countIndexParentItem = 0
