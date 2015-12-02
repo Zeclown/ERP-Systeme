@@ -80,6 +80,7 @@ class Controler():
             password = self.view.frameUsersList.frameCreateUser.entryPass.get()
 
             if username.strip()== "" or password.strip() == "":
+                self.view.showError("Usager existant","Pogne en un autre")
                 return False
 
             groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()

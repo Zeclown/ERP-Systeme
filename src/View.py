@@ -143,8 +143,15 @@ class FrameUsersList(GFrame):
         self.label.grid(row=0, column=0, sticky=W,columnspan=2, pady = 5, padx = 5)
         self.listboxUsers = Listbox(self)
         self.listboxUsers.bind('<<ListboxSelect>>', self.selectListBoxItem)
+        self.scrollBarListUsers = Scrollbar(self)
+
         self.currentListBoxSelection = None
         self.listboxUsers.grid(row=1,column=0,columnspan=2,sticky=W+E+N+S)
+
+        self.scrollBarListUsers.grid(row=1,column=1,sticky=W+E+N+S)
+        self.listboxUsers.config(yscrollcommand = self.scrollBarListUsers.set)
+        self.scrollBarListUsers.config(command = self.listboxUsers.yview)
+
         self.buttonModify = Button(self,text="Modifier utilisateur", command=self.buttonModifyToDo)
         self.buttonModify.grid(row=2,column=0,padx=0,sticky=W+E+N+S)
         self.buttonAdd = Button(self,text="Créer utilisateur", command=self.buttonCreateUserTodo)
@@ -310,7 +317,7 @@ class FrameCreateUser(GFrame):
         self.addItemsToComboBox()
 
     def buttonCreateConfirmToDo(self):
-        self.parentController.parent.createUser()
+
         self.parentWindow.refreshUsersInList()
         self.clearUserCreationTextFields()
         self.setUserCreationTextFieldState('disable')
