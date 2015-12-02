@@ -377,6 +377,32 @@ class FrameFormulaire(GFrame):
         self.editFormTreeView.heading('Type du vue', text="Type du vue")
         self.editFormTreeView.grid(row=1, column=4)
 
+        self.labelTypeChamps = Label(self, text="Type du champs : ")
+        self.labelTypeChamps.grid(row=2, column=3)
+        self.entryTypeChamps = Entry(self)
+        self.entryTypeChamps.grid(row=2, column=4)
+
+        self.labelNomChamps = Label(self, text="Nom du champs : ")
+        self.labelNomChamps.grid(row=3, column=3)
+        self.entryNomChamps = Entry(self)
+        self.entryNomChamps.grid(row=3, column=4)
+
+        self.labelTypeVue = Label(self, text="Type du vue : ")
+        self.labelTypeVue.grid(row=4, column=3)
+        self.typeVueValues = ["Entry", "ComboBox", "`RadioButton", "Checkbutton", "SpinBox"]
+        self.comboBoxTypeVue = Combobox(self, values=self.typeVueValues, state="readonly")
+        self.comboBoxTypeVue.current(4);
+        self.comboBoxTypeVue.grid(row=4, column=4)
+
+        if self.comboBoxTypeVue.get() != "Entry" and self.comboBoxTypeVue.get() != "SpinBox":
+            self.value = StringVar()
+            self.value.set("Valeur à entrez pour le " + self.comboBoxTypeVue.get())
+            self.labelValuesFromTypeVue = Label(self, text=self.value)
+            self.labelValuesFromTypeVue.grid(row=5, column=3)
+            self.entryValuesFromTypeVue = Entry(self)
+            self.entryValuesFromTypeVue.grid(row=5, column=4)
+
+
     def selectTreeViewItem(self ,event):
         selectedTreeView = event.widget
         itemID = selectedTreeView.identify_row(event.y)
