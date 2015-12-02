@@ -55,6 +55,8 @@ class DbManager():
              (id integer primary key autoincrement, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_RegleAffaireListe
              (id integer primary key autoincrement, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
+        self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_droitsGroupes
+        (groupid integer primary key autoincrement, motdepasseautre integer, motdepassepersonnel integer,cronjobs integer,regleaffaire integer, lireforms integer, modifforms integer,remplirformulaire integer, modifusagers integer, lireusagers integer, modifrapport integer,lirerapport integer,FOREIGN KEY(groupid) REFERENCES Sys_GroupesUtilisateurs(id) )''')
 if __name__ == "__main__":
     db=DbManager("data1.db")
 
