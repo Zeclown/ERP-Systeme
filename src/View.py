@@ -214,7 +214,7 @@ class FrameUsersList(GFrame):
         value = selectedListBox.get(index)
         self.currentListBoxSelection = value
         self.refreshCurrentlySelectedUser(index)
-        print("INDEX: ", index, "VALEUR:", value)
+
 
     def refreshUsersInList(self):
         self.listboxUsers.delete(0,END)
@@ -224,7 +224,7 @@ class FrameUsersList(GFrame):
         for i in range (len(listofUsers)):
             nameOfUsers.append(listofUsers[i][1])
 
-        print("NOM D'USAGER: ", listofUsers)
+
 
         for i in nameOfUsers:
             self.listboxUsers.insert(END,i)
@@ -315,6 +315,7 @@ class FrameCreateUser(GFrame):
         self.clearUserCreationTextFields()
         self.setUserCreationTextFieldState('disable')
         self.parentWindow.refreshUserNameArray()
+        self.parentWindow.currentListBoxSelection = None
 
     def clearUserCreationTextFields(self):
         self.stringVarEntryName.set("")
@@ -331,7 +332,7 @@ class FrameCreateUser(GFrame):
         for i in range (len(groups)):
             nameOfGroups.append(groups[i][1])
 
-        print(nameOfGroups)
+
 
         self.comboBoxGroup['values'] = nameOfGroups
 

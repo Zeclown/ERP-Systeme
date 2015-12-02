@@ -31,11 +31,8 @@ class Controler():
         username = self.view.frameLogin.entryName.get()
         password = self.view.frameLogin.entryPass.get()
 
-        print("YO",self.view.frameLogin.entryName.get())
-        print("YO",self.view.frameLogin.entryPass.get())
-        
         try:
-            testLogIn = self.serverCommunication.logIn(username,password )
+            testLogIn = self.serverCommunication.logIn(username, password)
             print(testLogIn)
             if testLogIn :
                 self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
