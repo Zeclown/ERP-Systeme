@@ -3,8 +3,8 @@ import Pyro4
 
 class ServerCommunication():
     def __init__(self,parent):
-        self.serverAdress = "PYRO:foo@192.168.1.60:8000"
-
+        #self.serverAdress = "PYRO:foo@184.162.124.218:8000"
+        self.serverAdress = "PYRO:foo@192.168.0.130:48261"
         self.parent = parent
         self.status = None
         self.server = None

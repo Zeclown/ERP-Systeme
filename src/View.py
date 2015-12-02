@@ -379,21 +379,40 @@ class FrameFormulaire(GFrame):
     def selectTreeViewItem(self ,event):
         selectedTreeView = event.widget
         itemID = selectedTreeView.identify_row(event.y)
-        print("print ->", itemID)
+        parentItem = selectedTreeView.parent(itemID)
+        itemName = selectedTreeView.item(itemID, "text")
+
+        if not parentItem:
+            itemList = []
+            for item in selectedTreeView.get_children(itemID):
+                itemList.append(selectedTreeView.item(item, "text"))
+            print(itemName,"children ->", itemList)
+            #self.fetchListOfItemsToEditFormTreeView()
+        else:
+            pass
+
+        print("Item ->", selectedTreeView.item(itemID, "text"))
+        print("Item parent ->",selectedTreeView.parent(itemID))
+        print("Index ->", selectedTreeView.index(itemID))
+        print("-------------------------")
 
 
+    def fetchListOfItemsToEditFormTreeView(self, listItems, parentItem):
+        for item in listItems:
+            pass
 
-    def fetchSelectedItemFromTreeView(self):
-        pass
 
 
     def showAllTablesInTreeView(self):
-        count = 0
-        for i in self.parentController.parent.getAllTables():
-            self.tablesTreeView.insert("", count, i, text=i)
-            for j in self.parentController.parent.getTableColumnName(i):
-                self.tablesTreeView.insert(i, count, text=j[0])
-                count+=1
+        countIndexParentItem = 0
+        countIndexChildItem = 0
+        for parentItem in self.parentController.parent.getAllTables():
+            self.tablesTreeView.insert("", countIndexParentItem, parentItem, text=parentItem)
+            countIndexParentItem+=1
+            for childItem in self.parentController.parent.getTableColumnName(parentItem):
+                self.tablesTreeView.insert(parentItem, countIndexChildItem, text=childItem[0])
+                countIndexChildItem+=1
+            countIndexChildItem=0
            
     def showAllFormsInListView(self):
         for i in self.parentController.parent.getFormsNameList():
