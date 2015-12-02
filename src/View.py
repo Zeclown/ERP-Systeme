@@ -389,18 +389,29 @@ class FrameFormulaire(GFrame):
 
         self.labelTypeVue = Label(self, text="Type du vue : ")
         self.labelTypeVue.grid(row=4, column=3)
-        self.typeVueValues = ["Entry", "ComboBox", "`RadioButton", "Checkbutton", "SpinBox"]
+        self.typeVueValues = ["Entry", "ComboBox", "RadioButton", "Checkbutton", "SpinBox"]
         self.comboBoxTypeVue = Combobox(self, values=self.typeVueValues, state="readonly")
-        self.comboBoxTypeVue.current(4);
+        self.comboBoxTypeVue.current(0);
         self.comboBoxTypeVue.grid(row=4, column=4)
 
         if self.comboBoxTypeVue.get() != "Entry" and self.comboBoxTypeVue.get() != "SpinBox":
             self.value = StringVar()
             self.value.set("Valeur à entrez pour le " + self.comboBoxTypeVue.get())
-            self.labelValuesFromTypeVue = Label(self, text=self.value)
+            self.labelValuesFromTypeVue = Label(self, text=self.value.get())
             self.labelValuesFromTypeVue.grid(row=5, column=3)
             self.entryValuesFromTypeVue = Entry(self)
             self.entryValuesFromTypeVue.grid(row=5, column=4)
+
+        self.labelDescription = Label(self, text="Description : ")
+        self.labelDescription.grid(row=6, column=3)
+        self.entryDescription = Entry(self)
+        self.entryDescription.grid(row=6, column=4)
+
+        self.buttonDelectRow = Button(self, text="Supprimer ligne")
+        self.buttonDelectRow.grid(row=7, column=3)
+
+        self.buttonCreatForm = Button(self, text="Crée formulaire")
+        self.buttonCreatForm.grid(row=7, column=4)
 
 
     def selectTreeViewItem(self ,event):
