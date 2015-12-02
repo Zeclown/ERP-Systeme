@@ -398,7 +398,7 @@ class FrameFormulaire(GFrame):
         self.labelTypeVue.grid(row=4, column=3)
         self.typeVueValues = ["Entry", "ComboBox", "RadioButton", "Checkbutton", "SpinBox"]
         self.comboBoxTypeVue = Combobox(self, values=self.typeVueValues, state="readonly")
-        self.comboBoxTypeVue.current(0);
+        self.comboBoxTypeVue.current(0)
         self.comboBoxTypeVue.grid(row=4, column=4)
 
         if self.comboBoxTypeVue.get() != "Entry" and self.comboBoxTypeVue.get() != "SpinBox":
@@ -426,15 +426,16 @@ class FrameFormulaire(GFrame):
         itemID = selectedTreeView.identify_row(event.y)
         parentItem = selectedTreeView.parent(itemID)
         itemName = selectedTreeView.item(itemID, "text")
+        itemList = []
+        if not parentItem: #parentItem represents a table in the data base
 
-        if not parentItem:
-            itemList = []
             for item in selectedTreeView.get_children(itemID):
                 itemList.append(selectedTreeView.item(item, "text"))
             print(itemName,"children ->", itemList)
-            #self.fetchListOfItemsToEditFormTreeView()
+            self.fetchListOfItemsToEditFormTreeView(itemList, itemName)
         else:
-            pass
+            itemList.append(itemName)
+            self.fetchListOfItemsToEditFormTreeView(itemList, parentItem)
 
         print("Item ->", selectedTreeView.item(itemID, "text"))
         print("Item parent ->",selectedTreeView.parent(itemID))
@@ -444,7 +445,7 @@ class FrameFormulaire(GFrame):
 
     def fetchListOfItemsToEditFormTreeView(self, listItems, parentItem):
         for item in listItems:
-            pass
+            self.editFormTreeView.insert("", END, text=parentItem + "." + item)
 
 
 
