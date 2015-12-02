@@ -81,7 +81,7 @@ class Controler():
 
             if username.strip()== "" or password.strip() == "":
                 self.view.showError("Usager existant","Pogne en un autre")
-                return False
+
 
             groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
 
@@ -116,8 +116,8 @@ class Controler():
     def getGroups(self):
         return self.model.getGroups()
         
-    def saveGroup(self):
-        pass    
+    def saveGroup(self,group):
+        self.model.saveGroup(group)    
                
 if __name__ == '__main__':
     c = Controler()

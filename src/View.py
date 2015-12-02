@@ -317,7 +317,7 @@ class FrameCreateUser(GFrame):
         self.addItemsToComboBox()
 
     def buttonCreateConfirmToDo(self):
-
+        self.parentController.parent.createUser()
         self.parentWindow.refreshUsersInList()
         self.clearUserCreationTextFields()
         self.setUserCreationTextFieldState('disable')
@@ -346,6 +346,9 @@ class FrameCreateUser(GFrame):
 
         for i in self.widgetUserCreation:
             i.configure(state = widgetState)
+
+class FrameCronJobs(GFrame):
+    pass
 
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -490,12 +493,29 @@ class FrameGroups(GFrame):
         self.labelGroups.grid(column=0,row=0)
         self.permissionCheckList=CheckList(self)
         self.permissionCheckList.grid(row=2,column=2,columnspan=2,sticky=E+W+S+N)
-        self.permissionCheckList.hlist.add("CL1", text="Modification d'usagers")
-        self.permissionCheckList.hlist.add("CL2", text="Lecture d'usagers")
-        self.permissionCheckList.hlist.add("CL3", text="Modification de groupes")
+        self.permissionCheckList.hlist.add("CL1", text="Modification mot de passe global")
+        self.permissionCheckList.hlist.add("CL2", text="Modification mot de passe personnel")
+        self.permissionCheckList.hlist.add("CL3", text="Lecture/Modification Cron jobs")
+        self.permissionCheckList.hlist.add("CL4", text="Lecture/Modification Règles d'affaire")
+        self.permissionCheckList.hlist.add("CL5", text="Lecture de formulaires")
+        self.permissionCheckList.hlist.add("CL6", text="Modification de formulaires")
+        self.permissionCheckList.hlist.add("CL7", text="Remplissage de formulaires")
+        self.permissionCheckList.hlist.add("CL8", text="Modification d'usagers")
+        self.permissionCheckList.hlist.add("CL9", text="Lecture d'usagers")
+        self.permissionCheckList.hlist.add("CL10", text="Modification rapports")
+        self.permissionCheckList.hlist.add("CL11", text="Lecture rapports")
         self.permissionCheckList.setstatus("CL1", "off")
         self.permissionCheckList.setstatus("CL2", "off")
         self.permissionCheckList.setstatus("CL3", "off")
+        self.permissionCheckList.setstatus("CL4", "off")
+        self.permissionCheckList.setstatus("CL5", "off")
+        self.permissionCheckList.setstatus("CL6", "off")
+        self.permissionCheckList.setstatus("CL7", "off")
+        self.permissionCheckList.setstatus("CL8", "off")
+        self.permissionCheckList.setstatus("CL9", "off")
+        self.permissionCheckList.setstatus("CL10", "off")
+        self.permissionCheckList.setstatus("CL11", "off")
+        
         self.permissionCheckList.autosetmode()
         
         self.widgetActivate=[self.buttonCancel,self.buttonModif,self.entryName,self.comboBoxLevel]#liste des widget a activer a la modification
@@ -538,13 +558,28 @@ class FrameGroups(GFrame):
 
 
     def saveGroup(self):
-        self.parentController.parent.saveGroup();
-        self.currentGroup["Name"]=self.stringVarEntryName.get()
-        self.currentGroup["Security"]=self.stringVarLevel.get()
-        self.currentGroup["Rights"]={}
+        
+        self.currentGroup["name"]=self.stringVarEntryName.get()
+        self.currentGroup["security"]=self.comboBoxLevel.get()
+        
+        self.currentGroup["rights"]={
+                                     'motdepasseautre':1 if(self.permissionCheckList.getstatus("CL1")=="on")else 0, 
+                                     'motdepassepersonnel':1 if(self.permissionCheckList.getstatus("CL2")=="on")else 0,
+                                     'cronjobs':1 if(self.permissionCheckList.getstatus("CL3")=="on")else 0,
+                                     'regleaffaire':1 if(self.permissionCheckList.getstatus("CL4")=="on")else 0,
+                                     'lireforms':1 if(self.permissionCheckList.getstatus("CL5")=="on")else 0,
+                                     'modifforms':1 if(self.permissionCheckList.getstatus("CL6")=="on")else 0,
+                                     'remplirformulaire':1 if(self.permissionCheckList.getstatus("CL7")=="on")else 0,
+                                     'modifusagers':1 if(self.permissionCheckList.getstatus("CL8")=="on")else 0,
+                                     'lireusagers':1 if(self.permissionCheckList.getstatus("CL9")=="on")else 0,
+                                     'modifrapport':1 if(self.permissionCheckList.getstatus("CL10")=="on")else 0,
+                                     'lirerapport':1 if(self.permissionCheckList.getstatus("CL11")=="on")else 0
+                                     }
+        
         self.deactivateModifs()
         self.stringVarEntryName.set("")
         self.stringVarLevel.set("")
+        self.parentController.parent.saveGroup(self.currentGroup);
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
