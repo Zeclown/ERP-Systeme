@@ -11,8 +11,8 @@ class Controler():
         self.model = Model(self)
         self.view = View(self)
         self.setUpClient()
-        #self.testOfDestruction()
         self.view.initFrames()
+        #self.testOfDestruction()
         self.view.root.mainloop()
         
     def setUpClient(self):
@@ -30,14 +30,17 @@ class Controler():
     def userLogin(self):
         username = self.view.frameLogin.entryName.get()
         password = self.view.frameLogin.entryPass.get()
+
+        print("YO",self.view.frameLogin.entryName.get())
+        print("YO",self.view.frameLogin.entryPass.get())
         
         try:
             testLogIn = self.serverCommunication.logIn(username,password )
-        
+            print(testLogIn)
             if testLogIn :
                 self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
             else:
-                self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.", "Veuillez réaaaseyyer.")
+                self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
                 self.view.frameLogin.resetEntries()
                 
         except Exception:

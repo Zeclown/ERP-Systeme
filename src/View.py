@@ -14,7 +14,7 @@ class View():
         self.parent = parent
         self.currentFrame = None
         self.styleCreation()
-        self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
+        self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=400, height=150)
         #self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
@@ -22,9 +22,10 @@ class View():
         #self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameSwapper(self.frameLogin)
+        self.root.iconbitmap('icon_erp.ico')
 
     def initFrames(self):
-        self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
+        #self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
@@ -223,7 +224,7 @@ class FrameUsersList(GFrame):
         for i in range (len(listofUsers)):
             nameOfUsers.append(listofUsers[i][1])
 
-        print("NOM D'USAGER: ", nameOfUsers)
+        print("NOM D'USAGER: ", listofUsers)
 
         for i in nameOfUsers:
             self.listboxUsers.insert(END,i)

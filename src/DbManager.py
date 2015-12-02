@@ -26,8 +26,9 @@ class DbManager():
         return self.cursorDB.fetchall()
 
     def login(self,name,pswd):
-        self.cursorDB.execute('SELECT id From Sys_Usagers Where nom=? AND mdp=?', (name,pswd))        
-        
+        self.cursorDB.execute('SELECT id From Sys_Usagers Where username=? AND password=?', (name,pswd))
+        print("QUERY FOIRER PEUT ETRE", 'SELECT id From Sys_Usagers Where username=? AND password=?', (name,pswd))
+
         if self.cursorDB.fetchone()!=None:
             return True
         else:
