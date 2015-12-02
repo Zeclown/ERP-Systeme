@@ -18,16 +18,16 @@ class Server(object):
         print(self.monip)
         
         self.ipDuServeur = self.monip
-        self.portDuServeur = 8000
+        self.portDuServeur = 48261
         
         self.dbManager=DbManager.DbManager("data1.db")
         
         self.databaseVersion = 0
-        f = open("Ressources/Database_Version.txt", "r")
+        """f = open("Ressources/Database_Version.txt", "r")
         self.databaseVersion = f.readline()
         print("DB version:")
         print(self.databaseVersion)
-        f.close()
+        f.close()"""
         
         #self.createCronJob()
         #self.executeCronJobs()
