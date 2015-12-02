@@ -13,3 +13,5 @@ class Model():
         return self.parent.serverCommunication.runSQLQuery(sqlCommand,None)
     def modifyTable(self,tablename,columns):
         self.tableManager.modifyTable(tablename,columns)
+    def deleteTable(self,tablename):
+        self.tableManager.deleteTable(tablename)
