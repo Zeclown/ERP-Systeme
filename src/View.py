@@ -317,7 +317,7 @@ class FrameCreateUser(GFrame):
         self.addItemsToComboBox()
 
     def buttonCreateConfirmToDo(self):
-
+        self.parentController.parent.createUser()
         self.parentWindow.refreshUsersInList()
         self.clearUserCreationTextFields()
         self.setUserCreationTextFieldState('disable')
@@ -346,6 +346,9 @@ class FrameCreateUser(GFrame):
 
         for i in self.widgetUserCreation:
             i.configure(state = widgetState)
+
+class FrameCronJobs(GFrame):
+    pass
 
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):

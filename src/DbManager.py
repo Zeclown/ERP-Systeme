@@ -19,7 +19,9 @@ class DbManager():
             queryToExecute = query + '(%s)' % placeholders
             self.cursorDB.execute(queryToExecute, bindings)
             self.db.commit()
+            print(queryToExecute)
             return self.cursorDB.fetchall()
+
 
         self.cursorDB.execute(query)
         self.db.commit()
