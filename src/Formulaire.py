@@ -8,7 +8,7 @@ class Formulaire():
         self.columnsNames = []
 
     def getAllTablesOfDataBase(self):
-        sqlQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'Sys_%'"
+        sqlQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'Dyn_%'"
         self.tableList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery,None)
         return self.tableList
 

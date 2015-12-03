@@ -17,5 +17,6 @@ class Table():
         sqlCommand="DROP TABLE "+tableName
         self.parent.parent.serverCommunication.runSQLQuery(sqlCommand,None)
         self.createNewTable(tableName, columns)
-
-
+    def deleteTable(self,tableName):
+        sqlCommand="DROP TABLE "+tableName
+        self.parent.parent.serverCommunication.runSQLQuery(sqlCommand,None)
