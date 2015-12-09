@@ -1,12 +1,18 @@
 from Table import *
 from Formulaire import *
 from DbManager import *
+from Users import *
 class Model():
     def __init__(self,parent):
         self.formsList = []
         self.parent=parent
         self.tableManager=Table(self)
         self.formsManager=Formulaire(self)
+        self.users=Users(self)
+
+    def deleteUser(self, userToDelete):
+        self.users.deleteUsers(userToDelete)
+
     def createTable(self,tablename,columns):
         self.tableManager.createNewTable(tablename,columns)
     def getGroups(self):

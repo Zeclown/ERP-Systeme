@@ -9,8 +9,8 @@ class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication(self)
         self.model = Model(self)
-        self.setUpClient()
         self.view = View(self)
+        self.setUpClient()
         self.view.initFrames()
         #self.testOfDestruction()
         self.view.root.mainloop()
@@ -103,13 +103,7 @@ class Controler():
             self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
 
     def deleteUser(self,accountToDelete):
-        
-        query = "DELETE FROM Sys_Usagers WHERE username = '%s'" % (accountToDelete)
-
-        print("deleted")
-        print("QUERY",query)
-
-        self.serverCommunication.runSQLQuery(query, None)
+        self.model.deleteUser(accountToDelete)
 
     def getGroups(self):
         return self.model.getGroups()
