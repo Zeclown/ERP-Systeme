@@ -386,6 +386,7 @@ class FrameFormulaire(GFrame):
         self.editFormTreeView.column("Type du vue", width=80)
         self.editFormTreeView.heading('Type du vue', text="Type du vue")
         self.editFormTreeView.grid(row=1, column=4)
+        self.editFormTreeView.bind("<Button-1>", self.selectTreeViewItem)
 
         self.labelTypeChamps = Label(self, text="Type du champs : ")
         self.labelTypeChamps.grid(row=2, column=3)
@@ -446,9 +447,7 @@ class FrameFormulaire(GFrame):
 
     def fetchListOfItemsToEditFormTreeView(self, listItems, parentItem):
         for item in listItems:
-            self.editFormTreeView.insert("", END, values=(parentItem + "." + item, self.entryNomChamps.get(),self.comboBoxTypeVue.get()))
-
-    
+            self.editFormTreeView.insert("", END, values=(parentItem + "." + item, item,self.comboBoxTypeVue.get()))
 
     def showAllTablesInTreeView(self):
         countIndexParentItem = 0
@@ -638,7 +637,6 @@ class FrameCreateTable(GFrame):
             self.treeviewColumns.insert("", END,    text=column[0], values=(column[1]))       
             self.currentTable[column[0]]=(column[1])
             self.entryColumnName.config(text="")
-            
         
         print(columns)
     def updateFrame(self):
