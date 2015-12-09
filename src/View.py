@@ -15,6 +15,7 @@ class View():
         self.currentFrame = None
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=400, height=150)
+        self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=400, height=200)
         #self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
@@ -22,7 +23,7 @@ class View():
         #self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         #self.frameSwapper(self.frameLogin)
-        self.frameSwapper(self.frameLogin)
+        self.frameSwapper(self.frameCronJobs)
         self.root.iconbitmap('icon_erp.ico')
 
     def initFrames(self):
@@ -265,37 +266,37 @@ class FrameCreateUser(GFrame):
         self.stringVarEntryName = StringVar()
         self.entryNameAccount = Entry(self, state='disable', textvariable = self.stringVarEntryName)
         self.entryNameAccount.focus_set()
-        self.entryNameAccount.grid(row=1, column=1, sticky=E)
+        self.entryNameAccount.grid(row=1, column=1, sticky=W)
         
         self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
         self.labelPass.grid(row=2, column=0, sticky=E)
         self.stringVarEntryPass = StringVar()
         self.entryPass = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
-        self.entryPass.grid(row=2, column=1, sticky=E)
+        self.entryPass.grid(row=2, column=1, sticky=W)
         
         self.labelPassConfirm = Label(self, text="Confirmer le mot de passe : ",  width=25, anchor=E)
         self.labelPassConfirm.grid(row=3, column=0, sticky=E)
         self.entryPassConfirm = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
-        self.entryPassConfirm.grid(row=3, column=1, sticky=E)
+        self.entryPassConfirm.grid(row=3, column=1, sticky=W)
         
         self.labelGroup = Label(self, text="Groupe d'usagers : ", width=25, anchor=E)
         self.labelGroup.grid(row=4, column=0, sticky=E)
         self.stringVarGroupeUsager = StringVar()
-        self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager)
+        self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager, width = 17)
 
-        self.comboBoxGroup.grid(row=4, column=1, sticky=E)
+        self.comboBoxGroup.grid(row=4, column=1, sticky=W)
         
         self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
         self.labelSurname.grid(row=5, column=0, sticky=E)
         self.stringVarEntrySurname = StringVar()
         self.entrySurname = Entry(self, state='disable', textvariable = self.stringVarEntrySurname)
-        self.entrySurname.grid(row=5, column=1, sticky=E)
+        self.entrySurname.grid(row=5, column=1, sticky=W)
         
         self.labelName = Label(self, text="Prenom : ", width=25, anchor=E)
         self.labelName.grid(row=6, column=0, sticky=E)
         self.stringVarEntryNameOfUser = StringVar()
         self.entryName = Entry(self, state='disable', textvariable = self.stringVarEntryNameOfUser)
-        self.entryName.grid(row=6, column=1, sticky=E)
+        self.entryName.grid(row=6, column=1, sticky=W)
 
         self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=self.buttonCreateConfirmToDo)
         self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
@@ -363,7 +364,34 @@ class FrameCreateUser(GFrame):
             i.configure(state = widgetState)
 
 class FrameCronJobs(GFrame):
-    pass
+    def __init__(self, parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+
+        self.stringVarNomCronJob = StringVar()
+        self.stringVarBusinessRule = StringVar()
+        self.stringVarFrequence = StringVar()
+
+        self.labelNouveauCronJob = Label(self, text= "Nouveau cron job", font = ("Verdana", 16))
+
+
+        self.labelNomCronJob = Label(self, text="Nom: ")
+        self.labelAFaire = Label(self, text="A faire: ")
+        self.labelFrequenceBase = Label(self, text="A chaque: ")
+
+        self.entryNomCronJob = Entry(self, textvariable=self.stringVarNomCronJob)
+        self.comboBoxAFaire = Combobox(self, textvariable=self.stringVarBusinessRule)
+        self.entryFrequence = Entry(self, textvariable=self.stringVarFrequence)
+
+        self.labelNouveauCronJob.grid(row=0,columnspan=2)
+
+        self.labelNomCronJob.grid(row=1,column=0,pady=5, sticky=E)
+        self.entryNomCronJob.grid(row=1, column=1, sticky=W)
+
+        self.labelAFaire.grid(row=2,column=0,pady=5, sticky=E)
+        self.comboBoxAFaire.grid(row=2,column=1, sticky=W)
+
+        self.labelFrequenceBase.grid(row=3,column=0,pady=5, sticky=E)
+        self.entryFrequence.grid(row=3,column=1, sticky=W)
 
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
