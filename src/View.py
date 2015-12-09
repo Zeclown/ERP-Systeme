@@ -21,6 +21,7 @@ class View():
         #self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         #self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
+        #self.frameSwapper(self.frameLogin)
         self.frameSwapper(self.frameLogin)
         self.root.iconbitmap('icon_erp.ico')
 
@@ -31,6 +32,8 @@ class View():
         self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
+
+
     def show(self):
         self.root.mainloop()
 
@@ -465,6 +468,44 @@ class FrameFormulaire(GFrame):
     def showAllFormsInListView(self):
         for i in self.parentController.parent.getFormsNameList():
             self.formsListBox.insert(END,i)
+
+class FrameAddUserGroup(GFrame):
+    def __init__(self,parentController,parentWindow,title,**args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+
+        self.label=Label(self,text="Usagers", width = 10, font = ("Bell Gothic Std Black", 18))
+        self.label.grid(row=0, column=0, sticky=W,columnspan=2, pady = 5, padx = 5)
+        self.listboxUsers = Listbox(self)
+        self.listboxUsers.bind('<<ListboxSelect>>', self.refreshSelection)
+        self.scrollBarListUsers = Scrollbar(self)
+
+        self.currentListBoxSelection = None
+        self.listboxUsers.grid(row=1,column=0,sticky=W+E+N+S)
+
+        self.scrollBarListUsers.grid(row=1,column=1,sticky=W+E+N+S)
+        self.listboxUsers.config(yscrollcommand = self.scrollBarListUsers.set)
+        self.scrollBarListUsers.config(command = self.listboxUsers.yview)
+
+        self.buttonAddUserToGroup = Button(self, text = "Ajouter au groupe")
+
+        self.refreshUsersInList()
+
+    def refreshUsersInList(self):
+        self.listboxUsers.delete(0,END)
+        listofUsers = self.parentController.parent.getUsers()
+        nameOfUsers = []
+
+        for i in range (len(listofUsers)):
+            nameOfUsers.append(listofUsers[i][1])
+
+        for i in nameOfUsers:
+            self.listboxUsers.insert(END,i)
+
+    def refreshSelection(self,evt):
+        selectedListBox = evt.widget
+        index = int(selectedListBox.curselection()[0])
+        value = selectedListBox.get(index)
+        self.currentListBoxSelection = value #nom de l'usager selectione
 
 class FrameGroups(GFrame):
     def __init__(self,parentController,parentWindow,title,**args):

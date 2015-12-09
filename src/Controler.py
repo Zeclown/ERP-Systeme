@@ -9,11 +9,12 @@ class Controler():
     def __init__(self):
         self.serverCommunication = ServerCommunication(self)
         self.model = Model(self)
-        self.view = View(self)
         self.setUpClient()
+        self.view = View(self)
         self.view.initFrames()
         #self.testOfDestruction()
         self.view.root.mainloop()
+        print("YO")
         
     def setUpClient(self):
         
