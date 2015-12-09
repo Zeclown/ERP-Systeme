@@ -19,11 +19,15 @@ class ServerCommunication():
     def runSQLQuery(self,SQLquery, bindings):
         return self.server.executeSql(SQLquery,bindings)
 
-        
-    def logIn(self,user,password):
-        if user.strip()== "" or password.strip() == "":
-            return False
+
+    def logIn(self,username,password):
+
+        if self.server.loginValidation(username,password):
+            self.parent.view.frameSwapper(self.parent.view.frameAcceuil)
         else:
-            message= self.server.loginValidation(user,password)
-            print(message)
-            return message
+            raise Exception("Votre informations d'indentification est invalide.")
+            self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
+            self.view.frameLogin.resetEntries()
+
+
+

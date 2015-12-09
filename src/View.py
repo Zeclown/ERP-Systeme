@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter.tix import *
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo, askyesno, askquestion, askretrycancel
-
+from Users import *
 
 
 
@@ -127,7 +127,7 @@ class FrameLogin(GFrame):
         labelErrorMsg.grid(row=4, columnspan=2, sticky=E)
 
     def callBackLogIn(self,evt):
-        self.parentController.parent.userLogin()
+        self.parentController.parent.userLogin(self.entryName.get(), self.entryPass.get())
 
     def resetEntries(self):
         self.entryName.delete(0, END)
@@ -194,10 +194,21 @@ class FrameUsersList(GFrame):
         else:
             self.parentController.showError("Aucune selection","Veuillez svp faire une selection")
 
+    def createUserObjectToSendToController(self):
+
+        username = self.frameCreateUser.stringVarEntryName.get()
+        password = self.frameCreateUser.stringVarEntryPass.get()
+        groupe = self.frameCreateUser.stringVarGroupeUsager.get()
+        firstname = self.frameCreateUser.stringVarEntryNameOfUser.get()
+        lastname = self.frameCreateUser.stringVarEntrySurname.get()
+
+        newUser = User(username,password,groupe,firstname,lastname)
+        return newUser
+
     def buttonConfirmitationTodo(self):
 
         self.parentController.parent.deleteUser(self.userToModify)
-        self.parentController.parent.createUser()
+        self.parentController.parent.createUser(self.createUserObjectToSendToController())
         self.refreshUsersInList()
         self.refreshUserNameArray()
         self.frameCreateUser.buttonConfirmModification.grid_forget()
@@ -320,7 +331,7 @@ class FrameCreateUser(GFrame):
         self.addItemsToComboBox()
 
     def buttonCreateConfirmToDo(self):
-        self.parentController.parent.createUser()
+        self.parentController.parent.createUser(self.parentWindow.createUserObjectToSendToController())
         self.parentWindow.refreshUsersInList()
         self.clearUserCreationTextFields()
         self.setUserCreationTextFieldState('disable')

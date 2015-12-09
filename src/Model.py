@@ -10,6 +10,12 @@ class Model():
         self.formsManager=Formulaire(self)
         self.users=Users(self)
 
+    def getUsers(self):
+        return self.users.getUsers()
+
+    def createUser(self,newUser):
+        self.users.createUser(newUser)
+
     def deleteUser(self, userToDelete):
         self.users.deleteUsers(userToDelete)
 
