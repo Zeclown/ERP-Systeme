@@ -56,10 +56,9 @@ class Controler():
     def saveGroup(self,group):
         self.model.saveGroup(group)
 
+    #cree 50 000 usagers dans la base de donnees
     def testOfDestruction(self):
-        for i in range (50000):
-            bindings = [ None, "dragomir"+str(i),"allo" , "ca va", "yooo", "allo" ]
-            self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
+        self.model.testOfDestruction()
 
 if __name__ == '__main__':
     c = Controler()

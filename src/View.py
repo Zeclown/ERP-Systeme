@@ -14,7 +14,7 @@ class View():
         self.parent = parent
         self.currentFrame = None
         self.styleCreation()
-        self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=350, height=150)
+        self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=450, height=280)
         self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
         #self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
@@ -108,29 +108,35 @@ class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
 
-        self.label = Label(self)
-        self.label.grid(row=0, column=0, sticky=W)
+        self.imageInsertech = PhotoImage(file = 'insertech.gif')
+
+        self.labelImageInsertech = Label(self, imag=self.imageInsertech )
+
+        self.label = Label(self, image=self.imageInsertech)
+        self.label.grid(row=0, column=0,sticky=W)
 
         self.labelName = Label(self, text="Usager : ", width=25, anchor=E)
-        self.labelName.grid(row=1, column=0, sticky=E)
+        self.labelName.grid(row=1, column=0,pady = (15,0))
         self.entryName = Entry(self)
         self.entryName.focus_set()
-        self.entryName.grid(row=1, column=1, sticky=E)
+        self.entryName.grid(row=1, column=1, pady = (15,0))
 
         self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
-        self.labelPass.grid(row=2, column=0, sticky=E)
+        self.labelPass.grid(row=2, column=0)
         self.entryPass = Entry(self, show="*")
-        self.entryPass.grid(row=2, column=1, sticky=E)
+        self.entryPass.grid(row=2, column=1)
         self.entryPass.bind("<Return>", self.callBackLogIn)
 
-        self.ButtonLogin = Button(self, text="Se connecter", width=13,command=self.parentController.parent.userLogin)
+        self.ButtonLogin = Button(self, text="Se connecter", width=13, command=lambda:self.parentController.parent.userLogin(self.entryName.get(),self.entryPass.get()))
         self.ButtonLogin.grid(row=3, column=1, sticky=E, ipady = 5, pady = 10)
 
         self.labelWrongPassword = Label(self, text="Le nom d'usager et ou le mot de passe sont invalides")
         self.labelWrongPassword = None
 
     def showErrorMsg(self, msg):
-        labelErrorMsg = Label(self, text= msg)
+        styleError = Style()
+        styleError.configure("BW.TLabel",foreground="red")
+        labelErrorMsg = Label(self, text = msg, style = "BW.TLabel")
         labelErrorMsg.grid(row=4, columnspan=2, sticky=E)
 
     def callBackLogIn(self,evt):
