@@ -16,18 +16,21 @@ class Controler():
         self.view.root.mainloop()
         
     def setUpClient(self):
-        
         try:
             self.serverCommunication.connectToServer()
             self.serverCommunication.server.testConnection()
-        except Exception:
-            if self.view.showError("Impossible de se connecter au serveur", "Veuillez vous assurer que le serveur est bien actif"):
+        except Exception as e:
+            if self.view.showError("Aucune connection au serveur", str(e)):
                 self.setUpClient()
             else:
                 self.view.root.destroy()
 
     def userLogin(self,username,password):
-        self.serverCommunication.logIn(username,password)
+        try:
+            self.serverCommunication.logIn(username,password)
+        except Exception as e:
+            self.view.frameLogin.showErrorMsg(str(e))
+            self.view.frameLogin.resetEntries()
 
     def getAllTables(self):
         return self.model.formsManager.getAllTablesOfDataBase()

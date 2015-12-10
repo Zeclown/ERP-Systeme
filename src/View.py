@@ -14,8 +14,8 @@ class View():
         self.parent = parent
         self.currentFrame = None
         self.styleCreation()
-        self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=400, height=150)
-        self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=400, height=200)
+        self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=350, height=150)
+        self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
         #self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
@@ -23,10 +23,11 @@ class View():
         #self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         #self.frameSwapper(self.frameLogin)
-        self.frameSwapper(self.frameCronJobs)
+        self.frameSwapper(self.frameLogin)
         self.root.iconbitmap('icon_erp.ico')
 
     def initFrames(self):
+        self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
         #self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
@@ -73,15 +74,20 @@ class GFrame(Frame):
         optionMenu.add_command(label="Gestion de groupe", command=self.addGroupToDB)
         optionMenu.add_command(label="Gestion de table", command=self.showFrameCreateTable)
         optionMenu.add_command(label="Gestion de formulaire", command=self.showFrameFormulaire)
+        optionMenu.add_command(label="Gestion de cron jobs", command=self.showFrameCronJobs)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
         optionMenu.add_command(label="Quitter", command = self.parentController.root.destroy)
         self.menuBar.add_cascade(label="Modules", menu=optionMenu)
         if showMenuBar:
             self.parentWindow.config(menu=self.menuBar)
+
     def updateFrame(self):
         pass
-            
+
+    def showFrameCronJobs(self):
+        self.parentController.frameSwapper(self.parentController.frameCronJobs)
+
     def showFrameUsersList(self):
         self.parentController.frameSwapper(self.parentController.frameUsersList)
         
@@ -370,17 +376,34 @@ class FrameCronJobs(GFrame):
         self.stringVarNomCronJob = StringVar()
         self.stringVarBusinessRule = StringVar()
         self.stringVarFrequence = StringVar()
+        self.regleAffaireDeBase = [ "Envoyé un email", "Faire un backup", "Write log" ]
+        self.typeDeTemps = [ "Minute", "Heure", "Semaine", "Mois", "Annee"]
+        self.columnsInCronJobTreeView = ( "Nom de la tâche chrnologique", "À faire", "Temps d'exécution", "Statue")
+
 
         self.labelNouveauCronJob = Label(self, text= "Nouveau cron job", font = ("Verdana", 16))
 
-
         self.labelNomCronJob = Label(self, text="Nom: ")
-        self.labelAFaire = Label(self, text="A faire: ")
-        self.labelFrequenceBase = Label(self, text="A chaque: ")
-
         self.entryNomCronJob = Entry(self, textvariable=self.stringVarNomCronJob)
-        self.comboBoxAFaire = Combobox(self, textvariable=self.stringVarBusinessRule)
+
+        self.labelAFaire = Label(self, text="A faire: ")
+        self.comboBoxAFaire = Combobox(self, textvariable=self.stringVarBusinessRule, width = 17, values=self.regleAffaireDeBase, state="readonly")
+
+        self.labelFrequenceBase = Label(self, text="A chaque: ")
         self.entryFrequence = Entry(self, textvariable=self.stringVarFrequence)
+        self.comboBoxTypeTime = Combobox(self, values = self.typeDeTemps, state="readonly")
+        self.buttonAdvcaned = Button(self, text = "Propriétées avancées")
+        #################################################
+        #CODER ICI LES WIDGET POUR PROPRIETES AVANCES###
+        ################################################
+
+        self.cronjobsTree = Treeview(self, column=self.columnsInCronJobTreeView, show="headings")
+        self.cronjobsTree.heading("Nom de la tâche chrnologique", text = "Nom de la tâche chrnologique")
+        self.cronjobsTree.heading("À faire", text = "À faire")
+        self.cronjobsTree.heading("Temps d'exécution", text = "Temps d'exécution")
+        self.cronjobsTree.heading("Statue", text = "Statue")
+
+        self.labelCronJobs = Label(self, text="Cron jobs", font = ("Verdana", 14))
 
         self.labelNouveauCronJob.grid(row=0,columnspan=2)
 
@@ -392,6 +415,12 @@ class FrameCronJobs(GFrame):
 
         self.labelFrequenceBase.grid(row=3,column=0,pady=5, sticky=E)
         self.entryFrequence.grid(row=3,column=1, sticky=W)
+        self.comboBoxTypeTime.grid(row=3,column=2)
+        self.buttonAdvcaned.grid(row=3,column=3)
+
+        self.labelCronJobs.grid(row=4)
+
+        self.cronjobsTree.grid(row=5,columnspan=4,pady=(30,0))
 
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -661,6 +690,7 @@ class FrameGroups(GFrame):
         self.stringVarEntryName.set("")
         self.stringVarLevel.set("")
         self.parentController.parent.saveGroup(self.currentGroup);
+
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
