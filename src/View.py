@@ -115,6 +115,9 @@ class FrameLogin(GFrame):
         self.label = Label(self, image=self.imageInsertech)
         self.label.grid(row=0, column=0,sticky=W)
 
+        self.labelGreetings = Label(self, text = "Bienvenue!\n\n Veuillez vous connecter pour avoir \n accèss à un monde de possiblitées", font = ("Bell Gothic Std Black", 12))
+        self.labelGreetings.grid(row=0,column=1)
+
         self.labelName = Label(self, text="Usager : ", width=25, anchor=E)
         self.labelName.grid(row=1, column=0,pady = (15,0))
         self.entryName = Entry(self)
@@ -130,8 +133,6 @@ class FrameLogin(GFrame):
         self.ButtonLogin = Button(self, text="Se connecter", width=13, command=lambda:self.parentController.parent.userLogin(self.entryName.get(),self.entryPass.get()))
         self.ButtonLogin.grid(row=3, column=1, sticky=E, ipady = 5, pady = 10)
 
-        self.labelWrongPassword = Label(self, text="Le nom d'usager et ou le mot de passe sont invalides")
-        self.labelWrongPassword = None
 
     def showErrorMsg(self, msg):
         styleError = Style()
@@ -145,6 +146,7 @@ class FrameLogin(GFrame):
     def resetEntries(self):
         self.entryName.delete(0, END)
         self.entryPass.delete(0, END)
+        self.entryName.focus_set()
 
 class FrameAcceuil(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
