@@ -6,6 +6,13 @@ class Users():
 
     def createUser(self,newUser):
 
+        query = "SELECT * FROM Sys_Usagers WHERE username = '%s'" % (newUser.username)
+        print(query)
+        userExists = self.parent.parent.serverCommunication.runSQLQuery(query, None)
+
+        if userExists:
+            raise Exception("Usager existant")
+
         if newUser.username.strip() == "" or newUser.password.strip() == "":
             raise Exception("Vous devez choisir un nom d'usager et un mot de passe")
 

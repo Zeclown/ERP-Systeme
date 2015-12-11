@@ -423,8 +423,8 @@ class FrameCronJobs(GFrame):
 
         self.labelFrequenceBase.grid(row=3,column=0,pady=5, sticky=E)
         self.entryFrequence.grid(row=3,column=1, sticky=W)
-        self.comboBoxTypeTime.grid(row=3,column=2)
-        self.buttonAdvcaned.grid(row=3,column=3)
+        self.comboBoxTypeTime.grid(row=3,column=1)
+        self.buttonAdvcaned.grid(row=3,column=2)
 
         self.labelCronJobs.grid(row=4)
 

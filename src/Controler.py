@@ -12,7 +12,6 @@ class Controler():
         self.view = View(self)
         self.setUpClient()
         self.view.initFrames()
-        #self.testOfDestruction()
         self.view.root.mainloop()
         
     def setUpClient(self):
@@ -20,7 +19,7 @@ class Controler():
             self.serverCommunication.connectToServer()
             self.serverCommunication.server.testConnection()
         except Exception as e:
-            if self.view.showError("Aucune connection au serveur", str(e)):
+            if self.view.showError("Aucune connection au serveur", str(e) ):
                 self.setUpClient()
             else:
                 self.view.root.destroy()
@@ -45,7 +44,10 @@ class Controler():
         return self.model.getUsers()
 
     def createUser(self,newUser):
-        self.model.createUser(newUser)
+        try:
+            self.model.createUser(newUser)
+        except Exception as e:
+            self.view.showError("ERROR", str(e))
 
     def deleteUser(self,accountToDelete):
         self.model.deleteUser(accountToDelete)
