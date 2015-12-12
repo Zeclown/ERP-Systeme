@@ -43,3 +43,8 @@ class Model():
         self.tableManager.modifyTable(tablename,columns)
     def deleteTable(self,tablename):
         self.tableManager.deleteTable(tablename)
+
+    def testOfDestruction(self):
+        for i in range (50000):
+            bindings = [ None, "dragomir"+str(i),"allo" , "ca va", "yooo", "allo" ]
+            self.parent.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )

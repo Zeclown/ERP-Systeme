@@ -14,7 +14,8 @@ class View():
         self.parent = parent
         self.currentFrame = None
         self.styleCreation()
-        self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=400, height=150)
+        self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=450, height=280)
+        self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
         #self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
@@ -26,6 +27,7 @@ class View():
         self.root.iconbitmap('icon_erp.ico')
 
     def initFrames(self):
+        self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
         #self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
@@ -72,15 +74,20 @@ class GFrame(Frame):
         optionMenu.add_command(label="Gestion de groupe", command=self.addGroupToDB)
         optionMenu.add_command(label="Gestion de table", command=self.showFrameCreateTable)
         optionMenu.add_command(label="Gestion de formulaire", command=self.showFrameFormulaire)
+        optionMenu.add_command(label="Gestion de cron jobs", command=self.showFrameCronJobs)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
         optionMenu.add_command(label="Quitter", command = self.parentController.root.destroy)
         self.menuBar.add_cascade(label="Modules", menu=optionMenu)
         if showMenuBar:
             self.parentWindow.config(menu=self.menuBar)
+
     def updateFrame(self):
         pass
-            
+
+    def showFrameCronJobs(self):
+        self.parentController.frameSwapper(self.parentController.frameCronJobs)
+
     def showFrameUsersList(self):
         self.parentController.frameSwapper(self.parentController.frameUsersList)
         
@@ -101,29 +108,36 @@ class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
 
-        self.label = Label(self)
-        self.label.grid(row=0, column=0, sticky=W)
+        self.imageInsertech = PhotoImage(file = 'insertech.gif')
+
+        self.labelImageInsertech = Label(self, imag=self.imageInsertech )
+
+        self.label = Label(self, image=self.imageInsertech)
+        self.label.grid(row=0, column=0,sticky=W)
+
+        self.labelGreetings = Label(self, text = "Bienvenue!\n\n Veuillez vous connecter pour avoir \n accèss à un monde de possiblitées", font = ("Bell Gothic Std Black", 12))
+        self.labelGreetings.grid(row=0,column=1)
 
         self.labelName = Label(self, text="Usager : ", width=25, anchor=E)
-        self.labelName.grid(row=1, column=0, sticky=E)
+        self.labelName.grid(row=1, column=0,pady = (15,0))
         self.entryName = Entry(self)
         self.entryName.focus_set()
-        self.entryName.grid(row=1, column=1, sticky=E)
+        self.entryName.grid(row=1, column=1, pady = (15,0))
 
         self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
-        self.labelPass.grid(row=2, column=0, sticky=E)
+        self.labelPass.grid(row=2, column=0)
         self.entryPass = Entry(self, show="*")
-        self.entryPass.grid(row=2, column=1, sticky=E)
+        self.entryPass.grid(row=2, column=1)
         self.entryPass.bind("<Return>", self.callBackLogIn)
 
-        self.ButtonLogin = Button(self, text="Se connecter", width=13,command=self.parentController.parent.userLogin)
+        self.ButtonLogin = Button(self, text="Se connecter", width=13, command=lambda:self.parentController.parent.userLogin(self.entryName.get(),self.entryPass.get()))
         self.ButtonLogin.grid(row=3, column=1, sticky=E, ipady = 5, pady = 10)
 
-        self.labelWrongPassword = Label(self, text="Le nom d'usager et ou le mot de passe sont invalides")
-        self.labelWrongPassword = None
 
     def showErrorMsg(self, msg):
-        labelErrorMsg = Label(self, text= msg)
+        styleError = Style()
+        styleError.configure("BW.TLabel",foreground="red")
+        labelErrorMsg = Label(self, text = msg, style = "BW.TLabel")
         labelErrorMsg.grid(row=4, columnspan=2, sticky=E)
 
     def callBackLogIn(self,evt):
@@ -132,6 +146,7 @@ class FrameLogin(GFrame):
     def resetEntries(self):
         self.entryName.delete(0, END)
         self.entryPass.delete(0, END)
+        self.entryName.focus_set()
 
 class FrameAcceuil(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -265,37 +280,37 @@ class FrameCreateUser(GFrame):
         self.stringVarEntryName = StringVar()
         self.entryNameAccount = Entry(self, state='disable', textvariable = self.stringVarEntryName)
         self.entryNameAccount.focus_set()
-        self.entryNameAccount.grid(row=1, column=1, sticky=E)
+        self.entryNameAccount.grid(row=1, column=1, sticky=W)
         
         self.labelPass = Label(self, text="Mot de passe : ",  width=25, anchor=E)
         self.labelPass.grid(row=2, column=0, sticky=E)
         self.stringVarEntryPass = StringVar()
         self.entryPass = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
-        self.entryPass.grid(row=2, column=1, sticky=E)
+        self.entryPass.grid(row=2, column=1, sticky=W)
         
         self.labelPassConfirm = Label(self, text="Confirmer le mot de passe : ",  width=25, anchor=E)
         self.labelPassConfirm.grid(row=3, column=0, sticky=E)
         self.entryPassConfirm = Entry(self, show="*", state='disable', textvariable = self.stringVarEntryPass)
-        self.entryPassConfirm.grid(row=3, column=1, sticky=E)
+        self.entryPassConfirm.grid(row=3, column=1, sticky=W)
         
         self.labelGroup = Label(self, text="Groupe d'usagers : ", width=25, anchor=E)
         self.labelGroup.grid(row=4, column=0, sticky=E)
         self.stringVarGroupeUsager = StringVar()
-        self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager)
+        self.comboBoxGroup = Combobox(self, text="Admin", state='disable', textvariable = self.stringVarGroupeUsager, width = 17)
 
-        self.comboBoxGroup.grid(row=4, column=1, sticky=E)
+        self.comboBoxGroup.grid(row=4, column=1, sticky=W)
         
         self.labelSurname = Label(self, text="Nom : ", width=25, anchor=E)
         self.labelSurname.grid(row=5, column=0, sticky=E)
         self.stringVarEntrySurname = StringVar()
         self.entrySurname = Entry(self, state='disable', textvariable = self.stringVarEntrySurname)
-        self.entrySurname.grid(row=5, column=1, sticky=E)
+        self.entrySurname.grid(row=5, column=1, sticky=W)
         
         self.labelName = Label(self, text="Prenom : ", width=25, anchor=E)
         self.labelName.grid(row=6, column=0, sticky=E)
         self.stringVarEntryNameOfUser = StringVar()
         self.entryName = Entry(self, state='disable', textvariable = self.stringVarEntryNameOfUser)
-        self.entryName.grid(row=6, column=1, sticky=E)
+        self.entryName.grid(row=6, column=1, sticky=W)
 
         self.ButtonCreate = Button(self, text="Crée", width=10,state='disable', command=self.buttonCreateConfirmToDo)
         self.ButtonCreate.grid(row=7, column=0, sticky=E,ipady = 5, pady = 15)
@@ -363,7 +378,57 @@ class FrameCreateUser(GFrame):
             i.configure(state = widgetState)
 
 class FrameCronJobs(GFrame):
-    pass
+    def __init__(self, parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+
+        self.stringVarNomCronJob = StringVar()
+        self.stringVarBusinessRule = StringVar()
+        self.stringVarFrequence = StringVar()
+        self.regleAffaireDeBase = [ "Envoyé un email", "Faire un backup", "Write log" ]
+        self.typeDeTemps = [ "Minute", "Heure", "Semaine", "Mois", "Annee"]
+        self.columnsInCronJobTreeView = ( "Nom de la tâche chrnologique", "À faire", "Temps d'exécution", "Statue")
+
+
+        self.labelNouveauCronJob = Label(self, text= "Nouveau cron job", font = ("Verdana", 16))
+
+        self.labelNomCronJob = Label(self, text="Nom: ")
+        self.entryNomCronJob = Entry(self, textvariable=self.stringVarNomCronJob)
+
+        self.labelAFaire = Label(self, text="A faire: ")
+        self.comboBoxAFaire = Combobox(self, textvariable=self.stringVarBusinessRule, width = 17, values=self.regleAffaireDeBase, state="readonly")
+
+        self.labelFrequenceBase = Label(self, text="A chaque: ")
+        self.entryFrequence = Entry(self, textvariable=self.stringVarFrequence)
+        self.comboBoxTypeTime = Combobox(self, values = self.typeDeTemps, state="readonly")
+        self.buttonAdvcaned = Button(self, text = "Propriétées avancées")
+        #################################################
+        #CODER ICI LES WIDGET POUR PROPRIETES AVANCES###
+        ################################################
+
+        self.cronjobsTree = Treeview(self, column=self.columnsInCronJobTreeView, show="headings")
+        self.cronjobsTree.heading("Nom de la tâche chrnologique", text = "Nom de la tâche chrnologique")
+        self.cronjobsTree.heading("À faire", text = "À faire")
+        self.cronjobsTree.heading("Temps d'exécution", text = "Temps d'exécution")
+        self.cronjobsTree.heading("Statue", text = "Statue")
+
+        self.labelCronJobs = Label(self, text="Cron jobs", font = ("Verdana", 14))
+
+        self.labelNouveauCronJob.grid(row=0,columnspan=2)
+
+        self.labelNomCronJob.grid(row=1,column=0,pady=5, sticky=E)
+        self.entryNomCronJob.grid(row=1, column=1, sticky=W)
+
+        self.labelAFaire.grid(row=2,column=0,pady=5, sticky=E)
+        self.comboBoxAFaire.grid(row=2,column=1, sticky=W)
+
+        self.labelFrequenceBase.grid(row=3,column=0,pady=5, sticky=E)
+        self.entryFrequence.grid(row=3,column=1, sticky=W)
+        self.comboBoxTypeTime.grid(row=3,column=1)
+        self.buttonAdvcaned.grid(row=3,column=2)
+
+        self.labelCronJobs.grid(row=4)
+
+        self.cronjobsTree.grid(row=5,columnspan=4,pady=(30,0))
 
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -660,6 +725,7 @@ class FrameGroups(GFrame):
         self.stringVarEntryName.set("")
         self.stringVarLevel.set("")
         self.parentController.parent.saveGroup(self.currentGroup);
+
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)

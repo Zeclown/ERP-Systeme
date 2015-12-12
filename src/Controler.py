@@ -12,22 +12,24 @@ class Controler():
         self.view = View(self)
         self.setUpClient()
         self.view.initFrames()
-        #self.testOfDestruction()
         self.view.root.mainloop()
         
     def setUpClient(self):
-        
         try:
             self.serverCommunication.connectToServer()
             self.serverCommunication.server.testConnection()
-        except Exception:
-            if self.view.showError("Impossible de se connecter au serveur", "Veuillez vous assurer que le serveur est bien actif"):
+        except Exception as e:
+            if self.view.showError("Aucune connection au serveur", str(e) ):
                 self.setUpClient()
             else:
                 self.view.root.destroy()
 
     def userLogin(self,username,password):
-        self.serverCommunication.logIn(username,password)
+        try:
+            self.serverCommunication.logIn(username,password)
+        except Exception as e:
+            self.view.frameLogin.showErrorMsg(str(e))
+            self.view.frameLogin.resetEntries()
 
     def getAllTables(self):
         return self.model.formsManager.getAllTablesOfDataBase()
@@ -42,7 +44,10 @@ class Controler():
         return self.model.getUsers()
 
     def createUser(self,newUser):
-        self.model.createUser(newUser)
+        try:
+            self.model.createUser(newUser)
+        except Exception as e:
+            self.view.showError("ERROR", str(e))
 
     def deleteUser(self,accountToDelete):
         self.model.deleteUser(accountToDelete)
@@ -53,10 +58,9 @@ class Controler():
     def saveGroup(self,group):
         self.model.saveGroup(group)
 
+    #cree 50 000 usagers dans la base de donnees
     def testOfDestruction(self):
-        for i in range (50000):
-            bindings = [ None, "dragomir"+str(i),"allo" , "ca va", "yooo", "allo" ]
-            self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
+        self.model.testOfDestruction()
 
 if __name__ == '__main__':
     c = Controler()
