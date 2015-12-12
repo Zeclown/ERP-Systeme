@@ -392,25 +392,32 @@ class FrameFormulaire(GFrame):
         self.entryNameForm = Entry(self)
         self.entryNameForm.grid(row=0, column=4)
 
-        self.columns = ("Type du champs", "Nom du champs", "Type du vue")
-        self.editFormTreeView = Treeview(self, columns=self.columns, show="headings")
+        self.columns = ("Type du champs", "Nom du champs", "Type du vue", "Valeurs", "Description")
+        self.editFormTreeView = Treeview(self, columns=self.columns, show="headings",
+                                         displaycolumns=("Type du champs", "Nom du champs", "Type du vue"))
         self.editFormTreeView.column("Type du champs", width=170)
         self.editFormTreeView.heading("Type du champs", text="Type du champs")
         self.editFormTreeView.column("Nom du champs", width=100)
         self.editFormTreeView.heading('Nom du champs', text="Nom du champs")
         self.editFormTreeView.column("Type du vue", width=80)
         self.editFormTreeView.heading('Type du vue', text="Type du vue")
+        self.editFormTreeView.column("Valeurs", width=100)
+        self.editFormTreeView.heading('Valeurs', text="Valeurs")
+        self.editFormTreeView.column("Description", width=100)
+        self.editFormTreeView.heading('Description', text="Description")
         self.editFormTreeView.grid(row=1, column=4)
-        self.editFormTreeView.bind("<Button-1>", self.selectTreeViewItem)
+        self.editFormTreeView.bind("<Button-1>", self.selectTableViewItem)
 
         self.labelTypeChamps = Label(self, text="Type du champs : ")
         self.labelTypeChamps.grid(row=2, column=3)
-        self.entryTypeChamps = Entry(self)
+        self.varTypeChamps = StringVar()
+        self.entryTypeChamps = Entry(self, textvariable=self.varTypeChamps, state="disable")
         self.entryTypeChamps.grid(row=2, column=4)
 
         self.labelNomChamps = Label(self, text="Nom du champs : ")
         self.labelNomChamps.grid(row=3, column=3)
-        self.entryNomChamps = Entry(self)
+        self.varNomChamps = StringVar()
+        self.entryNomChamps = Entry(self, textvariable=self.varNomChamps)
         self.entryNomChamps.grid(row=3, column=4)
 
         self.labelTypeVue = Label(self, text="Type du vue : ")
@@ -420,17 +427,19 @@ class FrameFormulaire(GFrame):
         self.comboBoxTypeVue.current(0)
         self.comboBoxTypeVue.grid(row=4, column=4)
 
+        self.varValues = StringVar()
         if self.comboBoxTypeVue.get() != "Entry" and self.comboBoxTypeVue.get() != "SpinBox":
             self.value = StringVar()
             self.value.set("Valeur à entrez pour le " + self.comboBoxTypeVue.get())
             self.labelValuesFromTypeVue = Label(self, text=self.value.get())
             self.labelValuesFromTypeVue.grid(row=5, column=3)
-            self.entryValuesFromTypeVue = Entry(self)
+            self.entryValuesFromTypeVue = Entry(self, textvariable=self.varValues)
             self.entryValuesFromTypeVue.grid(row=5, column=4)
 
         self.labelDescription = Label(self, text="Description : ")
         self.labelDescription.grid(row=6, column=3)
-        self.entryDescription = Entry(self)
+        self.varDescription = StringVar()
+        self.entryDescription = Entry(self, textvariable=self.varDescription)
         self.entryDescription.grid(row=6, column=4)
 
         self.buttonDelectRow = Button(self, text="Supprimer ligne")
@@ -438,6 +447,22 @@ class FrameFormulaire(GFrame):
 
         self.buttonCreatForm = Button(self, text="Crée formulaire")
         self.buttonCreatForm.grid(row=7, column=4)
+
+    def selectTableViewItem(self, event):
+        selectedTreeView = event.widget
+        itemID = selectedTreeView.identify_row(event.y)
+        itemValues = selectedTreeView.item(itemID, "values")
+        if itemValues != "":
+            self.fetchItemValues(itemValues)
+        print("Item values ->", itemValues)
+
+    def fetchItemValues(self, values):
+        self.varTypeChamps.set(values[0])
+        self.varNomChamps.set(values[1])
+        self.comboBoxTypeVue.set(values[2])
+        self.varValues.set(values[3])
+        self.varDescription.set(values[4])
+
 
     def selectTreeViewItem(self ,event):
         selectedTreeView = event.widget
@@ -461,8 +486,11 @@ class FrameFormulaire(GFrame):
         print("-------------------------")
 
     def fetchListOfItemsToEditFormTreeView(self, listItems, parentItem):
+        i = 0
         for item in listItems:
-            self.editFormTreeView.insert("", END, values=(parentItem + "." + item, item,self.comboBoxTypeVue.get()))
+            self.editFormTreeView.insert("", END, values=(parentItem + "." + item, item,self.comboBoxTypeVue.get(),
+                                                          i, i))
+            i=+1
 
     def showAllTablesInTreeView(self):
         countIndexParentItem = 0
