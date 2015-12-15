@@ -31,8 +31,7 @@ class Controler():
         username = self.view.frameLogin.entryName.get()
         password = self.view.frameLogin.entryPass.get()
 
-        print("YO",self.view.frameLogin.entryName.get())
-        print("YO",self.view.frameLogin.entryPass.get())
+
         
         try:
             testLogIn = self.serverCommunication.logIn(username,password )
