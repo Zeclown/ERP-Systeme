@@ -1,28 +1,35 @@
 import Pyro4
+# -*- coding: utf-8 -*-
 
 
 class ServerCommunication():
     def __init__(self,parent):
+
         self.serverAdress = "PYRO:foo@10.57.48.22:48261"
+
         self.parent = parent
         self.status = None
         self.server = None
         
     def connectToServer(self):
-        try:
-            self.server = Pyro4.Proxy(self.serverAdress)
-        except Exception:
-            self.parent.exception()
-        
+        self.server = Pyro4.Proxy(self.serverAdress)
+        if self.server == None:
+            raise Exception("Veuillez vous assurer que le serveur est bien actif")
 
     def runSQLQuery(self,SQLquery, bindings):
         return self.server.executeSql(SQLquery,bindings)
 
-        
-    def logIn(self,user,password):
-        if user.strip()== "" or password.strip() == "":
-            return False
+    def logIn(self,username,password):
+        if self.server.testConnection:
+            print("im in")
+            if self.server.loginValidation(username,password):
+                self.parent.view.frameSwapper(self.parent.view.frameAcceuil)
+            else:
+                raise Exception("L'information saisie est erronée.")
+                self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
+                self.view.frameLogin.resetEntries()
         else:
-            message= self.server.loginValidation(user,password)
-            print(message)
-            return message
+            raise Exception("Connection au serveur impossible.")
+
+
+

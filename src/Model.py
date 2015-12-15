@@ -1,12 +1,24 @@
 from Table import *
 from Formulaire import *
 from DbManager import *
+from Users import *
 class Model():
     def __init__(self,parent):
         self.formsList = []
         self.parent=parent
         self.tableManager=Table(self)
         self.formsManager=Formulaire(self)
+        self.users=Users(self)
+
+    def getUsers(self):
+        return self.users.getUsers()
+
+    def createUser(self,newUser):
+        self.users.createUser(newUser)
+
+    def deleteUser(self, userToDelete):
+        self.users.deleteUsers(userToDelete)
+
     def createTable(self,tablename,columns):
         self.tableManager.createNewTable(tablename,columns)
     def getGroups(self):
@@ -31,3 +43,8 @@ class Model():
         self.tableManager.modifyTable(tablename,columns)
     def deleteTable(self,tablename):
         self.tableManager.deleteTable(tablename)
+
+    def testOfDestruction(self):
+        for i in range (50000):
+            bindings = [ None, "dragomir"+str(i),"allo" , "ca va", "yooo", "allo" ]
+            self.parent.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )

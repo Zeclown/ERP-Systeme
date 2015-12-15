@@ -12,43 +12,26 @@ class Controler():
         self.view = View(self)
         self.setUpClient()
         self.view.initFrames()
-        #self.testOfDestruction()
         self.view.root.mainloop()
         
     def setUpClient(self):
-        
         try:
             self.serverCommunication.connectToServer()
             self.serverCommunication.server.testConnection()
-        except Exception:
-
-            if self.view.showError("Impossible de se connecter au serveur", "Veuillez vous assurer que le serveur est bien actif"):
+        except Exception as e:
+            if self.view.showError("Aucune connection au serveur", str(e) ):
                 self.setUpClient()
             else:
                 self.view.root.destroy()
 
-    def userLogin(self):
-        username = self.view.frameLogin.entryName.get()
-        password = self.view.frameLogin.entryPass.get()
 
+    def userLogin(self,username,password):
 
-        
         try:
-            testLogIn = self.serverCommunication.logIn(username,password )
-            print(testLogIn)
-            if testLogIn :
-                self.view.frameSwapper(self.view.frameAcceuil) #Balance l'usager a l'accueil
-            else:
-                self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
-                self.view.frameLogin.resetEntries()
-                
-        except Exception:
-            
-            if self.view.showError("Impossible de se connecter au serveur", "Veuillez vous assurer que le serveur est bien actif"):
-                self.serverCommunication.connectToServer()
-                self.userLogin()
-            else:
-                self.view.root.destroy()
+            self.serverCommunication.logIn(username,password)
+        except Exception as e:
+            self.view.frameLogin.showErrorMsg(str(e))
+            self.view.frameLogin.resetEntries()
 
     def getAllTables(self):
         return self.model.formsManager.getAllTablesOfDataBase()
@@ -56,67 +39,30 @@ class Controler():
     def getTableColumnName(self, table):
         return self.model.formsManager.getTableColumnName(table)
 
-    #def exception(self):
-        #if self.view.showError():
-            #self.serverCommunication.connectToServer()
-            #self.userLogin()
-        #else:
-            #self.view.root.destroy()
-
-    
     def getFormsNameList(self):
         return self.model.formsManager.getForms()
 
     def getUsers(self):
-        query = 'SELECT * FROM Sys_Usagers'
-        return self.serverCommunication.runSQLQuery(query, None)
-        
-    
-    def createUser(self):
+        return self.model.getUsers()
 
+    def createUser(self,newUser):
         try:
-            username = self.view.frameUsersList.frameCreateUser.entryNameAccount.get()
-            password = self.view.frameUsersList.frameCreateUser.entryPass.get()
-
-            if username.strip()== "" or password.strip() == "":
-                self.view.showError("Usager existant","Pogne en un autre")
-
-
-            groupeUtilisateur = self.view.frameUsersList.frameCreateUser.comboBoxGroup.get()
-
-
-            firstName = self.view.frameUsersList.frameCreateUser.entryName.get()
-            lastName = self.view.frameUsersList.frameCreateUser.entrySurname.get()
-
-
-            bindings = [ None, username, password, groupeUtilisateur, firstName, lastName ] #None pour le id
-
-            self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
-
-            print("USAGER CRÉE!!! USERNAME: %s PASSWORD: %s groupeutilisateur: %s" % (username,password,groupeUtilisateur) )
-        except sqlite3.IntegrityError:
-            self.view.showError("Usager existant","Pogne en un autre")
-
-    def testOfDestruction(self):
-
-        for i in range (50000):
-            bindings = [ None, "dragomir"+str(i),"allo" , "ca va", "yooo", "allo" ]
-            self.serverCommunication.runSQLQuery('INSERT INTO Sys_Usagers values', bindings )
+            self.model.createUser(newUser)
+        except Exception as e:
+            self.view.showError("ERROR", str(e))
 
     def deleteUser(self,accountToDelete):
-        
-        query = "DELETE FROM Sys_Usagers WHERE username = '%s'" % (accountToDelete)
-
-        print("deleted")
-        print("QUERY",query)
-
-        self.serverCommunication.runSQLQuery(query, None)
+        self.model.deleteUser(accountToDelete)
 
     def getGroups(self):
         return self.model.getGroups()
         
     def saveGroup(self,group):
-        self.model.saveGroup(group)    
-               
+        self.model.saveGroup(group)
+
+    #cree 50 000 usagers dans la base de donnees
+    def testOfDestruction(self):
+        self.model.testOfDestruction()
+
 if __name__ == '__main__':
     c = Controler()
