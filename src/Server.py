@@ -6,6 +6,7 @@ import shutil
 import os.path
 import smtplib
 import time
+import sqlite3
 from threading import Timer
 
 
@@ -61,7 +62,7 @@ class Server(object):
     
     def executeSql(self, query, bindings):
         queryResult = self.dbManager.query(query,bindings)
-        return queryResult
+        return(queryResult)
     
     def testConnection(self):
         return True

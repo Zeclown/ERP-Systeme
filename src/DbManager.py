@@ -17,7 +17,10 @@ class DbManager():
             placeholder = '?'
             placeholders = ', '.join( [placeholder] * numberOfBindings )
             queryToExecute = query + '(%s)' % placeholders
+
+
             self.cursorDB.execute(queryToExecute, bindings)
+
             self.db.commit()
             return self.cursorDB.fetchall()
 
