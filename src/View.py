@@ -550,7 +550,11 @@ class FrameFormulaire(GFrame):
             self.parentController.showError("Aucune selection", "Veuillez svp faire une selection")
 
     def createForm(self):
-        pass
+        listeItems = []
+
+
+
+        self.editFormTableView.next()
 
     def selectTableViewItem(self, event):
         selectedTreeView = event.widget

@@ -13,6 +13,7 @@ class Controler():
         self.setUpClient()
         self.view.initFrames()
         self.view.root.mainloop()
+
         
     def setUpClient(self):
         try:
@@ -43,9 +44,7 @@ class Controler():
         return self.model.formsManager.getForms()
 
     def createNewForm(self, name, formItemList):
-        pass
-
-
+        self.model.formsManager.createForm(name, formItemList)
 
     def getUsers(self):
         return self.model.getUsers()
