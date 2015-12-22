@@ -670,13 +670,16 @@ class FrameGroups(GFrame):
         self.comboBoxLevel.grid(row=1, column=3, sticky=W)
         self.buttonModif = Button(self, text="Sauvegarder", width=15,state='disable', command=self.saveGroup)
         self.buttonModif.grid(row=4, column=2, sticky=N,ipady = 5, pady = 15)
+        self.modifying=False;
         self.buttonCancel = Button(self, text="Annuler", width=15, state='disable', command=self.cancel)
         self.buttonCancel.grid(row=4, column=3, sticky=N, ipady = 5, pady = 15)
-        self.listboxGroups=Listbox(self)
+        self.listboxGroups=Listbox(self,exportselection=False)
         self.listboxGroups.grid(column=0,row=1,rowspan=2,columnspan=2)
         self.listboxGroups.bind('<<ListboxSelect>>', self.selectItem)
         self.buttonCreate=Button(self,text="Nouveau Groupe", width=20, state='enable', command=self.createGroup)
         self.buttonCreate.grid(column=0,row=4,sticky=N, ipady = 5, pady = 15)
+        self.buttonModifExist=Button(self, text="Modifier", width=15,state='disable', command=self.modifGroup)
+        self.buttonModifExist.grid(column=1,row=4,sticky=N, ipady = 5, pady = 15)
         self.labelGroups=Label(self,text="Groupes")
         self.labelGroups.grid(column=0,row=0)
         self.permissionCheckList=CheckList(self)
@@ -723,6 +726,7 @@ class FrameGroups(GFrame):
             widg.config(state="disable")
 
     def deactivateModifs(self):
+        self.resetFields()
         for widg in self.widgetActivate:
             widg.config(state="disable")
         for widg in self.widgetDeactivate:
@@ -734,21 +738,101 @@ class FrameGroups(GFrame):
         for groups in self.parentController.parent.getGroups():
             self.listboxGroups.insert(END,groups[1])
 
+    def resetFields(self):
+        self.stringVarEntryName.set("")
+        self.comboBoxLevel.set(0);
     def createGroup(self):
         self.activateModifs()
+        self.resetFields()
+        self.listboxGroups.selection_clear(0,END)
+        self.resetCheckList()
+    def modifGroup(self):
+        self.activateModifs()
+        self.buttonModifExist.config(state="disable")
+        self.modifying=True
 
     def selectItem(self,evt):
-        
-        self.stringVarEntryName.set(self.listboxGroups.get(ACTIVE))
+        self.cancel()
+        self.buttonModifExist.config(state="enable")
+        index = int(self.listboxGroups.curselection()[0])
+        value = self.listboxGroups.get(index)
+        self.stringVarEntryName.set(value)
         self.groupSelected=self.parentController.parent.getGroups()[int(self.listboxGroups.curselection()[0])]
-            
+        self.currentGroup["oldname"]=self.stringVarEntryName.get()
         self.stringVarLevel.set(str(self.groupSelected[2]))
+        self.currentGroup["rights"]=self.parentController.parent.getGroupRights(self.groupSelected[0])
+        print(self.currentGroup["rights"])
+        if(self.currentGroup["rights"]["motdepasseautre"]==1):
+            self.permissionCheckList.setstatus("CL1", "on")
+        else:
+            self.permissionCheckList.setstatus("CL1", "off")
+
+        if(self.currentGroup["rights"]["motdepassepersonnel"]==1):
+            self.permissionCheckList.setstatus("CL2", "on")
+        else:
+            self.permissionCheckList.setstatus("CL2", "off")
+
+        if(self.currentGroup["rights"]["cronjobs"]==1):
+            self.permissionCheckList.setstatus("CL3", "on")
+        else:
+            self.permissionCheckList.setstatus("CL3", "off")
+
+        if(self.currentGroup["rights"]["regleaffaire"]==1):
+            self.permissionCheckList.setstatus("CL4", "on")
+        else:
+            self.permissionCheckList.setstatus("CL4", "off")
+
+        if(self.currentGroup["rights"]["lireforms"]==1):
+            self.permissionCheckList.setstatus("CL5", "on")
+        else:
+            self.permissionCheckList.setstatus("CL5", "off")
+
+        if(self.currentGroup["rights"]["modifforms"]==1):
+            self.permissionCheckList.setstatus("CL6", "on")
+        else:
+            self.permissionCheckList.setstatus("CL6", "off")
+
+        if(self.currentGroup["rights"]["remplirformulaire"]==1):
+            self.permissionCheckList.setstatus("CL7", "on")
+        else:
+            self.permissionCheckList.setstatus("CL7", "off")
+
+        if(self.currentGroup["rights"]["modifusagers"]==1):
+            self.permissionCheckList.setstatus("CL8", "on")
+        else:
+            self.permissionCheckList.setstatus("CL8", "off")
+
+        if(self.currentGroup["rights"]["lireusagers"]==1):
+            self.permissionCheckList.setstatus("CL9", "on")
+        else:
+            self.permissionCheckList.setstatus("CL9", "off")
+
+        if(self.currentGroup["rights"]["modifrapport"]==1):
+            self.permissionCheckList.setstatus("CL10", "on")
+        else:
+            self.permissionCheckList.setstatus("CL10", "off")
+
+        if(self.currentGroup["rights"]["lirerapport"]==1):
+            self.permissionCheckList.setstatus("CL11", "on")
+        else:
+            self.permissionCheckList.setstatus("CL11", "off")
 
     def cancel(self):
-        self.setUserCreationTextFieldState("disable")
-
-    def setUserCreationTextFieldState(self,state):
-        pass
+        self.resetCheckList()
+        self.deactivateModifs()
+        self.modifying=False;
+    def resetCheckList(self):
+        self.permissionCheckList.setstatus("CL1", "off")
+        self.permissionCheckList.setstatus("CL2", "off")
+        self.permissionCheckList.setstatus("CL3", "off")
+        self.permissionCheckList.setstatus("CL4", "off")
+        self.permissionCheckList.setstatus("CL5", "off")
+        self.permissionCheckList.setstatus("CL6", "off")
+        self.permissionCheckList.setstatus("CL7", "off")
+        self.permissionCheckList.setstatus("CL8", "off")
+        self.permissionCheckList.setstatus("CL9", "off")
+        self.permissionCheckList.setstatus("CL10", "off")
+        self.permissionCheckList.setstatus("CL11", "off")
 
     def saveGroup(self):
         
@@ -772,8 +856,9 @@ class FrameGroups(GFrame):
         self.deactivateModifs()
         self.stringVarEntryName.set("")
         self.stringVarLevel.set("")
-        self.parentController.parent.saveGroup(self.currentGroup)
 
+        self.parentController.parent.saveGroup(self.currentGroup,self.modifying);
+        self.updateFrame();
 
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
@@ -827,6 +912,7 @@ class FrameCreateTable(GFrame):
         self.showAllTablesInListbox()
 
     def selectTable(self,evt):
+        self.currentTable.clear()
         self.entryNameString.set(self.listboxTables.get(self.listboxTables.curselection()))
         columns=self.parentController.parent.getTableColumnName(self.listboxTables.get(self.listboxTables.curselection()))
         self.treeviewColumns.delete(*self.treeviewColumns.get_children())
@@ -860,6 +946,7 @@ class FrameCreateTable(GFrame):
         self.updateFrame()
 
     def newTable(self):
+        self.currentTable.clear()
         self.activateModify()
         self.entryTableName.insert(0,"")
         self.entryColumnName.insert(0,"")
@@ -906,7 +993,9 @@ class FrameCreateTable(GFrame):
         self.treeviewColumns.delete(curItem)
 
     def modifyTable(self):
+
         self.parentController.parent.model.modifyTable(self.entryTableName.get(),self.currentTable)
+        self.currentTable.clear()
         self.entryColumnName.delete(0, END)
         self.entryTableName.delete(0,END)
         self.treeviewColumns.delete(*self.treeviewColumns.get_children())

@@ -24,7 +24,9 @@ class Controler():
             else:
                 self.view.root.destroy()
 
+
     def userLogin(self,username,password):
+
         try:
             self.serverCommunication.logIn(username,password)
         except Exception as e:
@@ -59,9 +61,12 @@ class Controler():
 
     def getGroups(self):
         return self.model.getGroups()
-        
-    def saveGroup(self,group):
-        self.model.saveGroup(group)
+
+    def getGroupRights(self,id):
+        return self.model.getGroupRights(id)
+    def saveGroup(self,group,modify):
+        self.model.saveGroup(group,modify)
+
 
     #cree 50 000 usagers dans la base de donnees
     def testOfDestruction(self):

@@ -9,7 +9,7 @@ class ServerCommunication():
         self.parent = parent
         self.status = None
         self.server = None
-        
+
     def connectToServer(self):
         self.server = Pyro4.Proxy(self.serverAdress)
         if self.server == None:
