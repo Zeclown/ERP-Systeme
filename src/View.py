@@ -782,13 +782,10 @@ class FrameGroups(GFrame):
         self.deactivateModifs()
         self.stringVarEntryName.set("")
         self.stringVarLevel.set("")
-<<<<<<< HEAD
+
         self.parentController.parent.saveGroup(self.currentGroup,self.modifying);
         self.updateFrame();
-=======
-        self.parentController.parent.saveGroup(self.currentGroup);
 
->>>>>>> efa840915108efa6bce2e05ca169698fea30e8aa
 class FrameCreateTable(GFrame):
     def __init__(self,parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)

@@ -4,13 +4,10 @@ import Pyro4
 
 class ServerCommunication():
     def __init__(self,parent):
-<<<<<<< HEAD
-        self.serverAdress = "PYRO:foo@192.168.0.101:48261"
-=======
 
-        self.serverAdress = "PYRO:foo@10.57.48.22:48261"
 
->>>>>>> efa840915108efa6bce2e05ca169698fea30e8aa
+        self.serverAdress = "PYRO:foo@10.57.49.41:48261"
+
         self.parent = parent
         self.status = None
         self.server = None
