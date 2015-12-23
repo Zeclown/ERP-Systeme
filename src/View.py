@@ -437,12 +437,20 @@ class FrameDisplayForm(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
 
-        self.labelForms = Label(self, text = "Formulaires de la base de donnee")
+        self.linkToDataBaseList = []
+
+        self.labelForms = Label(self, text = "Formulaires")
         self.labelForms.grid(row=0, column=0)
         self.formsListBox = Listbox(self)
         self.formsListBox.grid(row=1, column=0)
         self.formsListBox.bind("<Button-1>", self.selectFormInListView)
         self.showAllFormsInListView()
+
+        self.panelForm = Frame(self)
+        self.nomFormulaire = Label(self)
+
+        self.buttonSave = Button(self, text="Sauvegarder", width=19, command=self.sauvegarderALaBD)
+        self.buttonSave.grid(row=2, column=0)
 
     def selectFormInListView(self, event):
         selectedListBox = event.widget
@@ -451,9 +459,14 @@ class FrameDisplayForm(GFrame):
         print(value)
         resultFormSpecs = self.parentController.parent.getFormsSpecs(value)
         print(resultFormSpecs)
-        self.builtFormsWithSpecList(resultFormSpecs)
+        self.panelForm.grid_remove()
+        self.nomFormulaire.grid_remove()
+        self.builtFormsWithSpecList(resultFormSpecs, value)
 
-    def builtFormsWithSpecList(self, specList):
+    def builtFormsWithSpecList(self, specList, name):
+
+        self.nomFormulaire = Label(self, text=name)
+        self.nomFormulaire.grid(row=0, column=1)
 
         self.panelForm = Frame(self)
         self.panelForm.grid(row=1, column=1)
@@ -468,6 +481,8 @@ class FrameDisplayForm(GFrame):
             print("Valeurs ->", row[4])
             print("Description", row[5])
             print("------------------------------")
+
+            self.linkToDataBaseList.append([row[0], row[1], row[3]])
 
             self.label = row[2]
             self.typeVue = row[3]
@@ -496,6 +511,26 @@ class FrameDisplayForm(GFrame):
                 self.spinBox.grid(row=count, column=2)
 
             count+=1
+        print(self.linkToDataBaseList)
+
+    def sauvegarderALaBD(self):
+
+        infoEntre = []
+
+        for i in self.linkToDataBaseList:
+            if i[2] == "Entry":
+                infoEntre.append([i[0], i[1], self.entry.get()])
+            elif i[2] == "ComboBox":
+                infoEntre.append([i[0], i[1], self.comboBox.get()])
+
+        print("--------------------------")
+        print("Info entre ->", infoEntre)
+        print("--------------------------")
+
+        self.parentController.parent.insertDateToDB(infoEntre)
+
+
+
 
 
     def showAllFormsInListView(self):

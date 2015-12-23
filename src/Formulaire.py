@@ -69,5 +69,26 @@ class Formulaire():
             result = idResult[0][0]
         return result
 
+    def insertDateToDB(self, listInfo):
+        for item in listInfo:
+            table = item[0]
+            column = item[1]
+            info = item[2]
+
+
+
+            print("Table ->", item[0])
+            print("Colonne ->", item[1])
+            print("Info a envoyer ->", item[2])
+
+
+
+            sqlQuery = "INSERT INTO %s (%s) Values" %(table, column)
+            bindings = [info]
+            print(sqlQuery)
+            #self.parent.parent.serverCommunication.runSQLQuery(sqlQuery, bindings)
+
+
+
     def getDate(self):
         return time.strftime("%x")

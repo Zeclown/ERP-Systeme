@@ -49,6 +49,9 @@ class Controler():
     def getFormsSpecs(self, name):
         return self.model.formsManager.getFormsSpecs(name)
 
+    def insertDateToDB(self, listInfo):
+        self.model.formsManager.insertDateToDB(listInfo)
+
     def getUsers(self):
         return self.model.getUsers()
 
