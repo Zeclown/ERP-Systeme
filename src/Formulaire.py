@@ -23,8 +23,10 @@ class Formulaire():
             self.columnsNames.append([i[1],i[2]])
         return self.columnsNames
 
-        
     def getForms(self):
         sqlQuery = "SELECT nom FROM Sys_Formulaires"
         self.formsList = self.parent.parent.serverCommunication.runSQLQuery(sqlQuery,None)
         return self.formsList
+
+    def createForm(self, name, formItemList):
+        pass

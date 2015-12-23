@@ -19,7 +19,7 @@ class Server(object):
         print(self.monip)
         
         self.ipDuServeur = self.monip
-        self.portDuServeur = 8000
+        self.portDuServeur = 48261
         
         self.dbManager=DbManager.DbManager("data1.db")
         
