@@ -106,7 +106,7 @@ class GFrame(Frame):
         self.parentController.frameSwapper(self.parentController.frameGroups)
         
     def logOutUser(self):
-        #self.frameLogin = FrameLogin(self, self.parentController.root, "Connexion - ERP", width=450, height=280)
+        self.frameLogin = FrameLogin(self.parentController, self.parentController.root, "Connexion - ERP", width=450, height=280)
         self.parentController.frameSwapper( self.parentController.frameLogin )
         self.parentController.frameLogin.entryName.focus()
         self.parentController.frameLogin.resetEntries()
