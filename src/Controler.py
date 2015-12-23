@@ -46,6 +46,9 @@ class Controler():
     def createNewForm(self, name, formItemList):
         self.model.formsManager.createForm(name, formItemList)
 
+    def getFormsSpecs(self, name):
+        return self.model.formsManager.getFormsSpecs(name)
+
     def getUsers(self):
         return self.model.getUsers()
 

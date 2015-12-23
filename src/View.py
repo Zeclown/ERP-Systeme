@@ -33,7 +33,7 @@ class View():
         self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-
+        self.frameDisplayForm = FrameDisplayForm(self, self.root, "Consulter Formulaire", width=900, height=500)
 
     def show(self):
         self.root.mainloop()
@@ -75,6 +75,7 @@ class GFrame(Frame):
         optionMenu.add_command(label="Gestion de groupe", command=self.addGroupToDB)
         optionMenu.add_command(label="Gestion de table", command=self.showFrameCreateTable)
         optionMenu.add_command(label="Gestion de formulaire", command=self.showFrameFormulaire)
+        optionMenu.add_command(label="Afficher un formulaire", command=self.showFrameDisplayForm)
         optionMenu.add_command(label="Gestion de cron jobs", command=self.showFrameCronJobs)
         optionMenu.add_separator()
         optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
@@ -97,6 +98,9 @@ class GFrame(Frame):
     
     def showFrameFormulaire(self):
         self.parentController.frameSwapper(self.parentController.frameFormulaire)
+
+    def showFrameDisplayForm(self):
+        self.parentController.frameSwapper(self.parentController.frameDisplayForm)
         
     def addGroupToDB(self):
         self.parentController.frameSwapper(self.parentController.frameGroups)
@@ -429,6 +433,74 @@ class FrameCronJobs(GFrame):
 
         self.cronjobsTree.grid(row=5,columnspan=4,pady=(30,0))
 
+class FrameDisplayForm(GFrame):
+    def __init__(self, parentController, parentWindow, title, **args):
+        GFrame.__init__(self, parentController, parentWindow, title, **args)
+
+        self.labelForms = Label(self, text = "Formulaires de la base de donnee")
+        self.labelForms.grid(row=0, column=0)
+        self.formsListBox = Listbox(self)
+        self.formsListBox.grid(row=1, column=0)
+        self.formsListBox.bind("<Button-1>", self.selectFormInListView)
+        self.showAllFormsInListView()
+
+    def selectFormInListView(self, event):
+        selectedListBox = event.widget
+        index = selectedListBox.curselection()[0]
+        value = selectedListBox.get(index)[0]
+        print(value)
+        resultFormSpecs = self.parentController.parent.getFormsSpecs(value)
+        print(resultFormSpecs)
+        self.builtFormsWithSpecList(resultFormSpecs)
+
+    def builtFormsWithSpecList(self, specList):
+
+        self.panelForm = Frame(self)
+        self.panelForm.grid(row=1, column=1)
+
+        count = 1
+        for row in specList:
+            print("----------FORMULAIRE----------")
+            print("Table ->", row[0])
+            print("Colonne ->", row[1])
+            print("Label ->", row[2])
+            print("TypeVue ->", row[3])
+            print("Valeurs ->", row[4])
+            print("Description", row[5])
+            print("------------------------------")
+
+            self.label = row[2]
+            self.typeVue = row[3]
+            self.valeurs = row[4]
+            self.description = row[5]
+
+            width = 40
+
+            self.label = Label(self.panelForm, text=  self.label)
+            self.label.grid(row=count, column=1)
+            if self.typeVue ==  "Entry":
+                self.entry = Entry(self.panelForm, width=width)
+                self.entry.grid(row=count, column=2)
+            elif self.typeVue ==  "ComboBox":
+                self.comboBox = Combobox(self.panelForm, width=width-3,values=self.valeurs, state="readonly")
+                self.comboBox.current(0)
+                self.comboBox.grid(row=count, column=2)
+            elif self.typeVue ==  "RadioButton":
+                self.radioButton = Radiobutton(self.panelForm, width=width)
+                self.radioButton.grid(row=count, column=2)
+            elif self.typeVue == "Checkbutton":
+                self.checkButton = Checkbutton(self.panelForm, width=width)
+                self.checkButton.grid(row=count, column=2)
+            elif self.typeVue ==  "SpinBox":
+                self.spinBox = Spinbox(self.panelForm, width=width)
+                self.spinBox.grid(row=count, column=2)
+
+            count+=1
+
+
+    def showAllFormsInListView(self):
+        for i in self.parentController.parent.getFormsNameList():
+            self.formsListBox.insert(END,i)
 
 class FrameFormulaire(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
@@ -551,10 +623,16 @@ class FrameFormulaire(GFrame):
 
     def createForm(self):
         listeItems = []
+        idItems = self.editFormTableView.get_children()
+        print("Nb of item in tableView ->", len(idItems))
 
+        for item in idItems:
+            listeItems.append(self.editFormTableView.item(item, "values"))
+        print(self.entryNameForm.get())
+        print(listeItems)
 
+        self.parentController.parent.createNewForm(self.entryNameForm.get(), listeItems)
 
-        self.editFormTableView.next()
 
     def selectTableViewItem(self, event):
         selectedTreeView = event.widget
@@ -564,6 +642,8 @@ class FrameFormulaire(GFrame):
         if itemValues:
             self.fetchItemValues(itemValues, itemIndex)
         print("Item values ->", itemValues)
+        print("Item Index ->", itemIndex)
+        print("Item Id ->", self.itemID)
         self.changeViewType(self)
 
     def fetchItemValues(self, values, index):
