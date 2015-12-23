@@ -1,10 +1,14 @@
 import Pyro4
+import os.path
+import sys
 # -*- coding: utf-8 -*-
 
 
 class ServerCommunication():
     def __init__(self,parent):
-        f = open("Ressources/ip_address_server.txt", "r")
+        fichier = os.path.dirname(sys.argv[0])
+        fichier = fichier+"\Ressources\ip_address_server.txt"
+        f = open(fichier, "r")
         self.ipServer = f.readline()
         f.close()
         self.serverAdress = "PYRO:foo@"+self.ipServer+":48261"

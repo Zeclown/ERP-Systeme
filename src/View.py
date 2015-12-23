@@ -15,7 +15,7 @@ class View():
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=450, height=280)
         self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
-        #self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
+        #self.frameAccueil = FrameAccueil(self, self.root, "Acceuil", width=900, height=500)
         #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
         #self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
@@ -28,7 +28,7 @@ class View():
     def initFrames(self):
         self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
         #self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
-        self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
+        self.frameAccueil = FrameAccueil(self, self.root, "Acceuil", width=900, height=500)
         self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
