@@ -44,8 +44,8 @@ class DbManager():
              (id integer primary key autoincrement, username text NOT NULL UNIQUE, password text NOT NULL, groupUtilisateur integer  , firstName text, lastName text,FOREIGN KEY(groupUtilisateur) REFERENCES Sys_GroupeUtilisateur(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Formulaires
              ( id integer primary key autoincrement,nom text NOT NULL, date_creation Date NOT NULL, derniere_modif Date NOT NULL  , acces_utilisation integer  ,acces_modification integer   )''')
-        self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Specificite
-             (id integer, nomChamp text NOT NULL, type text NOT NULL,nomTable text,colonne text,action text,FOREIGN KEY(id) REFERENCES Sys_Formulaires(id))''')
+        self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_Form_Spec
+             (id integer primary key autoincrement, form_id integer, nomTable text,colonne text, label text NOT NULL, typeView text NOT NULL,valeurs text, description text,FOREIGN KEY(form_id) REFERENCES Sys_Formulaires(id))''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumType
              (id integer primary key autoincrement, nom text NOT NULL)''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_EnumList
