@@ -12,7 +12,6 @@ class ServerCommunication():
         self.ipServer = f.readline()
         f.close()
         self.serverAdress = "PYRO:foo@"+self.ipServer+":48261"
-		
         self.parent = parent
         self.status = None
         self.server = None

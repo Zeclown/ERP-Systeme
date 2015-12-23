@@ -15,13 +15,7 @@ class View():
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=450, height=280)
         self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
-        #self.frameAccueil = FrameAccueil(self, self.root, "Acceuil", width=900, height=500)
-        #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
-        #self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
-        #self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
-        #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        #self.frameSwapper(self.frameLogin)
         self.frameSwapper(self.frameLogin)
         self.root.iconbitmap('icon_erp.ico')
 
@@ -88,24 +82,31 @@ class GFrame(Frame):
         pass
 
     def showFrameCronJobs(self):
+        self.parentController.frameCronJobs = FrameCronJobs(self.parentController, self.parentController.root, "Jobs chronologiques", width=950, height=500)
         self.parentController.frameSwapper(self.parentController.frameCronJobs)
 
     def showFrameUsersList(self):
+        self.parentController.frameUsersList=FrameUsersList(self.parentController, self.parentController.root, "Usagers", width=900, height=500)
         self.parentController.frameSwapper(self.parentController.frameUsersList)
         
     def showFrameCreateTable(self):
+        self.parentController.frameCreateTable=FrameCreateTable(self.parentController, self.parentController.root, "Tables", width=900, height=500)
         self.parentController.frameSwapper(self.parentController.frameCreateTable)
     
     def showFrameFormulaire(self):
+        self.parentController.frameFormulaire=FrameFormulaire(self.parentController, self.parentController.root, "Formulaire", width=900, height=500)
         self.parentController.frameSwapper(self.parentController.frameFormulaire)
 
     def showFrameDisplayForm(self):
+        self.parentController.frameDisplayForm = FrameDisplayForm(self.parentController, self.parentController.root, "Consulter Formulaire", width=900, height=500)
         self.parentController.frameSwapper(self.parentController.frameDisplayForm)
         
     def addGroupToDB(self):
+        self.parentController.frameGroups=FrameGroups(self.parentController, self.parentController.root, "Groupes", width=900, height=500)
         self.parentController.frameSwapper(self.parentController.frameGroups)
         
     def logOutUser(self):
+        #self.frameLogin = FrameLogin(self, self.parentController.root, "Connexion - ERP", width=450, height=280)
         self.parentController.frameSwapper( self.parentController.frameLogin )
         self.parentController.frameLogin.entryName.focus()
         self.parentController.frameLogin.resetEntries()

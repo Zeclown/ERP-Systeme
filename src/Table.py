@@ -15,7 +15,12 @@ class Table():
     def modifyTable(self,tableName,columns):
         sqlCommand="DROP TABLE "+tableName
         self.parent.parent.serverCommunication.runSQLQuery(sqlCommand,None)
-        self.createNewTable(tableName, columns)
+        sqlCommand="CREATE TABLE " + tableName + " ("        
+        for column in columns.keys():
+            sqlCommand+=" " + column + " " + columns[column]+","
+        sqlCommand=sqlCommand[:-1]
+        sqlCommand+=" )"
+        self.parent.parent.serverCommunication.runSQLQuery(sqlCommand,None)
 
     def deleteTable(self,tableName):
         sqlCommand="DROP TABLE "+tableName
