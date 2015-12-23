@@ -19,10 +19,10 @@ class View():
         self.root.iconbitmap('icon_erp.ico')
     def login(self):
         self.showLogin()
-        self.frameSwapper(self.frameAcceuil)
+        self.frameSwapper(self.frameAccueil)
     def initFrames(self):
         self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
-        self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
+        self.frameAccueil = FrameAccueil(self, self.root, "Accueil", width=900, height=500)
         self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
@@ -119,8 +119,10 @@ class GFrame(Frame):
 class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
+        fichier = os.path.dirname(sys.argv[0])
+        fichier = fichier+"\insertech.gif"
         
-        self.imageInsertech = PhotoImage(file = 'insertech.gif')
+        self.imageInsertech = PhotoImage(file = fichier)
 
         self.labelImageInsertech = Label(self, imag=self.imageInsertech )
 
@@ -160,10 +162,12 @@ class FrameLogin(GFrame):
         self.entryName.focus_set()
 
 
-class FrameAcceuil(GFrame):
+class FrameAccueil(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         GFrame.addMenuBar(self, 1)
+        self.labelWelcome = Label(self, text="Bienvenue "+"!", font = ("Bell Gothic Std Black", 12))
+        self.labelWelcome.grid()
 
 
 class FrameUsersList(GFrame):
