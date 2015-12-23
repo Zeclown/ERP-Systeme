@@ -22,7 +22,7 @@ class View():
     def initFrames(self):
         self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
         #self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
-        self.frameAccueil = FrameAccueil(self, self.root, "Acceuil", width=900, height=500)
+        self.frameAccueil = FrameAccueil(self, self.root, "Accueil", width=900, height=500)
         self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
@@ -156,10 +156,11 @@ class FrameLogin(GFrame):
         self.entryName.focus_set()
 
 
-class FrameAcceuil(GFrame):
+class FrameAccueil(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
         GFrame.addMenuBar(self, 1)
+        self.labelWelcome = Label(self, text="Bienvenu "+"!")
 
 
 class FrameUsersList(GFrame):
