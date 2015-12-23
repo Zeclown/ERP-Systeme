@@ -14,7 +14,7 @@ class View():
         self.currentFrame = None
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=450, height=280)
-
+        self.root.resizable(0,0)
         self.frameSwapper(self.frameLogin)
         self.root.iconbitmap('icon_erp.ico')
     def login(self):

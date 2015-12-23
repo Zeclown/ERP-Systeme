@@ -58,10 +58,10 @@ class DbManager():
              (id integer primary key autoincrement, tableChoisie text,colonne text,operation text ,FOREIGN KEY(id) REFERENCES Sys_RegleAffaire(id) )''')
         self.db.execute('''CREATE TABLE IF NOT EXISTS Sys_droitsGroupes
         (groupid integer primary key autoincrement, motdepasseautre integer, motdepassepersonnel integer,cronjobs integer,regleaffaire integer, lireforms integer, modifforms integer,remplirformulaire integer, modifusagers integer, lireusagers integer, modifrapport integer,lirerapport integer,FOREIGN KEY(groupid) REFERENCES Sys_GroupesUtilisateurs(id) )''')
-        self.cursorDB.execute(''' SELECT * FROM Sys_Usagers WHERE id=1''')
+        self.cursorDB.execute(''' SELECT * FROM Sys_Usagers WHERE username='admin' ''')
         admin=self.cursorDB.fetchone()
         if(admin==None):
-            self.db.execute('''INSERT INTO Sys_Usagers (id,username, password) VALUES (1,'admin','admin')''')
+            self.db.execute('''INSERT INTO Sys_Usagers (id,username, password) VALUES (0,'admin','admin')''')
             
 if __name__ == "__main__":
     db=DbManager("data1.db")

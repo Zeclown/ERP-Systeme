@@ -59,8 +59,10 @@ class Model():
                                                                     ,rights["lireusagers"],rights["modifrapport"],rights["lirerapport"],group["id"])
             self.parent.serverCommunication.runSQLQuery(sqlCommand,None)
     def modifyTable(self,tablename,columns):
+        
         self.tableManager.modifyTable(tablename,columns)
     def deleteTable(self,tablename):
+        
         self.tableManager.deleteTable(tablename)
 
     def testOfDestruction(self):
