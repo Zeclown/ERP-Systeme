@@ -6,6 +6,7 @@ import shutil
 import os.path
 import smtplib
 import time
+import sqlite3
 from threading import Timer
 
 
@@ -23,11 +24,11 @@ class Server(object):
         self.dbManager=DbManager.DbManager("data1.db")
         
         self.databaseVersion = 0
-        f = open("Ressources/Database_Version.txt", "r")
+        """f = open("Ressources/Database_Version.txt", "r")
         self.databaseVersion = f.readline()
         print("DB version:")
         print(self.databaseVersion)
-        f.close()
+        f.close()"""
         
         #self.createFonctionInTableIfNotExist()
         
@@ -42,7 +43,7 @@ class Server(object):
         
     def executeSql(self, query, bindings):
         queryResult = self.dbManager.query(query,bindings)
-        return queryResult
+        return(queryResult)
     
     def testConnection(self):
         return True
@@ -195,9 +196,9 @@ class CronJob():
 
 serverPyro = Server()   #objet du serveur
 
-daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur ,port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
+daemon = Pyro4.Daemon(host=serverPyro.ipDuServeur, port=serverPyro.portDuServeur)      #ce qui écoute les remote calls sur le serveur
 
-uri = daemon.register(serverPyro,"foo")
+uri = daemon.register(serverPyro, "foo")
 
 #serverPyro.backupDatabase()           #TEST DE BACKUP
 #serverPyro.sendEmail("un autre test esti","Subject: "+"un sujet","champsfuturs@gmail.com","A1?champsfutursouverture","unreaved@hotmail.com")    #TEST DE EMAIL
