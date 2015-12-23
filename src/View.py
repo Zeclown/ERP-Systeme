@@ -14,27 +14,37 @@ class View():
         self.currentFrame = None
         self.styleCreation()
         self.frameLogin = FrameLogin(self, self.root, "Connexion - ERP", width=450, height=280)
-        self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
-        #self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
-        #self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameLogin.addMenuBar(0)
-        #self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
-        #self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
-        #self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
-        #self.frameSwapper(self.frameLogin)
         self.frameSwapper(self.frameLogin)
         self.root.iconbitmap('icon_erp.ico')
-
+    def login(self):
+        self.showLogin()
+        self.frameSwapper(self.frameAcceuil)
     def initFrames(self):
         self.frameCronJobs = FrameCronJobs(self, self.root, "Jobs chronologiques", width=950, height=500)
-        #self.frameLogin = FrameLogin(self, self.root, "Connexion", width=400, height=150)
         self.frameAcceuil = FrameAcceuil(self, self.root, "Acceuil", width=900, height=500)
         self.frameCreateTable=FrameCreateTable(self, self.root, "Tables", width=900, height=500)
         self.frameGroups=FrameGroups(self, self.root, "Groupes", width=900, height=500)
         self.frameUsersList=FrameUsersList(self, self.root, "Usagers", width=900, height=500)
         self.frameFormulaire=FrameFormulaire(self, self.root, "Formulaire", width=900, height=500)
         self.frameDisplayForm = FrameDisplayForm(self, self.root, "Consulter Formulaire", width=900, height=500)
-
+    def showLogin(self):
+        self.menuBar = Menu(self.root, tearoff=0)
+        optionMenu = Menu(self.menuBar, tearoff=0)
+        optionMenu.add_command(label="Gestion d'usager", command=self.currentFrame.showFrameUsersList)
+        optionMenu.add_command(label="Gestion de groupe", command=self.currentFrame.addGroupToDB)
+        optionMenu.add_command(label="Gestion de table", command=self.currentFrame.showFrameCreateTable)
+        optionMenu.add_command(label="Gestion de formulaire", command=self.currentFrame.showFrameFormulaire)
+        optionMenu.add_command(label="Afficher un formulaire", command=self.currentFrame.showFrameDisplayForm)
+        optionMenu.add_command(label="Gestion de cron jobs", command=self.currentFrame.showFrameCronJobs)
+        optionMenu.add_separator()
+        optionMenu.add_command(label="Se deconnecter", command=self.currentFrame.logOutUser)
+        optionMenu.add_command(label="Quitter", command = self.root.destroy)
+        self.menuBar.add_cascade(label="Modules", menu=optionMenu)
+        self.root.config(menu=self.menuBar)
+    def hideLogin(self):
+        self.root.destroy()
+        self.__init__(self.parent)
     def show(self):
         self.root.mainloop()
 
@@ -69,20 +79,7 @@ class GFrame(Frame):
         self.grid_propagate(0)
         self.config()
     def addMenuBar(self, showMenuBar):
-        self.menuBar = Menu(self.parentWindow, tearoff=0)
-        optionMenu = Menu(self.menuBar, tearoff=0)
-        optionMenu.add_command(label="Gestion d'usager", command=self.showFrameUsersList)
-        optionMenu.add_command(label="Gestion de groupe", command=self.addGroupToDB)
-        optionMenu.add_command(label="Gestion de table", command=self.showFrameCreateTable)
-        optionMenu.add_command(label="Gestion de formulaire", command=self.showFrameFormulaire)
-        optionMenu.add_command(label="Afficher un formulaire", command=self.showFrameDisplayForm)
-        optionMenu.add_command(label="Gestion de cron jobs", command=self.showFrameCronJobs)
-        optionMenu.add_separator()
-        optionMenu.add_command(label="Se deconnecter", command=self.logOutUser)
-        optionMenu.add_command(label="Quitter", command = self.parentController.root.destroy)
-        self.menuBar.add_cascade(label="Modules", menu=optionMenu)
-        if showMenuBar:
-            self.parentWindow.config(menu=self.menuBar)
+        pass
 
     def updateFrame(self):
         pass
@@ -109,12 +106,13 @@ class GFrame(Frame):
         self.parentController.frameSwapper( self.parentController.frameLogin )
         self.parentController.frameLogin.entryName.focus()
         self.parentController.frameLogin.resetEntries()
+        self.parentController.hideLogin()
 
 
 class FrameLogin(GFrame):
     def __init__(self, parentController, parentWindow, title, **args):
         GFrame.__init__(self, parentController, parentWindow, title, **args)
-
+        
         self.imageInsertech = PhotoImage(file = 'insertech.gif')
 
         self.labelImageInsertech = Label(self, imag=self.imageInsertech )
