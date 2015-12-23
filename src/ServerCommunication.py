@@ -1,11 +1,17 @@
 import Pyro4
+import os.path
+import sys
 # -*- coding: utf-8 -*-
 
 
 class ServerCommunication():
     def __init__(self,parent):
-        self.serverAdress = "PYRO:foo@10.57.47.24:48261"
-        #self.serverAdress = "PYRO:foo@192.168.0.130:48261"
+        fichier = os.path.dirname(sys.argv[0])
+        fichier = fichier+"\Ressources\ip_address_server.txt"
+        f = open(fichier, "r")
+        self.ipServer = f.readline()
+        f.close()
+        self.serverAdress = "PYRO:foo@"+self.ipServer+":48261"
         self.parent = parent
         self.status = None
         self.server = None
@@ -22,7 +28,7 @@ class ServerCommunication():
         if self.server.testConnection:
             print("im in")
             if self.server.loginValidation(username,password):
-                self.parent.view.frameSwapper(self.parent.view.frameAcceuil)
+                self.parent.view.login()
             else:
                 raise Exception("L'information saisie est erronée.")
                 self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
