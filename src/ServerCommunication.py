@@ -3,7 +3,10 @@ import Pyro4
 
 class ServerCommunication():
     def __init__(self,parent):
-        self.serverAdress = "PYRO:foo@localhost:48261"
+        f = open("Ressources/ip_address_server.txt", "r")
+        self.ipServer = f.readline()
+        f.close()
+        self.serverAdress = "PYRO:foo@"+self.ipServer+":48261"
 
         self.parent = parent
         self.status = None

@@ -29,42 +29,42 @@ class Server(object):
         print(self.databaseVersion)
         f.close()
         
+        #self.createFonctionInTableIfNotExist()
+        
         #self.createCronJob()
         #self.executeCronJobs()
         
-    
     def loginValidation(self, user, mdp):
         if self.dbManager.login(user, mdp):
             return True
         else:
             return False
         
-#     def writeIP(self):
-#         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#         s.connect(("gmail.com",80))
-#         self.monip=s.getsockname()[0]
-# 
-#         f = open("ip address.txt", "w")
-#         print(self.monip)
-#         f.write(self.monip)
-#         f.close()
-#         
-#     def correctIP(self):
-#         f = open("ip address.txt", "r")
-#         
-#         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#         s.connect(("gmail.com",80))
-#         self.monip=s.getsockname()[0]
-#         
-#         if(f.readline() != self.monip):
-#             self.writeIP()
-    
     def executeSql(self, query, bindings):
         queryResult = self.dbManager.query(query,bindings)
         return queryResult
     
     def testConnection(self):
         return True
+    
+    def createFonctionInTableIfNotExist(self):        #si les cron jobs hardcodé n'existe pas
+        aQuery = "SELECT * FROM Sys_Crons WHERE id = 1"
+        result = self.executeSql(aQuery, None)
+        if(result == []):
+            aQuery = "INSERT INTO Sys_Crons(id,nom,fnct_id,nbTemps,frequence,actif) VALUES (1,'Database Backup',1,4,7,1)"
+            self.executeSql(aQuery, None)
+        
+        aQuery = "SELECT * FROM Sys_Crons WHERE id = 2"
+        result = self.executeSql(aQuery, None)
+        if(result == []):
+            aQuery = "INSERT INTO Sys_Crons(id,nom,fnct_id,nbTemps,frequence,actif) VALUES (2,'Send Email',2,4,7,0)"
+            self.executeSql(aQuery, None)
+        
+        aQuery = "SELECT * FROM Sys_Crons WHERE id = 3"
+        result = self.executeSql(aQuery, None)
+        if(result == []):
+            aQuery = "INSERT INTO Sys_Crons(id,nom,fnct_id,nbTemps,frequence,actif) VALUES (3,'Write Log',3,4,7,0)"
+            self.executeSql(aQuery, None)
     
     def createCronJob(self):
         uneQuerySQL = "SELECT * FROM Sys_Crons"
@@ -100,10 +100,26 @@ class Server(object):
             newCronJob = CronJob(self, id, nom, fnctid, nbTemps, frequence, activeCron)
             self.activeCronJobs.append( newCronJob )
         
+    def deleteCronJob(self,cronId):
+        for cron in self.activeCronJobs:
+            if(cron.id == cronId):
+                cron.cancelTimer()
+                self.activeCronJobs.remove(cron)
+                aQuery = "DELETE FROM Sys_Crons WHERE id = %s" %(cronId)
+                print(aQuery)
+                self.executeSql(aQuery, None)
+            
     def executeCronJobs(self):
         for i in self.activeCronJobs:
             i.timerExecution()
-            
+    
+    def executeCustomCronJob(self,functionId):
+        aQuery = "SELECT id FROM Sys_RegleAffaire WHERE id = "+functionId
+        RegleAffaire = self.executeSql(aQuery, None)
+        aQuery = "SELECT * FROM Sys_RegleAffaireListe WHERE id = "+RegleAffaire
+        tabRegleAffaire = self.executeSql(aQuery, None)
+        
+    
     def executeCronJobsWhenNew(self):
         theLength = len(self.activeCronJobs)
         self.activeCronJobs[theLength-1].timerExecution()
@@ -118,6 +134,9 @@ class Server(object):
          
         aFileName = "database_Backup_"+ str(self.databaseVersion) +".db"
         shutil.copyfile("data1.db", aFileName)
+        
+        logMessage = "la database a fait un backup"
+        self.writeLog(logMessage, "databaseLog")
  
     def sendEmail(self, textToSend, subjectEmail, fromEmail, fromPassword, toEmail):    #Le ID de cette fonction est 2
         server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -132,11 +151,9 @@ class Server(object):
         currentDate = time.strftime("%d/%m/%Y")
         currentTime = time.strftime("%I:%M:%S")
         f = open("Logs/"+typeOfLog+"_Log.txt", "a")
-        f.write(messageToSave+" ---"+currentTime+" - "+currentDate+"---\n")
+        f.write("---"+currentTime+" - "+currentDate+"--- "+messageToSave+"\n")
         f.close()
     
-        
-
 
 class CronJob():
     def __init__(self, parent, id, nom, fnctid, nbTemps, frequence, activeCron):
@@ -149,7 +166,19 @@ class CronJob():
         self.activeCron = activeCron
          
     def timerExecution(self):
-        tempsAExecuter = self.frequence*self.nbTemps
+        if(self.nbTemps == 1):       #secondes
+            tempsAExecuter = self.frequence*1
+        elif(self.nbTemps == 2):     #minutes
+            tempsAExecuter = self.frequence*60
+        elif(self.nbTemps == 3):     #heures
+            tempsAExecuter = self.frequence*3600
+        elif(self.nbTemps == 4):     #jours
+            tempsAExecuter = self.frequence*86400
+        elif(self.nbTemps == 5):     #mois (on prend en compte que c'est 30 jours ici)
+            tempsAExecuter = self.frequence*2592000
+        elif(self.nbTemps == 6):     #an (on prend en compte ici que 1 an est 365 jours
+            tempsAExecuter = self.frequence*31536000
+
         self.t = Timer( tempsAExecuter ,self.timerExecution)
         self.t.start()
         if(self.activeCron == 0):
@@ -157,11 +186,8 @@ class CronJob():
             
         if(self.functionId == 1):
             self.parent.backupDatabase()
-        elif(self.functionId == 2):
-                                                    ####################################placeholder
-            self.parent.sendEmail("un autre test esti","Subject: "+"un sujet","champsfuturs@gmail.com","A1?champsfutursouverture","unreaved@hotmail.com")     
-        elif(self.functionId == 3):
-            self.parent.writeLog()
+        else:
+            self.parent.executeCustomCronJob(self.functionId)
              
     def cancelTimer(self):
         self.t.cancel()
@@ -176,6 +202,11 @@ uri = daemon.register(serverPyro,"foo")
 #serverPyro.backupDatabase()           #TEST DE BACKUP
 #serverPyro.sendEmail("un autre test esti","Subject: "+"un sujet","champsfuturs@gmail.com","A1?champsfutursouverture","unreaved@hotmail.com")    #TEST DE EMAIL
 #serverPyro.writeLog("A backup was made", "DBBackup")
+
+#serverPyro.createFonctionInTableIfNotExist()
+#serverPyro.createCronJob()        #TEST
+#serverPyro.executeCronJobs()
+#serverPyro.deleteCronJob(1)
 
 print("ready")
 daemon.requestLoop()
