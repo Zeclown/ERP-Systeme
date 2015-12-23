@@ -61,7 +61,7 @@ class DbManager():
         self.cursorDB.execute(''' SELECT * FROM Sys_Usagers WHERE id=1''')
         admin=self.cursorDB.fetchone()
         if(admin==None):
-            self.db.execute('''INSERT INTO Sys_Usagers (username, password) VALUES ('admin','admin')''')
+            self.db.execute('''INSERT INTO Sys_Usagers (id,username, password) VALUES (1,'admin','admin')''')
             
 if __name__ == "__main__":
     db=DbManager("data1.db")
