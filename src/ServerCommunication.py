@@ -28,7 +28,7 @@ class ServerCommunication():
         if self.server.testConnection:
             print("im in")
             if self.server.loginValidation(username,password):
-                self.parent.view.frameSwapper(self.parent.view.frameAcceuil)
+                self.parent.view.login()
             else:
                 raise Exception("L'information saisie est erronée.")
                 self.view.frameLogin.showErrorMsg("Votre informations d'indentification est invalide.")
